@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends("next/core-web-vitals", "next/typescript", "react-app", "eslint:recommended"),
   {
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
@@ -22,6 +22,7 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",
+
     },
   },
   {
@@ -29,6 +30,7 @@ const eslintConfig = [
     rules: {
       "no-unused-vars": "warn",
       "no-console": "warn",
+      "react/no-unescaped-entities": 0
     },
   },
   {

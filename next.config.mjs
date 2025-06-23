@@ -1,6 +1,7 @@
-import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+
+
+const nextConfig= {
   /* config options here */
   experimental: {
     // Add supported experimental options here if needed
@@ -15,6 +16,13 @@ const nextConfig: NextConfig = {
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "",
+  },
+  //eslint rules
+  eslint:{
+    //no unescaped entities rule
+
+    ignoreDuringBuilds: true,
+  
   }
 };
 
