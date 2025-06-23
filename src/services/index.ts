@@ -1,0 +1,10 @@
+export { default as apiClient } from './apiClient';
+export * from './education.service';
+export * from './experience.service';
+export * from './auth.service';
+export * from './user.service';
+export * from './contact.service';
+export * from './skills.service';
+export * from './projects.service';
+export * from './blog.service';
+export * from './github.service';
