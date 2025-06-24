@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer_component";
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
+import Script from "next/script";
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -81,6 +82,10 @@ export default function RootLayout({
             <Toaster richColors position="top-right" />
           </Theme>
         </ThemeProvider>
+     <script
+  src={process.env.NEXT_PUBLIC_FONT_AWESOME_KIT_URL}
+  crossOrigin="anonymous"
+/>
       </body>
     </html>
   )

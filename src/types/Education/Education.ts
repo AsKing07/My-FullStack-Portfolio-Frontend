@@ -14,7 +14,7 @@ export interface Education {
     createdAt: Date; // Timestamp when the record was created
     updatedAt: Date; // Timestamp when the record was last updated
 
-    user: User; 
+    user?: User; 
 
 }
 

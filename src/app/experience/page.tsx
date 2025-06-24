@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button_component";
 import { Download, Briefcase, MapPin, Calendar, Loader2, CogIcon, Code2, Terminal, LightbulbIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const typeColors: Record<string, string> = {
   FULLTIME: "bg-blue-600",
@@ -172,12 +173,14 @@ export default function ExperiencePage() {
                             "hover:bg-blue-100 dark:hover:bg-blue-900 transition"
                           )}
                         >
+                          
                             {skill.icon && <i className={cn(skill.icon, "mr-1")} />} 
                           {skill.name}
                           <span className="ml-1 text-xs text-muted-foreground">
                             {skill.level === "BEGINNER" && "Débutant"}
                             {skill.level === "INTERMEDIATE" && "Intermédiaire"}
                             {skill.level === "ADVANCED" && "Avancé"}
+                            {skill.level === "EXPERT" && "Expert"}
                           </span>
                         </Badge>
                       ))}

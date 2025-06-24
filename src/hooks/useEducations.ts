@@ -13,7 +13,7 @@ export function useEducations() {
     setError(null);
     try {
       const res = await EducationService.getEducations();
-      setEducations(res.data || []);
+      setEducations(res.data.items || []);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement des formations');
     } finally {
