@@ -5,11 +5,11 @@ import { User } from '@/types/User/User';
 import { UserRequest } from '@/types/User/UserRequest';
 
 export const UserService = {
-  getUserPublic: async (id: string): Promise<ApiResponse<User>> =>
-    (await apiClient.get(`/auth/user/${id}`)).data,
+  getUserPublic: async (): Promise<ApiResponse<User>> =>
+    (await apiClient.get(`/auth/user/`)).data,
 
-    getUserByAdmin: async (id: string): Promise<ApiResponse<User>> =>
-    (await apiClient.get(`/auth/user/${id}`)).data,
+    getUserByAdmin: async (): Promise<ApiResponse<User>> =>
+    (await apiClient.get(`/auth/user/`)).data,
 
     updateUser: async (user: UserRequest): Promise<ApiResponse<User>> =>
     (await apiClient.put('/auth/user', user)).data,

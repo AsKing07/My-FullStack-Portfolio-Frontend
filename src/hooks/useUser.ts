@@ -1,19 +1,23 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, use, useEffect } from 'react';
 import UserService from '@/services/user.service';
 import { User } from '@/types/User/User';
 import { UserRequest } from '@/types/User/UserRequest';
+import { useAuthStore } from '@/stores/auth_store'; 
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isAuthenticated } = useAuthStore();
 
-  const fetchUserPublic = useCallback(async (id: string) => {
+  const fetchUserPublic = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await UserService.getUserPublic(id);
+      const res = await UserService.getUserPublic();
       setUser(res.data!);
+      console.log('User fetched:', res.data);
+
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement de l\'utilisateur');
     } finally {
@@ -21,11 +25,11 @@ export function useUser() {
     }
   }, []);
 
-  const fetchUserByAdmin = useCallback(async (id: string) => {
+  const fetchUserByAdmin = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await UserService.getUserByAdmin(id);
+      const res = await UserService.getUserByAdmin();
       setUser(res.data!);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement (admin)');
@@ -59,6 +63,18 @@ export function useUser() {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    // Chargement initial de l'utilisateur si nécessaire
+
+    if (isAuthenticated) {
+      fetchUserByAdmin();
+    
+    } else {
+      fetchUserPublic();
+    }
+  }, [fetchUserPublic, fetchUserByAdmin]);
+
 
   return {
     user,
