@@ -22,6 +22,12 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",
+      // Allow console logs in development
+      "no-console": process.env.NODE_ENV === "development" ? "warn" : "error",
+      // properties does not exist on this object
+      "@typescript-eslint/no-unsafe-assignment": "on",
+"@typescript-eslint/no-unsafe-member-access": "error",
+
 
     },
   },
