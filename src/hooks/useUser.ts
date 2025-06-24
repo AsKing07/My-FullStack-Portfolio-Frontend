@@ -15,7 +15,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await UserService.getUserPublic();
-      setUser(res.data!);
+      setUser(res.data!.items);
       console.log('User fetched:', res.data);
 
     } catch (err: any) {
@@ -30,7 +30,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await UserService.getUserByAdmin();
-      setUser(res.data!);
+      setUser(res.data!.items);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement (admin)');
     } finally {
@@ -43,7 +43,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await UserService.updateUser(userReq);
-      setUser(res.data!);
+      setUser(res.data!.items);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour');
     } finally {
@@ -56,7 +56,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await UserService.updateResume(resume);
-      setUser(res.data!);
+      setUser(res.data!.items);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour du CV');
     } finally {

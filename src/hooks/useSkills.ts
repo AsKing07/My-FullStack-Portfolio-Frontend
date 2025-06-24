@@ -13,7 +13,7 @@ export function useSkills() {
     setError(null);
     try {
       const res = await SkillsService.getSkills();
-      setSkills(res.data || []);
+      setSkills(res.data.items || []);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement des compétences');
     } finally {

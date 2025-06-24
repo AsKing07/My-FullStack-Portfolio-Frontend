@@ -13,7 +13,7 @@ export function useExperiences() {
     setError(null);
     try {
       const res = await ExperienceService.getExperiences();
-      setExperiences(res.data || []);
+      setExperiences(res.data.items || []);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement des expériences');
     } finally {
