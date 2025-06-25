@@ -6,10 +6,11 @@ import { useCategory } from "@/hooks/useCategory";
 import { useUser } from "@/hooks/useUser";
 import { Badge } from "@/components/ui/badge_component";
 import { Button } from "@/components/ui/button_component";
-import { Download, Briefcase, MapPin, Calendar, Loader2, CogIcon, Code2, Terminal, LightbulbIcon } from "lucide-react";
+import { Download, Briefcase, MapPin, Calendar, Loader2, CogIcon, Code2, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
 const typeColors: Record<string, string> = {
   FULLTIME: "bg-blue-600",
@@ -30,10 +31,10 @@ const hardSkills = [
 ];
 
 export default function ExperiencePage() {
-  const { experiences, loading: loadingExp } = useExperiences();
-  const { skills, loading: loadingSkills } = useSkills();
+  const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
+  const { skills, loading: loadingSkills, error: errorSkills } = useSkills();
   const { categories } = useCategory();
-  const { user } = useUser();
+  const { user, loading: loadingUser, error: errorUser } = useUser();
 
   // Regroupe les skills par catégorie
   const skillsByCategory = (Array.isArray(categories) ? categories : []).reduce<Record<string, typeof skills>>((acc, cat) => {
@@ -41,13 +42,52 @@ export default function ExperiencePage() {
     return acc;
   }, {});
 
+    if (loadingExp || loadingSkills) {
+      return (
+  <div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">        
+    <div className="container mx-auto">
+      
+       <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <LoadingSpinner />
+  </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (errorSkills || errorExp ) {
+  return (
+    <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
+        <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
+        <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
+          Une erreur est survenue
+        </h2>
+        <p className="text-sm text-red-600 dark:text-red-200 text-center">
+          Erreur lors du chargement des expériences&nbsp;:<br />
+          <span className="font-mono break-all">{
+            errorSkills || errorExp
+          }</span>
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
+        >
+          Réessayer
+        </button>
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-12">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow">
-            Expérience professionnelle
-          </h1>
+        <div className="flex flex-col items-center justify-center gap-4 mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
+          <Briefcase className="w-10 h-10 text-primary" />
+          Expériences professionnelles
+        </h1>
           {user?.resumeUrl && (
             <Button
               asChild
@@ -68,11 +108,11 @@ export default function ExperiencePage() {
             <Briefcase className="w-6 h-6 text-blue-600" />
             Parcours professionnel
           </h2>
-          {loadingExp ? (
+        
             <div className="flex justify-center py-12">
               <Loader2 className="animate-spin w-8 h-8 text-blue-600" />
             </div>
-          ) : (
+          
            <ol className="relative border-l-4 border-blue-200 dark:border-blue-800 ml-8">
               {(Array.isArray(experiences) ? experiences : [])
                 .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
@@ -131,7 +171,7 @@ export default function ExperiencePage() {
                   </li>
                 ))}
             </ol>
-          )}
+        
         </section>
 
         {/* Compétences techniques */}
@@ -142,11 +182,11 @@ export default function ExperiencePage() {
            Compétences techniques
           </h2>
           {/* <h2 className="text-2xl font-bold mb-8">Compétences techniques</h2> */}
-          {loadingSkills ? (
+        
             <div className="flex justify-center py-12">
               <Loader2 className="animate-spin w-8 h-8 text-blue-600" />
             </div>
-          ) : (
+          
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mx-18">
               {categories.map((cat) =>
                 skillsByCategory[cat.name] && skillsByCategory[cat.name].length > 0 ? (
@@ -189,7 +229,7 @@ export default function ExperiencePage() {
                 ) : null
               )}
             </div>
-          )}
+          
         </section>
 
         {/* Hard Skills */}

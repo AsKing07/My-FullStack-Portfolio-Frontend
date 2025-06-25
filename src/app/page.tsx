@@ -1,8 +1,16 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Download, GraduationCap, Briefcase, BookOpen, AlertTriangle, WorkflowIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Download,
+  GraduationCap,
+  Briefcase,
+  BookOpen,
+  WorkflowIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button_component";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card_component";
 import { useExperiences } from "@/hooks/useExperience";
@@ -19,14 +27,12 @@ export default function HomePage() {
   const { educations, loading: loadingEdu, error: errorEdu } = useEducations();
   const { projects, loading: loadingProj, error: errorProj } = useProjects();
   const { user, loading: loadingUser, error: errorUser } = useUser();
-   const{ posts, loading: loadingPost, error: errorPost } = useBlog();
+  const { posts, loading: loadingPost, error: errorPost } = useBlog();
 
-  const {toast} = useToast();
+  const { toast } = useToast();
 
-  const isLoading = loadingExp || loadingEdu || loadingProj || loadingUser;
-  const error = errorExp || errorEdu || errorProj || errorUser;
-
-
+  const isLoading = loadingExp || loadingEdu || loadingProj || loadingUser || loadingPost;
+  const error = errorExp || errorEdu || errorProj || errorUser || errorPost;
 
   if (isLoading) {
     return (
@@ -40,14 +46,10 @@ export default function HomePage() {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-          <span className="text-5xl mb-2" role="img" aria-label="Triste">
-            😢
-          </span>
-          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-            Une erreur est survenue
-          </h2>
+          <span className="text-5xl mb-2" role="img" aria-label="Triste">😢</span>
+          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">Une erreur est survenue</h2>
           <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            Erreur lors du chargement des données du portfolio&nbsp;:<br />
+            Erreur lors du chargement des données du portfolio :<br />
             <span className="font-mono break-all">{error}</span>
           </p>
           <button
@@ -62,83 +64,60 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col">
-      {/* Hero / Présentation rapide */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950">
+    <div className="flex flex-col w-full">
+      <section className="relative isolate overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 py-24 sm:py-32">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
           <div className="flex-1 space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {user?.name || "Charbel SONON"}
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground max-w-xl">
               {user?.bio ||
                 "Développeur full stack passionné par React, Next.js, Node.js et TypeScript. J’aime créer des applications web modernes, performantes et accessibles."}
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <Button asChild>
                 <Link href="/about">
                   Mieux me connaître
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild onClick={()=>{
-                toast.info("Téléchargement du CV en cours...");
-                const resumeUrl = user?.resumeUrl;
-                if (resumeUrl) {
-                  //download CV
-                  const link = document.createElement("a");
-                  link.href = resumeUrl;
-                  link.download = `CV_${user?.name || "Charbel_SONON"}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                  toast.success("Téléchargement du CV terminé !");
-               
-                }
-              }} variant="outline" className="cursor-pointer">
-                <span>
-                  <Download className="mr-2 h-4 w-4" />
-                  Télécharger CV
-                </span>
-                 
-              
+              <Button
+                variant="outline"
+                className="cursor-pointer"
+                onClick={() => {
+                  toast.info("Téléchargement du CV en cours...");
+                  const resumeUrl = user?.resumeUrl;
+                  if (resumeUrl) {
+                    const link = document.createElement("a");
+                    link.href = resumeUrl;
+                    link.download = `CV_${user?.name || "Charbel_SONON"}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    toast.success("Téléchargement du CV terminé !");
+                  }
+                }}
+              >
+                <Download className="mr-2 h-4 w-4" /> Télécharger CV
               </Button>
             </div>
           </div>
           <div className="flex-1 flex justify-center">
-            <div className="aspect-square w-48 relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600">
-        
-        {
-          user?.avatarUrl?(
-               <Image
-                src={user?.avatarUrl}
-                alt="Photo de profil"
-                fill
-                className="object-cover"
-                priority
-              />
-            
-          ) :
-        <div
-          className="hero__avatar"
-          style={{
-            fontSize: "120px",
-            textAlign: "center",
-            background: "linear-gradient(135deg, var(--color-primary), var(--color-primary-hover))",
-            borderRadius: "50%",
-            width: "200px",
-            height: "200px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto",
-            boxShadow: "var(--shadow-lg)",
-          }}
-        >
-          👨‍💻
-        </div>
-        }
-           
+            <div className="aspect-square w-52 sm:w-60 relative overflow-hidden rounded-full shadow-xl ring-4 ring-blue-400 dark:ring-purple-600">
+              {user?.avatarUrl ? (
+                <Image
+                  src={user.avatarUrl}
+                  alt="Photo de profil"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="text-6xl flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                  👨‍💻
+                </div>
+              )}
             </div>
           </div>
         </div>

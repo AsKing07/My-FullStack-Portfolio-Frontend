@@ -6,14 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_c
 import { Input } from '@/components/ui/form/input_component';
 import { Textarea } from '@/components/ui/form/textarea_component';
 import { Button } from '@/components/ui/button_component';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter, Globe, Building2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter, Globe, Building2, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { useUser } from '@/hooks/useUser';
 import { useContacts } from '@/hooks/useContact';
 import { ContactRequest } from '@/types/Contact/ContactRequest';
+import { LoadingSpinner } from '@/components/ui/loading_spinner';
 
 export default function ContactPage() {
-  const { user } = useUser();
+  const { user, loading: loadingUser, error: errorUser } = useUser();
   const { createContact, loading } = useContacts();
   const [formData, setFormData] = useState({
     name: '',
@@ -82,6 +83,43 @@ export default function ContactPage() {
     }));
   };
 
+if(loadingUser) {
+return(
+  <div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">        
+  <div className="container mx-auto">
+    
+     <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+  <LoadingSpinner />
+</div>
+        </div>
+      </div>
+)
+         
+}
+
+if (errorUser) {
+  return (
+    <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
+        <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
+        <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
+          Une erreur est survenue
+        </h2>
+        <p className="text-sm text-red-600 dark:text-red-200 text-center">
+          Erreur lors du chargement des informations de contact&nbsp;:<br />
+          <span className="font-mono break-all">{errorUser}</span>
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
+        >
+          Réessayer
+        </button>
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       <div className="container mx-auto px-4 py-20">
@@ -91,7 +129,8 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
+          <Send className="w-10 h-10 text-primary" />
             Contact
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -205,7 +244,7 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      rows={6}
+                      rows={7}
                       placeholder="Votre message..."
                     />
                   </div>

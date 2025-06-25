@@ -3,13 +3,14 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import { Badge } from '@/components/ui/badge_component';
-import { Calendar, MapPin, Code, Music, Link as LinkIcon, Gamepad, Book,  } from 'lucide-react';
+import { Calendar, MapPin, Code, Music, Link as LinkIcon, Gamepad, Book, Info, AlertTriangle,  } from 'lucide-react';
 import { soccerBall } from '@lucide/lab';
 
 import { createLucideIcon, icons } from 'lucide-react';
 
 import { useUser } from '@/hooks/useUser';
 import Image from 'next/image';
+import { LoadingSpinner } from '@/components/ui/loading_spinner';
 
 
 const Football = createLucideIcon('Football', soccerBall);
@@ -24,6 +25,42 @@ const interests = [
 export default function AboutPage() {
   const { user, loading, error } = useUser();
 
+    if (loading) {
+    return (
+<div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">        
+  <div className="container mx-auto">
+    
+     <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+  <LoadingSpinner />
+</div>
+        </div>
+      </div>
+    );
+  }
+
+if (error) {
+  return (
+    <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
+        <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
+        <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
+          Une erreur est survenue
+        </h2>
+        <p className="text-sm text-red-600 dark:text-red-200 text-center">
+          Erreur lors du chargement des informations&nbsp;:<br />
+          <span className="font-mono break-all">{error}</span>
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
+        >
+          Réessayer
+        </button>
+      </div>
+    </div>
+  );
+}
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       <div className="container mx-auto px-4 py-20">
@@ -33,9 +70,10 @@ export default function AboutPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            À Propos de Moi
-          </h1>
+        <h1 className="text-4xl md:text-5xl font-bold bg-primary bg-clip-text text-transparent mb-12 drop-shadow flex items-center justify-center gap-3">
+          <Info className="w-10 h-10 text-primary" />
+         A Propos de Moi
+        </h1>
        
         </motion.div>
 

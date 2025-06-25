@@ -16,6 +16,7 @@ import {
   Code,
   Activity,
   AlertTriangle,
+  BarChartIcon,
 } from "lucide-react";
 import { useGitHub } from "@/hooks/useGithub";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
@@ -98,9 +99,10 @@ if (error) {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Statistiques GitHub
-          </h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
+          <BarChartIcon className="w-10 h-10 text-primary" />
+          Statistique Github
+        </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Aperçu de mon activité de développement et de mes contributions open
             source
