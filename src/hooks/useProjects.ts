@@ -13,7 +13,7 @@ export function useProjects() {
     setError(null);
     try {
       const res = await ProjectsService.getProjects();
-      setProjects(res.data || []);
+      setProjects(res.data.items || []);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement des projets');
     } finally {

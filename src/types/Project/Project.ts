@@ -8,33 +8,6 @@ export enum ProjectStatus {
 }
     
 
-// model Project {
-//   id          String      @id @default(uuid())
-//   title       String
-//   slug        String      @unique
-//   description String      @db.Text
-//   shortDesc   String?     @db.VarChar(255)
-//   content     String?     @db.Text
-//   status      ProjectStatus @default(PUBLISHED)
-//   featured    Boolean     @default(false)
-//   priority    Int         @default(0)
-//   liveUrl     String?
-//   githubUrl   String?
-//   figmaUrl    String?
-//   image       String?
-//   gallery     String?     @db.Text
-//   technologies String?    @db.Text
-//   startDate   DateTime?
-//   endDate     DateTime?
-//   createdAt   DateTime    @default(now())
-//   updatedAt   DateTime    @updatedAt
-
-//   // Relations
-//   userId      String
-//   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   categoryId  String?
-//   category    Category?   @relation(fields: [categoryId], references: [id])
-// }
 
 export interface Project {
     id: string; // UUID
