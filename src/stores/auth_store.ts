@@ -10,7 +10,7 @@ interface AuthStore extends AuthState {
   refreshToken: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void| boolean>;
   logout: () => void;
   register: (name: string, email: string, password: string) => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -39,10 +39,14 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: loading });
       },
 
-      login: async (email: string, password: string) => {
+      login: async (email: string, password: string)  => {
         try {
           set({ isLoading: true });
           const response = await AuthService.login(email, password);
+
+          if (!response || !response.user || !response.token) {
+            throw new Error('Invalid login response');
+          }
 
           set({
             user: response.user,
@@ -51,6 +55,7 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: true,
             isLoading: false,
           });
+          return true;
         } catch (error) {
           set({ isLoading: false });
           throw error;
@@ -69,6 +74,7 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: true,
             isLoading: false,
           });
+          return
         } catch (error) {
           set({ isLoading: false });
           throw error;

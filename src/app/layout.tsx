@@ -2,17 +2,19 @@ import type { Metadata } from "next";
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@/providers/theme_provider";
 import { Toaster } from "sonner";
-import { Header } from "@/components/layout/header_component";
-import { Footer } from "@/components/layout/footer_component";
+import ClientLayout from "@/app/ClientLayout";
+
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 import Script from "next/script";
 
+// PAS de usePathname ici, ni de "use client"
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+
   title: {
     default: 'Charbel SONON | Portfolio - Développeur Full Stack',
     template: '%s | Portfolio'
@@ -46,12 +48,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-}
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={inter.className}>
@@ -62,31 +62,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Theme className="dark:bg-slate-950 bg-slate-50">
-            {/* Header fixé en haut */}
-            <header className="fixed top-0 left-0 w-full z-50">
-              <Header />
-            </header>
-            {/* Layout principal en colonne */}
-            <div className="flex flex-col min-h-screen">
-              {/* Espace réservé pour le header */}
-              <div className="h-[64px]" />
-              {/* Contenu principal qui prend tout l'espace restant, centré */}
-              <main className="flex-1 flex flex-col justify-center items-center">
-                {children}
-              </main>
-              {/* Footer non fixe, défile avec le contenu */}
-              <footer>
-                <Footer />
-              </footer>
-            </div>
+            <ClientLayout> {children}</ClientLayout>
             <Toaster richColors position="top-right" />
           </Theme>
         </ThemeProvider>
-     <script
-  src={process.env.NEXT_PUBLIC_FONT_AWESOME_KIT_URL}
-  crossOrigin="anonymous"
-/>
+        <Script
+          src={process.env.NEXT_PUBLIC_FONT_AWESOME_KIT_URL}
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
-  )
+  );
 }
+
