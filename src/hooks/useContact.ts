@@ -1,18 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ContactService } from '@/services/contact.service';
 import { Contact } from '@/types/Contact/Contact';
+import { ContactRequest } from '@/types/Contact/ContactRequest';
+import { useAuthStore } from '@/stores/auth_store';
 
 export function useContacts() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { isAuthenticated } = useAuthStore();
+
   const fetchContacts = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await ContactService.getContacts();
-      setContacts(res.data || []);
+      setContacts(res.data.items || []);
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement des contacts');
     } finally {
@@ -25,34 +29,35 @@ export function useContacts() {
     setError(null);
     try {
       const res = await ContactService.getContactById(id);
-      return res.data;
+      return res.data.items;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement du contact');
       return null;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [fetchContacts]);
 
-  const createContact = useCallback(async (contact: Contact) => {
+  const createContact = useCallback(async (contact: ContactRequest) => {
     setLoading(true);
     setError(null);
     try {
       await ContactService.createContact(contact);
-      await fetchContacts();
+
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création du contact');
+       throw err;
     } finally {
       setLoading(false);
     }
-  }, [fetchContacts]);
+  }, []);
 
   const markAsRead = useCallback(async (id: string) => {
     setLoading(true);
     setError(null);
     try {
       await ContactService.markAsRead(id);
-      await fetchContacts();
+fetchContacts();
     } catch (err: any) {
       setError(err.message || 'Erreur lors du marquage comme lu');
     } finally {
@@ -87,8 +92,10 @@ export function useContacts() {
   }, [fetchContacts]);
 
   useEffect(() => {
-    fetchContacts();
-  }, [fetchContacts]);
+    if (isAuthenticated) {
+      fetchContacts();
+    }
+  }, [isAuthenticated, fetchContacts]);
 
   return {
     contacts,
