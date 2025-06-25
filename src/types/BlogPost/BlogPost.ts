@@ -15,7 +15,7 @@ export interface BlogPost {
     id: string;
     title: string;
     slug: string;
-    excerpt: string;
+    excerpt?: string;
     content: string;
     status: PostStatus;
     featured: boolean;
@@ -27,6 +27,7 @@ export interface BlogPost {
     createdAt: Date;
     updatedAt: Date;
     userId: string;
+    tags?: string[]; 
     user?: User;
 }
 

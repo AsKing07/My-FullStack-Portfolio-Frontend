@@ -16,6 +16,8 @@ export const BlogService = {
     (await apiClient.post('/blog', blogPost)).data,
     updateBlogPost: async (id: string, blogPost: BlogPostRequest): Promise<ApiResponse<BlogPost>> =>
     (await apiClient.put(`/blog/${id}`, blogPost)).data,
+    publishBlogPost: async (id: string): Promise<ApiResponse<BlogPost>> =>
+    (await apiClient.put(`/blog/${id}/publish`)).data,
     deleteBlogPost: async (id: string): Promise<ApiResponse> =>
     (await apiClient.delete(`/blog/${id}`)).data,
 };
