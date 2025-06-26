@@ -18,7 +18,8 @@ import {
   Menu,
   Briefcase,
   Shapes,
-  GraduationCap
+  GraduationCap,
+  Code
 } from 'lucide-react';
 import { Button } from '@/components/ui/button_component';
 import { Tooltip } from '@radix-ui/themes';
@@ -62,13 +63,20 @@ const menuItems: MenuItem[] = [
     icon: < Briefcase  className="h-5 w-5" />
   },
   {
+    path: '/dashboard/skills',
+    name: 'Compétences',
+    icon: <Code className="h-5 w-5" />
+ 
+  },
+
+  {
     path: '/dashboard/education',
     name: 'Éducation',
     icon: <GraduationCap className="h-5 w-5" />
 
   },
   { 
-    path: '/dashboard/messages', 
+    path: '/dashboard/contact', 
     name: 'Messages', 
     icon: <Mail className="h-5 w-5" />,
     // badge: 'New'

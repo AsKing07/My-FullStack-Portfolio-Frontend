@@ -15,10 +15,10 @@ export const ContactService = {
     (await apiClient.get(`/contacts/${id}`)).data,
 
   markAsRead: async (id: string): Promise<ApiResponse<Contact>> =>
-    (await apiClient.put(`/contacts/${id}/read`)).data,
+    (await apiClient.put(`/contacts/${id}`)).data,
 
   replyToContact: async (id: string, reply: string): Promise<ApiResponse<Contact>> =>
-    (await apiClient.patch(`/contacts/${id}/reply`, { reply })).data,
+    (await apiClient.patch(`/contacts/${id}`, { reply })).data,
 
   deleteContact: async (id: string): Promise<ApiResponse> =>
     (await apiClient.delete(`/contacts/${id}`)).data,
