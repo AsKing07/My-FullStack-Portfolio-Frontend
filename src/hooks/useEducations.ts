@@ -29,6 +29,7 @@ export function useEducations() {
       return res.data;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement de la formation');
+      throw new Error(err.message || 'Erreur lors du chargement de la formation');
       return null;
     } finally {
       setLoading(false);
@@ -43,6 +44,7 @@ export function useEducations() {
       await fetchEducations();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création de la formation');
+      throw new Error(err.message || 'Erreur lors de la création de la formation');
     } finally {
       setLoading(false);
     }
@@ -56,6 +58,7 @@ export function useEducations() {
       await fetchEducations();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification de la formation');
+      throw new Error(err.message || 'Erreur lors de la modification de la formation');
     } finally {
       setLoading(false);
     }
@@ -69,6 +72,7 @@ export function useEducations() {
       await fetchEducations();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression de la formation');
+      throw new Error(err.message || 'Erreur lors de la suppression de la formation');
     } finally {
       setLoading(false);
     }

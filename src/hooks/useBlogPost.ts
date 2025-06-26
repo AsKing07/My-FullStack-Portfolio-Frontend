@@ -42,7 +42,8 @@ const {isAuthenticated} = useAuthStore();
       return res.data.items;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement de l\'article');
-      return null;
+      throw new Error(err.message || 'Erreur lors du chargement de l\'article');
+    
     } finally {
       setLoading(false);
     }
@@ -56,6 +57,7 @@ const {isAuthenticated} = useAuthStore();
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création de l\'article');
+      throw new Error(err.message || 'Erreur lors de la création de l\'article');
     } finally {
       setLoading(false);
     }
@@ -69,6 +71,7 @@ const {isAuthenticated} = useAuthStore();
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification de l\'article');
+      throw new Error(err.message || 'Erreur lors de la modification de l\'article');
     } finally {
       setLoading(false);
     }
@@ -82,6 +85,7 @@ const {isAuthenticated} = useAuthStore();
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la publication de l\'article');
+      throw new Error(err.message || 'Erreur lors de la publication de l\'article');
     } finally {
       setLoading(false);
     }
@@ -96,6 +100,7 @@ const {isAuthenticated} = useAuthStore();
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression de l\'article');
+      throw new Error(err.message || 'Erreur lors de la suppression de l\'article');
     } finally {
       setLoading(false);
     }

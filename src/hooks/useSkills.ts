@@ -28,7 +28,8 @@ export function useSkills() {
       await SkillsService.createSkill(skill);
       await fetchSkills();
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création');
+      setError(err.message || 'Erreur lors de la création')
+                throw new Error(err.message || 'Erreur lors de la création');
     } finally {
       setLoading(false);
     }
@@ -42,6 +43,7 @@ export function useSkills() {
       await fetchSkills();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification');
+      throw new Error(err.message || 'Erreur lors de la modification');
     } finally {
       setLoading(false);
     }
@@ -55,6 +57,7 @@ export function useSkills() {
       await fetchSkills();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression');
+      throw new Error(err.message || 'Erreur lors de la suppression');
     } finally {
       setLoading(false);
     }

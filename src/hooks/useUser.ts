@@ -46,6 +46,7 @@ export function useUser() {
       setUser(res.data!.items);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour');
+      throw new Error(err.message || 'Erreur lors de la mise à jour');
     } finally {
       setLoading(false);
     }
@@ -59,6 +60,7 @@ export function useUser() {
       setUser(res.data!.items);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour du CV');
+      throw new Error(err.message || 'Erreur lors de la mise à jour du CV');
     } finally {
       setLoading(false);
     }

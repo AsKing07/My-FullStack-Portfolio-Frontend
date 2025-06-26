@@ -75,6 +75,7 @@ export function useProjects() {
       await fetchProjects();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création du projet');
+      throw new Error(err.message || 'Erreur lors de la création du projet');
     } finally {
       setLoading(false);
     }
@@ -88,6 +89,7 @@ export function useProjects() {
       await fetchProjects();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification du projet');
+      throw new Error(err.message || 'Erreur lors de la modification du projet');
     } finally {
       setLoading(false);
     }
@@ -101,6 +103,7 @@ export function useProjects() {
       await fetchProjects();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression du projet');
+      throw new Error(err.message || 'Erreur lors de la suppression du projet');
     } finally {
       setLoading(false);
     }
@@ -114,6 +117,7 @@ export function useProjects() {
       await fetchProjects();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression des projets');
+      throw new Error(err.message || 'Erreur lors de la suppression des projets');
     } finally {
       setLoading(false);  
           }

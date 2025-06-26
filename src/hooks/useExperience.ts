@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ExperienceService } from '@/services/experience.service';
 import { Experience } from '@/types/Experience/Experience';
 import { ExperienceRequest } from '@/types/Experience/ExperienceRequest';
+import { th } from 'zod/v4/locales';
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -35,27 +36,33 @@ export function useExperiences() {
     }
   }, []);
 
-  const createExperience = useCallback(async (experience: ExperienceRequest) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await ExperienceService.createExperience(experience);
-      await fetchExperiences();
-    } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création de l\'expérience');
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchExperiences]);
+const createExperience = useCallback(async (experience: ExperienceRequest) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await ExperienceService.createExperience(experience);
+    await fetchExperiences();
+    return { success: true, data: res.data };
+  } catch (err: any) {
+   ;
+    const apiError = err.response?.data?.error?.message || err.message || "Erreur lors de la création de l'expérience";
+    setError(apiError);
+   throw new Error(apiError);
+  } finally {
+    setLoading(false);
+  }
+}, [fetchExperiences]);
 
   const updateExperience = useCallback(async (id: string, experience: ExperienceRequest) => {
     setLoading(true);
     setError(null);
     try {
-      await ExperienceService.updateExperience(id, experience);
+    const res=  await ExperienceService.updateExperience(id, experience);
       await fetchExperiences();
+      return { success: true, data: res.data };
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification de l\'expérience');
+      throw new Error(err.message || 'Erreur lors de la modification de l\'expérience');
     } finally {
       setLoading(false);
     }
@@ -69,6 +76,7 @@ export function useExperiences() {
       await fetchExperiences();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression de l\'expérience');
+      throw new Error(err.message || 'Erreur lors de la suppression de l\'expérience');
     } finally {
       setLoading(false);
     }

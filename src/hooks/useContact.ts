@@ -32,7 +32,7 @@ export function useContacts() {
       return res.data.items;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement du contact');
-      return null;
+      throw new Error(err.message || 'Erreur lors du chargement du contact');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export function useContacts() {
 
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création du contact');
-       throw err;
+       throw  new Error(err.message || 'Erreur lors de la création du contact');
     } finally {
       setLoading(false);
     }
@@ -60,6 +60,7 @@ export function useContacts() {
 fetchContacts();
     } catch (err: any) {
       setError(err.message || 'Erreur lors du marquage comme lu');
+      throw new Error(err.message || 'Erreur lors du marquage comme lu');
     } finally {
       setLoading(false);
     }
@@ -73,6 +74,7 @@ fetchContacts();
       await fetchContacts();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la réponse au contact');
+      throw new Error(err.message || 'Erreur lors de la réponse au contact');
     } finally {
       setLoading(false);
     }
@@ -86,6 +88,7 @@ fetchContacts();
       await fetchContacts();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression du contact');
+      throw new Error(err.message || 'Erreur lors de la suppression du contact');
     } finally {
       setLoading(false);
     }

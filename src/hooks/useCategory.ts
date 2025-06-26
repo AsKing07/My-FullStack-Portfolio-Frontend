@@ -44,6 +44,7 @@ export function useCategory() {
       await fetchCategories();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la création de la catégorie');
+      throw new Error(err.message || 'Erreur lors de la création de la catégorie');
     } finally {
       setLoading(false);
     }
@@ -57,6 +58,7 @@ export function useCategory() {
       await fetchCategories();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la modification de la catégorie');
+      throw new Error(err.message || 'Erreur lors de la modification de la catégorie');
     } finally {
       setLoading(false);
     }
@@ -70,6 +72,7 @@ export function useCategory() {
       await fetchCategories();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression de la catégorie');
+      throw new Error(err.message || 'Erreur lors de la suppression de la catégorie');
     } finally {
       setLoading(false);
     }
