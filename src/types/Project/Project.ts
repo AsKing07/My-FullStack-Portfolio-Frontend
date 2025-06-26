@@ -4,7 +4,10 @@ import { User } from "../User/User";
 export enum ProjectStatus {
     DRAFT = "DRAFT",
     PUBLISHED = "PUBLISHED",
-    ARCHIVED = "ARCHIVED"
+    ARCHIVED = "ARCHIVED",
+    IN_PROGRESS = "IN_PROGRESS",
+    PLANNED = "PLANNED",
+    COMPLETED = "COMPLETED",
 }
     
 
@@ -22,7 +25,7 @@ export interface Project {
     liveUrl?: string; // URL to the live project
     githubUrl?: string; // URL to the project's GitHub repository
     figmaUrl?: string; // URL to the project's Figma design file
-    image?: string; // Main image URL for the project
+    image: string; // Main image URL for the project
     gallery?: string; // Comma-separated list of image URLs for a gallery
     technologies?: string; // Comma-separated list of technologies used in the project
     startDate?: Date; // Optional start date of the project

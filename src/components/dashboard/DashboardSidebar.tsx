@@ -15,7 +15,10 @@ import {
   FileCode,
   ChevronRight,
   X,
-  Menu
+  Menu,
+  Briefcase,
+  Shapes,
+  GraduationCap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button_component';
 import { Tooltip } from '@radix-ui/themes';
@@ -42,27 +45,39 @@ const menuItems: MenuItem[] = [
     name: 'Dashboard', 
     icon: <LayoutDashboard className="h-5 w-5" />
   },
-  { 
-    path: '/dashboard/blog', 
-    name: 'Blog', 
-    icon: <FileText className="h-5 w-5" />,
-    badge: '5'
+  {
+    path: '/dashboard/categories',
+    name: 'Gestion des catégories',
+    icon: <Shapes className="h-5 w-5" />
   },
+
   { 
     path: '/dashboard/projects', 
     name: 'Projets', 
     icon: <FileCode className="h-5 w-5" />
   },
   { 
-    path: '/dashboard/media', 
-    name: 'Media', 
-    icon: <ImageIcon className="h-5 w-5" />
+    path: '/dashboard/experiences', 
+    name: 'Expériences', 
+    icon: < Briefcase  className="h-5 w-5" />
+  },
+  {
+    path: '/dashboard/education',
+    name: 'Éducation',
+    icon: <GraduationCap className="h-5 w-5" />
+
   },
   { 
     path: '/dashboard/messages', 
     name: 'Messages', 
     icon: <Mail className="h-5 w-5" />,
-    badge: 'New'
+    // badge: 'New'
+  },
+    { 
+    path: '/dashboard/blog', 
+    name: 'Blog', 
+    icon: <FileText className="h-5 w-5" />,
+    // badge: '5'
   },
   { 
     path: '/dashboard/github', 

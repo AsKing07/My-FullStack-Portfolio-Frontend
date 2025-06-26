@@ -7,6 +7,7 @@ import { Loader2, ExternalLink, Github, Figma, Calendar, Layers } from "lucide-r
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import Image from "next/image";
 
 const statusColors: Record<string, string> = {
   DRAFT: "bg-gray-400",
@@ -86,7 +87,9 @@ export default function ProjectsPage() {
                   className="bg-white/90 dark:bg-slate-900/90 rounded-2xl shadow-xl border border-blue-100 dark:border-blue-900 hover:shadow-2xl transition flex flex-col"
                 >
                   {project.image && (
-                    <img
+                    <Image
+                      width={48}
+                      height={48}
                       src={project.image}
                       alt={project.title}
                       className="rounded-t-2xl w-full h-48 object-cover border-b border-blue-100 dark:border-blue-900"

@@ -2,7 +2,7 @@ import { ProjectStatus } from "./Project";
 
 export interface ProjectRequest {
     title: string;
-    slug: string;
+    slug?: string;
     description: string;
     shortDesc?: string;
     content?: string;
@@ -12,7 +12,7 @@ export interface ProjectRequest {
     liveUrl?: string;
     githubUrl?: string;
     figmaUrl?: string;
-    image?: string;
+    image: string; // URL or path to the main image of the project
     gallery?: string;
     technologies?: string;
     startDate?: Date;
