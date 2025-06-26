@@ -5,7 +5,7 @@ import { useCategory } from "@/hooks/useCategory";
 import { Badge } from "@/components/ui/badge_component";
 import { Loader2, ExternalLink, Github, Figma, Calendar, Layers } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, formatDateShort } from "@/lib/utils";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -112,11 +112,11 @@ export default function ProjectsPage() {
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                       <Calendar className="w-4 h-4" />
                       {project.startDate &&
-                        new Date(project.startDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })}
+                        formatDateShort(project.startDate)}
                       {project.endDate && (
                         <>
                           {" - "}
-                          {new Date(project.endDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })}
+                          {formatDateShort(project.endDate)}
                         </>
                       )}
                       {project.category && (

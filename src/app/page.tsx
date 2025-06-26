@@ -21,6 +21,7 @@ import { LoadingSpinner } from "@/components/ui/loading_spinner";
 import { Badge } from "@/components/ui/badge_component";
 import { useToast } from "@/hooks/useToast";
 import { useBlog } from "@/hooks/useBlogPost";
+import { formatDate } from "@/lib/utils";
 
 export default function HomePage() {
   const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
@@ -153,7 +154,7 @@ export default function HomePage() {
                       {exp.company} — {exp.location}
                     </div>
                     <div className="text-xs text-gray-500 mb-2">
-                      {(exp.startDate instanceof Date ? exp.startDate.toLocaleDateString() : exp.startDate)} - {(exp.endDate instanceof Date ? exp.endDate.toLocaleDateString() : exp.endDate || "Aujourd'hui")}
+                      {(exp.startDate ? formatDate(exp.startDate) : exp.startDate)} - {(exp.endDate  ? formatDate(exp.endDate) : exp.endDate || "Aujourd'hui")}
                     </div>
                     <div className="line-clamp-3">{exp.description}</div>
                   </CardContent>
@@ -194,7 +195,7 @@ export default function HomePage() {
                   <CardContent>
                     <div className="text-muted-foreground text-sm mb-2">{edu.school}</div>
                     <div className="text-xs text-gray-500 mb-2">
-                      {edu.startDate instanceof Date ? edu.startDate.toLocaleDateString() : edu.startDate} - {edu.endDate instanceof Date ? edu.endDate.toLocaleDateString() : edu.endDate || "Aujourd'hui"}
+                      {edu.startDate   ?  formatDate(edu.startDate)  : edu.startDate} - {edu.endDate  ?   formatDate(edu.endDate) : edu.endDate || "Aujourd'hui"}
                     </div>
                     <div className="line-clamp-3">{edu.description}</div>
                   </CardContent>
@@ -251,7 +252,7 @@ export default function HomePage() {
            
                       ))}
                     </div>
-                    <div className="line-clamp-3">{proj.description}</div>
+                    <div  className="line-clamp-3">{proj.description}</div>
                     <Button variant="link" size="sm" asChild>
                       <Link href={`/projects/${proj.slug}`}>
                         Voir le projet
@@ -295,7 +296,7 @@ export default function HomePage() {
                                         </CardHeader>
                                         <CardContent>
                                             <div className="text-muted-foreground text-sm mb-2">
-                                                Publié le {new Date(post.publishedAt).toLocaleDateString('fr-FR')}
+                                                Publié le {formatDate(post.publishedAt)}
                                             </div>
                                             <div className="line-clamp-3">{post.excerpt}</div>
                                             <Button variant="link" size="sm" asChild>

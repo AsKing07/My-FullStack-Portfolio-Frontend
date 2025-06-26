@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge_component";
 import { Button } from "@/components/ui/button_component";
 import { Download, Briefcase, MapPin, Calendar, Loader2, CogIcon, Code2, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { cn, formatDateShort } from "@/lib/utils";
+
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
 const typeColors: Record<string, string> = {
@@ -109,9 +109,7 @@ export default function ExperiencePage() {
             Parcours professionnel
           </h2>
         
-            <div className="flex justify-center py-12">
-              <Loader2 className="animate-spin w-8 h-8 text-blue-600" />
-            </div>
+      
           
            <ol className="relative border-l-4 border-blue-200 dark:border-blue-800 ml-8">
               {(Array.isArray(experiences) ? experiences : [])
@@ -142,11 +140,11 @@ export default function ExperiencePage() {
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Calendar className="w-4 h-4" />
-                          {new Date(exp.startDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })} 
+                          {formatDateShort(exp.startDate)} 
                           {" - "}
                           {exp.current || !exp.endDate
                             ? "Aujourd'hui"
-                            : new Date(exp.endDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })}
+                            : formatDateShort(exp.endDate)}
                           {exp.location && (
                             <>
                               <span className="mx-2">•</span>
@@ -183,10 +181,7 @@ export default function ExperiencePage() {
           </h2>
           {/* <h2 className="text-2xl font-bold mb-8">Compétences techniques</h2> */}
         
-            <div className="flex justify-center py-12">
-              <Loader2 className="animate-spin w-8 h-8 text-blue-600" />
-            </div>
-          
+  
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mx-18">
               {categories.map((cat) =>
                 skillsByCategory[cat.name] && skillsByCategory[cat.name].length > 0 ? (

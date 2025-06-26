@@ -26,6 +26,7 @@ import { toast } from 'sonner';
 import { LoadingSpinner } from '@/components/ui/loading_spinner';
 import { TextField } from "@radix-ui/themes"
 import DatePicker from 'react-datepicker';
+import { Project } from '@/types/Project/Project';
 
 const formSchema = z.object({
   title: z.string().min(3, 'Le titre doit contenir au moins 3 caractères'),
@@ -52,6 +53,7 @@ export default function ProjectEditPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { getProjectBySlug, updateProject, saveProjectImages, loading, error } = useProjects();
+  const [project, setProject] = useState<Project | null>(null);
 
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
   const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
@@ -83,6 +85,7 @@ export default function ProjectEditPage() {
       setLoadingProject(true);
       try {
         const project = await getProjectBySlug(slug);
+        setProject(project);
         if (!project) {
           toast.error('Projet introuvable');
           router.push('/dashboard/projects');
@@ -174,7 +177,7 @@ export default function ProjectEditPage() {
         gallery: (values.gallery || []).join(','),
         technologies: values.technologies,
       };
-      await updateProject(slug, payload);
+      await updateProject(project?.id!, payload);
       if (!error) {
         toast.success('Projet modifié avec succès');
         router.push('/dashboard/projects');

@@ -3,7 +3,7 @@
 import { useEducations } from "@/hooks/useEducations";
 import { Badge } from "@/components/ui/badge_component";
 import { Loader2, GraduationCap, MapPin, Calendar, BookOpen, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDateShort } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
 export default function EducationPage() {
@@ -78,11 +78,11 @@ if (error) {
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="w-4 h-4" />
-                        {new Date(edu.startDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })}
+                        {formatDateShort(edu.startDate)}
                         {" - "}
                         {edu.current || !edu.endDate
                           ? "Aujourd'hui"
-                          : new Date(edu.endDate).toLocaleDateString("fr-FR", { year: "numeric", month: "short" })}
+                          : formatDateShort(edu.endDate)}
                         {edu.location && (
                           <>
                             <span className="mx-2">•</span>

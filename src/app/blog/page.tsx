@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge_component';
 import { Search, Calendar, Clock, AlertTriangle, BookOpen } from 'lucide-react';
 import { useBlog } from '@/hooks/useBlogPost';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
+import { formatDate } from '@/lib/utils';
 
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -164,7 +165,7 @@ export default function BlogPage() {
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            {new Date(post.publishedAt).toLocaleDateString('fr-FR')}
+                            {formatDate(post.publishedAt)}
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
