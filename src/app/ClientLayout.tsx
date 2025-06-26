@@ -15,7 +15,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
            <div className="h-[64px]" />
         </header>
       )}
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen mt-10">
        
         <main className="flex-1 flex flex-col justify-center items-center">
           {children}
