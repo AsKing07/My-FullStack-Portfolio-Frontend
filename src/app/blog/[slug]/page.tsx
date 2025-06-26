@@ -8,6 +8,7 @@ import { Loader2, Calendar, Clock, User, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge_component';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -78,7 +79,7 @@ export default function BlogPostPage() {
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-2">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {new Date(post.publishedAt).toLocaleDateString('fr-FR')}
+                {formatDate(post.publishedAt)}
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
