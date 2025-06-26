@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User } from '@/types/User/User';
 import { AuthState } from '@/types/Auth/AuthState';
-import { AuthService } from '@/services';
+import { AuthService, UserService } from '@/services';
 
 interface AuthStore extends AuthState {
   user: User | null;
@@ -18,6 +18,7 @@ interface AuthStore extends AuthState {
   setLoading: (loading: boolean) => void;
   setToken: (token: string) => void;
   setRefreshToken: (refreshToken: string) => void;
+  refetchUser: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -124,6 +125,24 @@ export const useAuthStore = create<AuthStore>()(
           throw error;
         }
       },
+      refetchUser: async () => {
+        const { token } = get();
+        if (!token) return;
+        try{
+          set({ isLoading: true });
+          const response = await UserService.getUserByAdmin();
+          set({
+            user: response.data.items,
+            isLoading: false,
+          });
+
+        }
+        catch (error) {
+          set({ isLoading: false });
+          throw error;
+        }
+        
+      }
     }),
     {
       name: 'auth-storage',

@@ -3,6 +3,7 @@ import { ExperienceService } from '@/services/experience.service';
 import { Experience } from '@/types/Experience/Experience';
 import { ExperienceRequest } from '@/types/Experience/ExperienceRequest';
 import { th } from 'zod/v4/locales';
+import { UserService } from '@/services';
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -27,7 +28,7 @@ export function useExperiences() {
     setError(null);
     try {
       const res = await ExperienceService.getExperienceById(id);
-      return res.data;
+      return res.data.items;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement de l\'expérience');
       return null;
@@ -35,6 +36,21 @@ export function useExperiences() {
       setLoading(false);
     }
   }, []);
+
+    const updateResume = useCallback(async (resume: File) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await UserService.updateResume(resume);
+       
+      } catch (err: any) {
+        setError(err.message || 'Erreur lors de la mise à jour du CV');
+        throw new Error(err.message || 'Erreur lors de la mise à jour du CV');
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+  
 
 const createExperience = useCallback(async (experience: ExperienceRequest) => {
   setLoading(true);
@@ -44,8 +60,9 @@ const createExperience = useCallback(async (experience: ExperienceRequest) => {
     await fetchExperiences();
     return { success: true, data: res.data };
   } catch (err: any) {
-   ;
+  
     const apiError = err.response?.data?.error?.message || err.message || "Erreur lors de la création de l'expérience";
+    console.error(apiError);
     setError(apiError);
    throw new Error(apiError);
   } finally {
@@ -90,6 +107,7 @@ const createExperience = useCallback(async (experience: ExperienceRequest) => {
     experiences,
     loading,
     error,
+    updateResume,
     fetchExperiences,
     getExperienceById,
     createExperience,
