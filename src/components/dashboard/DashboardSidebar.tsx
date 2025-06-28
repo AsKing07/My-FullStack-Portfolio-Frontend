@@ -27,85 +27,23 @@ import { cn } from '@/lib/utils';
 import { User as UserType } from '@/types/User/User';
 import { useAuthStore } from '@/stores/auth_store';
 import { useSidebar } from '@/hooks/useSidebar';
+import { useContacts } from '@/hooks/useContact';
+import { useBlog } from '@/hooks/useBlogPost';
+import { ContactStatus } from '@/types/Contact/Contact';
+import { PostStatus } from '@/types/BlogPost/BlogPost';
+import Image from 'next/image';
 
 interface MenuItem {
   path: string;
   name: string;
   icon: React.ReactNode;
-  badge?: string;
+  badge?: string | number;
+  badgeType?: 'new' | 'count' | 'warning';
 }
 
 interface DashboardSidebarProps {
   user: UserType;
 }
-
-// Éléments de menu statiques
-const menuItems: MenuItem[] = [
-  { 
-    path: '/dashboard', 
-    name: 'Dashboard', 
-    icon: <LayoutDashboard className="h-5 w-5" />
-  },
-  {
-    path: '/dashboard/categories',
-    name: 'Gestion des catégories',
-    icon: <Shapes className="h-5 w-5" />
-  },
-
-  { 
-    path: '/dashboard/projects', 
-    name: 'Projets', 
-    icon: <FileCode className="h-5 w-5" />
-  },
-  { 
-    path: '/dashboard/experiences', 
-    name: 'Expériences', 
-    icon: < Briefcase  className="h-5 w-5" />
-  },
-  {
-    path: '/dashboard/skills',
-    name: 'Compétences',
-    icon: <Code className="h-5 w-5" />
- 
-  },
-
-  {
-    path: '/dashboard/education',
-    name: 'Éducation',
-    icon: <GraduationCap className="h-5 w-5" />
-
-  },
-  { 
-    path: '/dashboard/contact', 
-    name: 'Messages', 
-    icon: <Mail className="h-5 w-5" />,
-    // badge: 'New'
-  },
-    { 
-    path: '/dashboard/blog', 
-    name: 'Blog', 
-    icon: <FileText className="h-5 w-5" />,
-    // badge: '5'
-  },
-  { 
-    path: '/dashboard/github', 
-    name: 'GitHub', 
-    icon: <Github className="h-5 w-5" />
-  },
-];
-
-const settingsItems: MenuItem[] = [
-  { 
-    path: '/dashboard/profile', 
-    name: 'Profil', 
-    icon: <User className="h-5 w-5" />
-  },
-  { 
-    path: '/dashboard/settings', 
-    name: 'Paramètres', 
-    icon: <Settings className="h-5 w-5" />
-  },
-];
 
 // Composant pour un groupe de navigation
 const NavGroup = ({ 
@@ -131,7 +69,12 @@ const NavGroup = ({
     )}
     <nav className="space-y-1">
       {items.map((item) => {
-        const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`);
+        const isActive = (() => {
+          if (item.path === '/dashboard') {
+            return pathname === '/dashboard';
+          }
+          return pathname === item.path || pathname.startsWith(`${item.path}/`);
+        })();
         
         return (
           <Tooltip
@@ -141,8 +84,7 @@ const NavGroup = ({
             delayDuration={200}
           >
             <Link
-                       onClick={collapse && isMobile ? (() => collapse()) : undefined}
-
+              onClick={collapse && isMobile ? (() => collapse()) : undefined}
               href={item.path}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 relative group",
@@ -161,9 +103,11 @@ const NavGroup = ({
                   {item.badge && (
                     <span className={cn(
                       "ml-auto rounded-full px-2 py-0.5 text-xs font-medium transition-colors",
-                      item.badge === 'New' 
+                      item.badgeType === 'new' 
                         ? "bg-green-500 text-white animate-pulse" 
-                        : "bg-slate-700 text-slate-300"
+                        : item.badgeType === 'warning'
+                        ? "bg-orange-500 text-white"
+                        : "bg-red-500 text-white"
                     )}>
                       {item.badge}
                     </span>
@@ -171,8 +115,15 @@ const NavGroup = ({
                 </>
               )}
               {isCollapsed && item.badge && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 text-[10px] text-white flex items-center justify-center animate-pulse">
-                  •
+                <span className={cn(
+                  "absolute -top-1 -right-1 h-5 w-5 rounded-full text-[10px] text-white flex items-center justify-center font-medium",
+                  item.badgeType === 'new' 
+                    ? "bg-green-500 animate-pulse" 
+                    : item.badgeType === 'warning'
+                    ? "bg-orange-500"
+                    : "bg-red-500"
+                )}>
+                  {typeof item.badge === 'number' && item.badge > 9 ? '9+' : item.badge}
                 </span>
               )}
             </Link>
@@ -183,12 +134,84 @@ const NavGroup = ({
   </div>
 );
 
+const settingsItems: MenuItem[] = [
+  { 
+    path: '/dashboard/profile', 
+    name: 'Profil', 
+    icon: <User className="h-5 w-5" />
+  },
+];
+
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const { logout } = useAuthStore();
   const { isCollapsed, isMobile, toggle, isTransitioning, collapse } = useSidebar();
   const pathname = usePathname();
-   const { resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
+  
+  // Hooks pour récupérer les données
+  const { contacts } = useContacts();
+  const { posts } = useBlog();
 
+  // Calcul des badges dynamiques
+  const unreadContactsCount = useMemo(() => {
+    return contacts.filter(contact => 
+      contact.status === ContactStatus.UNREAD || !contact.read
+    ).length;
+  }, [contacts]);
+
+  const unpublishedPostsCount = useMemo(() => {
+    return posts.filter(post => 
+      post.status === PostStatus.DRAFT
+    ).length;
+  }, [posts]);
+
+  // Éléments de menu avec badges dynamiques
+  const menuItems: MenuItem[] = useMemo(() => [
+    { 
+      path: '/dashboard', 
+      name: 'Dashboard', 
+      icon: <LayoutDashboard className="h-5 w-5" />
+    },
+    {
+      path: '/dashboard/categories',
+      name: 'Gestion des catégories',
+      icon: <Shapes className="h-5 w-5" />
+    },
+    { 
+      path: '/dashboard/projects', 
+      name: 'Projets', 
+      icon: <FileCode className="h-5 w-5" />
+    },
+    { 
+      path: '/dashboard/experiences', 
+      name: 'Expériences', 
+      icon: <Briefcase className="h-5 w-5" />
+    },
+    {
+      path: '/dashboard/skills',
+      name: 'Compétences',
+      icon: <Code className="h-5 w-5" />
+    },
+    {
+      path: '/dashboard/education',
+      name: 'Éducation',
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    { 
+      path: '/dashboard/contact', 
+      name: 'Messages', 
+      icon: <Mail className="h-5 w-5" />,
+      badge: unreadContactsCount > 0 ? `${unreadContactsCount} non lus`: undefined,
+      badgeType: 'count'
+    },
+    { 
+      path: '/dashboard/blog', 
+      name: 'Blog', 
+      icon: <FileText className="h-5 w-5" />,
+      badge: unpublishedPostsCount > 0 ?  `${unpublishedPostsCount} non publié`  : undefined,
+      badgeType: 'warning'
+    },
+  ], [unreadContactsCount, unpublishedPostsCount]);
 
   // Couleurs dynamiques selon le thème
   const isDark = resolvedTheme === 'dark';
@@ -211,7 +234,6 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
     isMobile && !isCollapsed ? "opacity-100" : "opacity-0 pointer-events-none"
   ), [isMobile, isCollapsed, isDark]);
 
-
   return (
     <>
       {/* Overlay mobile amélioré */}
@@ -223,7 +245,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* Sidebar principale */}
       <aside className={sidebarClasses}>
         {/* Header de la sidebar avec améliorations */}
-            <div className={cn(
+        <div className={cn(
           "flex items-center justify-between p-4 h-16 border-b backdrop-blur-sm",
           isDark
             ? "border-slate-800/50 bg-slate-950/50"
@@ -246,7 +268,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
                 "font-bold text-lg bg-clip-text text-transparent",
                 isDark
                   ? "bg-gradient-to-r from-white to-slate-300"
-                  : "bg-gradient-to-r from-blue-900 to-slate-700"
+                  : "bg-gradient-to-r primary"
               )}>
                 Portfolio
               </span>
@@ -273,7 +295,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
         </div>
         
         {/* Contenu scrollable avec scroll personnalisé */}
-      <div className={cn(
+        <div className={cn(
           "flex-1 overflow-y-auto py-6 px-4 scrollbar-thin",
           isDark
             ? "scrollbar-thumb-slate-700 scrollbar-track-transparent"
@@ -293,7 +315,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
               isDark ? "border-slate-800/50" : "border-slate-200/70"
             )} />
           )}
-         <NavGroup 
+          <NavGroup 
             title={!isCollapsed ? "Compte" : undefined}
             items={settingsItems}
             isCollapsed={isCollapsed}
@@ -326,7 +348,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
                     : "text-slate-500 hover:bg-red-100 hover:text-red-600"
                 )}
               >
-             <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 {!isCollapsed && <span className="ml-2">Déconnexion</span>}
               </Button>
             </Tooltip>
@@ -350,7 +372,9 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
                     : "bg-gradient-to-br from-blue-100 to-blue-300 ring-blue-300 group-hover:ring-blue-500/30"
                 )}>
                   {user.avatarUrl ? (
-                    <img 
+                    <Image
+                      width={40}
+                      height={40}
                       src={user.avatarUrl} 
                       alt={`Avatar de ${user.name}`}
                       className="w-10 h-10 rounded-full object-cover"
@@ -360,7 +384,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
                       "text-xl font-semibold",
                       isDark ? "text-white" : "text-blue-900"
                     )}>
-                           {user.name.charAt(0)}
+                      {user.name.charAt(0)}
                     </span>
                   )}
                 </div>

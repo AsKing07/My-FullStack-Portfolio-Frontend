@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge_component';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -60,7 +61,8 @@ export default function BlogPostPage() {
         <Card>
           {post.image && (
             <div className="relative h-64 w-full overflow-hidden rounded-t-2xl">
-              <img
+              <Image
+                layout='fill'
                 src={post.image}
                 alt={post.title}
                 className="w-full h-full object-cover"

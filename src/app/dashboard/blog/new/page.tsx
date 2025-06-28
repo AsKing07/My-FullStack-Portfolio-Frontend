@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { Input } from '@/components/ui/form/input_component';
 import { BlogPostRequest } from '@/types/BlogPost/BlogPostRequest';
+import Image from 'next/image';
 
 const blogPostSchema = z.object({
   title: z.string().min(2, 'Le titre doit contenir au moins 2 caractères'),
@@ -410,7 +411,9 @@ export default function NewBlogPostPage() {
                 {/* Aperçu de l'image */}
                 {imagePreview && (
                   <div className="relative">
-                    <img 
+                    <Image
+                      width={500}
+                      height={200}
                       src={imagePreview}
                       alt="Aperçu" 
                       className="w-full h-32 object-cover rounded-md border"

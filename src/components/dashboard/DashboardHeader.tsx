@@ -25,6 +25,7 @@ import { User } from '@/types/User/User';
 import { useSidebar } from '@/hooks/useSidebar';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface DashboardHeaderProps {
   user: User;
@@ -122,82 +123,12 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
       </div>
       
       <div className="flex items-center gap-2">
-        {/* Barre de recherche responsive */}
-        <div className="relative">
-          {/* Version desktop */}
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input 
-              type="search" 
-              placeholder="Rechercher..."
-              className="w-64 pl-10 bg-slate-50 border-slate-200 focus:bg-white dark:bg-slate-800 dark:border-slate-700 dark:focus:bg-slate-900 transition-colors"
-            />
-          </div>
-          
-          {/* Version mobile */}
-          <div className="md:hidden">
-            {!isSearchOpen ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSearchOpen(true)}
-                className="hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2 absolute right-0 top-0 bg-white dark:bg-slate-900 p-2 rounded-lg shadow-lg border dark:border-slate-800 min-w-[200px]">
-                <Input 
-                  type="search" 
-                  placeholder="Rechercher..."
-                  className="flex-1"
-                  autoFocus
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsSearchOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+
         
         {/* Actions rapides pour mobile */}
         <div className="flex items-center gap-1">
           {/* Notifications avec indicateur */}
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                className="relative hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                <Bell className="h-5 w-5" />
-                {/* Indicateur de notifications */}
-                <span className="absolute -top-0.5 -right-0.5 h-3 w-3 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 animate-pulse"></span>
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="end" className="w-80">
-              <DropdownMenu.Label className="font-semibold">
-                Notifications
-              </DropdownMenu.Label>
-              <DropdownMenu.Separator />
-              <div className="p-4">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium">Nouveau commentaire</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Il y a 5 minutes</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+
           
           {/* Sélecteur de thème amélioré */}
           <DropdownMenu.Root>
@@ -254,7 +185,9 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                 <div className="relative">
                   <div className="h-8 w-8 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center overflow-hidden dark:from-slate-700 dark:to-slate-800 ring-2 ring-slate-200 dark:ring-slate-700">
                     {user.avatarUrl ? (
-                      <img 
+                      <Image
+                        width={32}
+                        height={32} 
                         src={user.avatarUrl} 
                         alt={`Avatar de ${user.name}`}
                         className="h-8 w-8 rounded-full object-cover"
@@ -281,7 +214,9 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                 <div className="relative">
                   <div className="h-10 w-10 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center overflow-hidden dark:from-slate-700 dark:to-slate-800">
                     {user.avatarUrl ? (
-                      <img 
+                      <Image
+                        width={40}
+                        height={40}
                         src={user.avatarUrl} 
                         alt={`Avatar de ${user.name}`}
                         className="h-10 w-10 rounded-full object-cover"
@@ -309,12 +244,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                   <span>Mon Profil</span>
                 </Link>
               </DropdownMenu.Item>
-              <DropdownMenu.Item asChild>
-                <Link href="/dashboard/settings" className="flex items-center gap-3 py-2">
-                  <Settings className="h-4 w-4" />
-                  <span>Paramètres</span>
-                </Link>
-              </DropdownMenu.Item>
+             
               
               <DropdownMenu.Separator />
               

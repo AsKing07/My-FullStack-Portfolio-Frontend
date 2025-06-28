@@ -397,7 +397,6 @@ export default function ProjectCreatePage() {
                           width: "auto",
                         }}
                       />
-                      {/* <img src={mainImageUrl} alt="Aperçu" className="rounded-lg max-h-48" /> */}
                     </div>
                   )}
                 </div>

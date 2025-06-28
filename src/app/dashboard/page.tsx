@@ -8,6 +8,7 @@ import { Loader2, BookOpen, Briefcase, GraduationCap, Mail, FileText, User, Fold
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card_component";
 import { Badge } from "@/components/ui/badge_component";
+import Image from "next/image";
 
 export default function DashboardHome() {
   const { projects, loading: loadingProj, error: errorProj } = useProjects();
@@ -117,7 +118,11 @@ export default function DashboardHome() {
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                   {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt={user.name} className="w-14 h-14 object-cover rounded-full" />
+                    <Image
+                    width={140}
+                    height={140}
+                    
+                    src={user.avatarUrl} alt={user.name} className="w-14 h-14 object-cover rounded-full" />
                   ) : (
                     <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">{user.name.charAt(0)}</span>
                   )}

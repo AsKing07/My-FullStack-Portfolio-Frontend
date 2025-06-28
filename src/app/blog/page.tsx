@@ -10,6 +10,7 @@ import { Search, Calendar, Clock, AlertTriangle, BookOpen } from 'lucide-react';
 import { useBlog } from '@/hooks/useBlogPost';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
 import { formatDate } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -138,7 +139,8 @@ export default function BlogPage() {
                   <Card className="h-full hover:shadow-lg transition-all duration-300 cursor-pointer group">
                     {post.image && (
                       <div className="relative h-48 overflow-hidden rounded-t-lg">
-                        <img
+                        <Image
+                          layout='fill'
                           src={post.image}
                           alt={post.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

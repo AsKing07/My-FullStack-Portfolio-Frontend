@@ -1,8 +1,18 @@
 
 const nextConfig = {
   /* config options here */
-    images: {
-    domains: ["avatars.githubusercontent.com", "localhost"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+      },
+    ],
   },
 };
 
