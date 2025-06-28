@@ -27,7 +27,7 @@ export function useCategory() {
     setError(null);
     try {
       const res = await CategoryService.getCategoryBySlug(slug);
-      return res.data;
+      return res.data.items;
     } catch (err: any) {
       setError(err.message || 'Erreur lors du chargement de la catégorie');
       return null;
