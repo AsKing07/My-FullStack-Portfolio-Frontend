@@ -112,12 +112,16 @@ const NavGroup = ({
   title, 
   items, 
   isCollapsed, 
-  pathname 
+  pathname, 
+  collapse,
+  isMobile
 }: { 
   title?: string;
   items: MenuItem[];
   isCollapsed: boolean;
   pathname: string;
+  collapse?: Function ;
+  isMobile?: boolean;
 }) => (
   <div className="mb-6">
     {title && !isCollapsed && (
@@ -137,6 +141,8 @@ const NavGroup = ({
             delayDuration={200}
           >
             <Link
+                       onClick={collapse && isMobile ? (() => collapse()) : undefined}
+
               href={item.path}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 relative group",
@@ -179,7 +185,7 @@ const NavGroup = ({
 
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
   const { logout } = useAuthStore();
-  const { isCollapsed, isMobile, toggle, isTransitioning } = useSidebar();
+  const { isCollapsed, isMobile, toggle, isTransitioning, collapse } = useSidebar();
   const pathname = usePathname();
    const { resolvedTheme } = useTheme();
 
@@ -277,6 +283,8 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             items={menuItems}
             isCollapsed={isCollapsed}
             pathname={pathname}
+            collapse={collapse}
+            isMobile={isMobile}
           />
           
           {!isCollapsed && (
@@ -290,6 +298,8 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             items={settingsItems}
             isCollapsed={isCollapsed}
             pathname={pathname}
+            collapse={collapse}
+            isMobile={isMobile}
           />
         </div>
         
