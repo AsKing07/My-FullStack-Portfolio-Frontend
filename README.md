@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Frontend
 
-## Getting Started
+Un portfolio moderne et responsive développé avec Next.js, TypeScript et Tailwind CSS.
 
-First, run the development server:
+## 🚀 Technologies utilisées
+
+- **Next.js 14** - Framework React avec App Router
+- **TypeScript** - Typage statique pour JavaScript
+- **Tailwind CSS** - Framework CSS utilitaire
+- **React** - Bibliothèque JavaScript pour l'interface utilisateur
+- **ESLint** - Linting et qualité du code
+
+## 📁 Structure du projet
+
+```
+src/
+├── app/                 # Pages et layouts (App Router)
+├── components/          # Composants React réutilisables
+├── constants/           # Constantes et configuration
+├── hooks/              # Hooks React personnalisés
+├── lib/                # Utilities et helpers
+├── providers/          # Providers React (Context, etc.)
+├── services/           # Services API et logique métier
+├── stores/             # Gestion d'état (Zustand, Redux, etc.)
+├── styles/             # Styles globaux et configurations CSS
+└── types/              # Définitions TypeScript
+```
+
+## 🛠️ Installation
+
+1. Clonez le repository :
+```bash
+git clone <your-repo-url>
+cd portfolio-frontend
+```
+
+2. Installez les dépendances :
+```bash
+npm install
+# ou
+yarn install
+# ou
+pnpm install
+```
+
+3. Copiez le fichier d'environnement :
+```bash
+cp .env.local.example .env.local
+```
+
+4. Configurez vos variables d'environnement dans `.env.local`
+
+## 🚀 Développement
+
+Lancez le serveur de développement :
 
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
+# ou
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour voir le résultat.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Scripts disponibles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Lance le serveur de développement
+- `npm run build` - Construit l'application pour la production
+- `npm run start` - Lance l'application en mode production
+- `npm run lint` - Vérifie la qualité du code avec ESLint
+- `npm run type-check` - Vérifie les types TypeScript
 
-## Learn More
+## 🎨 Fonctionnalités
 
-To learn more about Next.js, take a look at the following resources:
+- ✅ Design responsive et moderne
+- ✅ Mode sombre/clair
+- ✅ Animations fluides
+- ✅ SEO optimisé
+- ✅ Performance optimisée
+- ✅ Accessibilité (a11y)
+- ✅ TypeScript pour la sécurité des types
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Déploiement
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vercel (Recommandé)
 
-## Deploy on Vercel
+Le moyen le plus simple de déployer votre application Next.js est d'utiliser la [plateforme Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Autres plateformes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Consultez la [documentation de déploiement Next.js](https://nextjs.org/docs/app/building-your-application/deploying) pour plus de détails sur d'autres plateformes.
+
+## 📚 Ressources utiles
+
+- [Documentation Next.js](https://nextjs.org/docs)
+- [Documentation TypeScript](https://www.typescriptlang.org/docs/)
+- [Documentation Tailwind CSS](https://tailwindcss.com/docs)
+
+## ⚠️ Utilisation
+
+Ce projet est un portfolio personnel. L'utilisation, la modification ou la distribution du code nécessite une autorisation explicite de l'auteur.
+
+## 📄 Licence
+
+Ce projet est sous licence privée. Tous droits réservés.
+
+**© 2025 [Charbel SONON]. Tous droits réservés.**
+
+L'utilisation, la reproduction, la modification ou la distribution de ce code source, en tout ou en partie, sans autorisation écrite préalable de l'auteur, est strictement interdite.
+
+---
+
+Développé avec ❤️ par [Charbel SONON]
