@@ -57,7 +57,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await UserService.updateResume(resume);
-      setUser(res.data!.items);
+     fetchUserByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour du CV');
       throw new Error(err.message || 'Erreur lors de la mise à jour du CV');
@@ -65,6 +65,21 @@ export function useUser() {
       setLoading(false);
     }
   }, []);
+
+  const updateAvatar = useCallback(async (avatar: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await UserService.updateAvatar(avatar);
+    fetchUserByAdmin();
+    } catch (err: any) {
+      setError(err.message || 'Erreur lors de la mise à jour de l\'avatar');
+      throw new Error(err.message || 'Erreur lors de la mise à jour de l\'avatar');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
 
   useEffect(() => {
     // Chargement initial de l'utilisateur si nécessaire
@@ -86,6 +101,7 @@ export function useUser() {
     fetchUserByAdmin,
     updateUser,
     updateResume,
+    updateAvatar,
     setUser, // Pour modification manuelle éventuelle
   };
 }

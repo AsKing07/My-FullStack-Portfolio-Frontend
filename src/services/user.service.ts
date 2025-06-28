@@ -23,6 +23,15 @@ export const UserService = {
         },
       })).data;
     },
+    updateAvatar: async (avatar: File): Promise<ApiResponse<User>> => {
+      const formData = new FormData();
+      formData.append('avatar', avatar);
+      return (await apiClient.put('/auth/user', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })).data;
+    }
 
 };
 
