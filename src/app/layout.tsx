@@ -15,6 +15,9 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 
+  icons: {
+    icon: '/logo.png',
+  },
   title: {
     default: 'Charbel SONON | Portfolio - Développeur Full Stack',
     template: '%s | Portfolio'

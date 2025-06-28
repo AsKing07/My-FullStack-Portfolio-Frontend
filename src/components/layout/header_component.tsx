@@ -216,7 +216,7 @@ export function Header({
             className="text-xl font-bold text-gradient focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md"
             aria-label="Retour à l'accueil"
           >
-            Portfolio
+            Charbel's Portfolio
           </Link>
 
           {/* Desktop Navigation */}
