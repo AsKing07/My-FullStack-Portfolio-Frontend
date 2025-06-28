@@ -13,9 +13,23 @@ export const BlogService = {
     getBlogPostBySlug: async (slug: string): Promise<ApiResponse<BlogPost>> =>
     (await apiClient.get(`/blog/${slug}`)).data,
     createBlogPost: async (blogPost: BlogPostRequest): Promise<ApiResponse<BlogPost>> =>
-    (await apiClient.post('/blog', blogPost)).data,
-    updateBlogPost: async (id: string, blogPost: BlogPostRequest): Promise<ApiResponse<BlogPost>> =>
-    (await apiClient.put(`/blog/${id}`, blogPost)).data,
+   {
+     return (await apiClient.post('/blog', blogPost, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+     })).data
+
+   },
+   updateBlogPost: async (id: string, blogPost: BlogPostRequest): Promise<ApiResponse<BlogPost>> =>
+  {
+     return (await apiClient.put(`/blog/${id}`, blogPost, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+     })).data
+
+   },
     publishBlogPost: async (id: string): Promise<ApiResponse<BlogPost>> =>
     (await apiClient.put(`/blog/${id}/publish`)).data,
     deleteBlogPost: async (id: string): Promise<ApiResponse> =>

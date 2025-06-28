@@ -67,6 +67,7 @@ const {isAuthenticated} = useAuthStore();
     setLoading(true);
     setError(null);
     try {
+      console.log('Updating blog post with ID:', id, 'and data:', blogPost);
       await BlogService.updateBlogPost(id, blogPost);
       await fetchBlogPostsByAdmin();
     } catch (err: any) {

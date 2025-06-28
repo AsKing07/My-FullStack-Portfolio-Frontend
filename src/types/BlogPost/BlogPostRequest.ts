@@ -9,7 +9,7 @@ export interface BlogPostRequest {
     featured?: boolean;
     metaTitle?: string;
     metaDesc?: string;
-    image?: string;
+    image?: File;
     readingTime?: number;
     publishedAt?: Date;
 }

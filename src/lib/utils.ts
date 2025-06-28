@@ -51,8 +51,18 @@ export function generateSlug(text: string): string {
     .replace(/[^a-z0-9 -]/g, '') // Supprimer les caractères spéciaux
     .replace(/\s+/g, '-') // Remplacer les espaces par des tirets
     .replace(/-+/g, '-') // Supprimer les tirets multiples
-    .replace(/^-+|-+$/g, ''); // Supprimer les tirets en début et fin
+    .replace(/^-+|-+$/g, '') // Supprimer les tirets en début et fin
+          .replace(/[àáâäã]/g, 'a')
+      .replace(/[èéêë]/g, 'e')
+      .replace(/[ìíîï]/g, 'i')
+      .replace(/[òóôöõ]/g, 'o')
+      .replace(/[ùúûü]/g, 'u')
+      .replace(/[ç]/g, 'c')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
 }
+
 
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
@@ -162,38 +172,5 @@ export const skillCategories = [
   'Other'
 ] as const;
 
-export const projectTags = [
-  'React',
-  'Next.js',
-  'Vue.js',
-  'Angular',
-  'TypeScript',
-  'JavaScript',
-  'Node.js',
-  'Express',
-  'Prisma',
-  'PostgreSQL',
-  'MongoDB',
-  'Tailwind CSS',
-  'CSS',
-  'HTML',
-  'Python',
-  'Django',
-  'Flask',
-  'PHP',
-  'Laravel',
-  'Docker',
-  'AWS',
-  'Vercel',
-  'Netlify'
-] as const;
 
-export const socialIcons = {
-  github: 'https://github.com',
-  linkedin: 'https://linkedin.com',
-  twitter: 'https://twitter.com',
-  instagram: 'https://instagram.com',
-  youtube: 'https://youtube.com',
-  discord: 'https://discord.com',
-  email: 'mailto:',
-} as const;
+
