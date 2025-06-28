@@ -21,6 +21,20 @@ export function useSkills() {
     }
   }, []);
 
+  const getSkillById = useCallback(async (id: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await SkillsService.getSkillById(id);
+      return res.data.items;
+    } catch (err: any) {
+      setError(err.message || 'Erreur lors du chargement de la compétence');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const createSkill = useCallback(async (skill: SkillRequest) => {
     setLoading(true);
     setError(null);
@@ -67,5 +81,5 @@ export function useSkills() {
     fetchSkills();
   }, [fetchSkills]);
 
-  return { skills, loading, error, fetchSkills, createSkill, updateSkill, deleteSkill };
+  return { skills, loading, error, fetchSkills, getSkillById, createSkill, updateSkill, deleteSkill };
 }
