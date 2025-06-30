@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/form/input_component";
 import { TextArea } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button_component";
 import { Tabs } from "@radix-ui/themes";
-import { Badge } from "@/components/ui/badge_component";
 import { Select } from "@radix-ui/themes";
 import { Checkbox } from "@radix-ui/themes";
 import {
@@ -25,7 +24,6 @@ import {
   Save,
   Image as ImageIcon,
   Link as LinkIcon,
-  Calendar,
 } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { ProjectRequest } from "@/types/Project/ProjectRequest";

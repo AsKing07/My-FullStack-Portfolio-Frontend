@@ -121,17 +121,28 @@ export default function ProjectEditPage() {
 
   // Upload image principale
   const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
+        try {
       const file = e.target.files?.[0];
       if (!file) return;
+
+      // Upload vers API
       const urls = await saveProjectImages(file);
+
       if (urls) {
-        setMainImageUrl(urls[0]);
-        form.setValue('image', urls[0]);
+        if (Array.isArray(urls)) {
+          setMainImageUrl(urls[0]);
+          form.setValue("image", urls[0]);
+        } else {
+          setMainImageUrl(urls);
+          form.setValue("image", urls);
+        }
       }
-      toast.success('Image principale téléchargée avec succès');
+      toast.success("Image principale téléchargée avec succès");
     } catch (error) {
-      toast.error(`Erreur lors du téléchargement de l'image principale`);
+      toast.error(
+        `Erreur lors du téléchargement de l\'image principale ` +
+          (error instanceof Error ? error.message : "")
+      );
     }
   };
 
