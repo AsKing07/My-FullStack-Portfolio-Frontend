@@ -110,8 +110,10 @@ export default function HomePage() {
                 <Image
                   src={user.avatarUrl}
                   alt="Photo de profil"
-                  fill
-                  className="object-cover"
+                  
+                 className="object-cover w-full h-full"
+                   width={240}
+        height={240}
                   priority
                 />
               ) : (
