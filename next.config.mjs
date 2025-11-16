@@ -13,6 +13,9 @@ const nextConfig = {
         port: '8000',
       },
     ],
+        dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   distDir: 'build'
 };
