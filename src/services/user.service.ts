@@ -9,7 +9,7 @@ export const UserService = {
     (await apiClient.get(`/auth/user/`)).data,
 
     getUserByAdmin: async (): Promise<ApiResponse<User>> =>
-    (await apiClient.get(`/auth/user/`)).data,
+    (await apiClient.get(`/auth/userByAdmin/`)).data,
 
     updateUser: async (user: UserRequest): Promise<ApiResponse<User>> =>
     (await apiClient.put('/auth/user', user)).data,
