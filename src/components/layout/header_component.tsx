@@ -31,7 +31,7 @@ const DEFAULT_NAVIGATION: NavigationItem[] = [
   { name: "Expérience", href: "/experience" },
   { name: "Éducation", href: "/education" },
   { name: "Projets", href: "/projects" },
-  { name: "Stats GitHub", href: "/github-stats" },  
+  { name: "Stats Dev", href: "/github-stats" },  
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ]

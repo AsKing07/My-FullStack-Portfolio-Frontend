@@ -17,10 +17,11 @@ import {
   Activity,
   AlertTriangle,
   BarChartIcon,
+  Monitor,
+  TrendingUp,
 } from "lucide-react";
 import { useGitHub } from "@/hooks/useGithub";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
-
 
 const languageColors: Record<string, string> = {
   JavaScript: "#f1e05a",
@@ -52,43 +53,40 @@ export default function GitHubStatsPage() {
     fetchData();
   }, [fetchStats, fetchRepos]);
 
-
-
   if (isLoading) {
     return (
-<div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">        
-  <div className="container mx-auto">
-    
-     <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-  <LoadingSpinner />
-</div>
+      <div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+        <div className="container mx-auto">
+          <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+            <LoadingSpinner />
+          </div>
         </div>
       </div>
     );
   }
 
-if (error) {
-  return (
-    <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-        <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
-        <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
-        </h2>
-        <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement des statistiques GitHub&nbsp;:<br />
-          <span className="font-mono break-all">{error}</span>
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
-        >
-          Réessayer
-        </button>
+  if (error) {
+    return (
+      <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+        <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
+          <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
+          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
+            Une erreur est survenue
+          </h2>
+          <p className="text-sm text-red-600 dark:text-red-200 text-center">
+            Erreur lors du chargement des statistiques GitHub&nbsp;:<br />
+            <span className="font-mono break-all">{error}</span>
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
+          >
+            Réessayer
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
@@ -99,10 +97,10 @@ if (error) {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
-          <BarChartIcon className="w-10 h-10 text-primary" />
-          Statistique Github
-        </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
+            <BarChartIcon className="w-10 h-10 text-primary" />
+            Statistiques de développement
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Aperçu de mon activité de développement et de mes contributions open
             source
@@ -178,56 +176,79 @@ if (error) {
           </Card>
         </motion.div>
 
-        {/* Language Stats */}
-        {stats?.stats.languages && stats.stats.languages.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mb-12"
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Code className="w-5 h-5" />
-                  Langages les Plus Utilisés
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {stats.stats.languages
-                    .sort((a, b) => b.count - a.count)
-                    .slice(0, 8)
-                    .map((lang) => (
-                      <div key={lang.name} className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 min-w-[120px]">
-                          <div
-                            className="w-3 h-3 rounded-full"
-                            style={{
-                              backgroundColor:
-                                languageColors[lang.name] || "#6b7280",
-                            }}
-                          ></div>
-                          <span className="text-sm font-medium">
-                            {lang.name}
-                          </span>
-                        </div>
-                        <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                          <div
-                            className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
-                            style={{ width: `${lang.percentage}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-sm text-muted-foreground min-w-[40px] text-right">
-                          {lang.percentage.toFixed(1)}%
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
+        {/* Wakatime Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="space-y-12 mb-12"
+        >
+          {/* Language Percentage */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Code className="w-5 h-5" />
+                Pourcentage de langage sur la dernière année
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-100 flex items-center justify-center">
+                <iframe
+                  src="https://wakatime.com/share/@asking007/34ba19f4-dfbe-4949-8c52-b81a61482f84.svg"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  className="rounded-lg"
+                  title="Pourcentage de langage sur la dernière année"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Coding Activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                Activité de développement personnel les 30 derniers jours
+              </CardTitle>
+            </CardHeader>
+           <CardContent>
+              <div className="w-full h-100  flex items-center justify-center">
+                <iframe
+                  src="https://wakatime.com/share/@asking007/185b1ad0-6b4b-4d22-b19f-29ff474684ed.svg"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  className="rounded-lg"
+                  title="Activité de codage les 30 derniers jours"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Editors */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Monitor className="w-5 h-5" />
+                Éditeurs utilisés sur la dernière année
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-80 flex items-center justify-center">
+                <iframe
+                  src="https://wakatime.com/share/@asking007/ed887c56-b8da-4e9c-976e-fed3e5465d34.svg"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  className="rounded-lg"
+                  title="Éditeurs utilisés sur la dernière année"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Popular Repositories */}
         <motion.div
