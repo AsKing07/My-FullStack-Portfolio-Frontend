@@ -20,7 +20,7 @@ const typeColors: Record<string, string> = {
   CONTRACT: "bg-pink-600",
 };
 
-const hardSkills = [
+const SoftSkills = [
   "Gestion du temps",
   "Travail en équipe",
   "Résolution de problèmes",
@@ -232,11 +232,11 @@ export default function ExperiencePage() {
              
          <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <LightbulbIcon className="w-6 h-6 text-blue-600" />
-            Hard Skills
+           Soft Skills
 
           </h2>
           <div className="flex flex-wrap gap-4 mx-18">
-            {hardSkills.map((skill) => (
+            {SoftSkills.map((skill) => (
               <Badge
                 key={skill}
                 variant="secondary"
