@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Adresse email invalide' }),
@@ -136,6 +137,16 @@ export default function DashboardLoginPage() {
                 {errors.password && (
                   <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
                 )}
+              </div>
+
+              {/* Lien mot de passe oublié */}
+              <div className="flex justify-end">
+                <Link 
+                  href="/dashboard/forgot-password" 
+                  className="text-sm text-blue-600 hover:underline hover:text-blue-700 transition-colors"
+                >
+                  Mot de passe oublié ?
+                </Link>
               </div>
 
               <Button

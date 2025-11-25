@@ -13,4 +13,10 @@ export const AuthService = {
 
   updatePassword: async (currentPassword: string, newPassword: string): Promise<ApiResponse> =>
     (await apiClient.put('/auth/password', { currentPassword, newPassword })).data,
+
+  forgotPassword: async (email: string): Promise<ApiResponse> =>
+    (await apiClient.post('/auth/forgot-password', { email })).data,
+
+  resetPassword: async (token: string, newPassword: string): Promise<ApiResponse> =>
+    (await apiClient.post('/auth/reset-password', { token, newPassword })).data,
 };

@@ -26,7 +26,16 @@ const DashboardLayoutContent = ({ children }: DashboardLayoutProps) => {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!isAuthenticated && pathname !== "/dashboard/login") {
+    
+    console.log('DashboardLayout - pathname:', pathname);
+    console.log('DashboardLayout - isAuthenticated:', isAuthenticated);
+    
+    // Pages accessibles sans authentification
+    const publicPages = ["/dashboard/login", "/dashboard/forgot-password", "/dashboard/reset-password"];
+    const isPublicPage = publicPages.includes(pathname);
+    
+    
+    if (!isAuthenticated && !isPublicPage) {
       router.replace("/dashboard/login");
     } else if (isAuthenticated && pathname === "/dashboard/login") {
       router.replace("/dashboard");
@@ -44,7 +53,12 @@ const DashboardLayoutContent = ({ children }: DashboardLayoutProps) => {
     );
   }
 
-  if (!isAuthenticated && pathname === "/dashboard/login") {
+  // Pages accessibles sans authentification
+  const publicPages = ["/dashboard/login", "/dashboard/forgot-password", "/dashboard/reset-password"];
+  const isPublicPage = publicPages.includes(pathname);
+
+  // Si on est sur une page publique et pas authentifié, on affiche le contenu
+  if (!isAuthenticated && isPublicPage) {
     return (
       <Suspense fallback={<LoadingSpinner />}>
         {children}
@@ -52,6 +66,7 @@ const DashboardLayoutContent = ({ children }: DashboardLayoutProps) => {
     );
   }
 
+  // Si on n'est pas authentifié et pas sur une page publique, on redirige vers login
   if (!isAuthenticated) {
     return null;
   }
