@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground">
                   Vérifiez votre boîte de réception et vos spams.
-                  Le lien sera valide pendant 1 heure.
+                  Le lien sera valide pendant 2 heures.
                 </p>
               </div>
             </CardContent>
