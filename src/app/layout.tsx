@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@/providers/theme_provider";
 import { Toaster } from "sonner";
 import ClientLayout from "@/app/ClientLayout";
+import { Analytics } from "@vercel/analytics/next"
+
 
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
@@ -66,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <Theme className="dark:bg-slate-950 bg-slate-50">
             <ClientLayout> {children}</ClientLayout>
+              <Analytics />
             <Toaster richColors position="top-right" />
           </Theme>
         </ThemeProvider>
