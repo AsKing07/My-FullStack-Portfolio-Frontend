@@ -39,7 +39,7 @@ export default function ProjectsPage() {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-12 drop-shadow flex justify-center items-center gap-3">
           <Layers className="w-10 h-10 text-blue-600" />
-          Projets réalisés
+          Completed projects
         </h1>
 
         {/* Filtres par catégorie */}
@@ -54,7 +54,7 @@ export default function ProjectsPage() {
             )}
             onClick={() => setSelectedCategory(null)}
           >
-            Tous
+            All
           </Badge>
           {(categories.length > 0 ? categories : projectCategories).map((cat: any) => (
             <Badge
@@ -99,13 +99,13 @@ export default function ProjectsPage() {
                     <div className="flex items-center gap-2 mb-2">
                       <h2 className="text-xl font-semibold">{project.title}</h2>
                       <Badge className={cn("ml-2", statusColors[project.status], "text-white")}>
-                        {project.status === "DRAFT" && "Brouillon"}
-                        {project.status === "PUBLISHED" && "Publié"}
-                        {project.status === "ARCHIVED" && "Archivé"}
+                        {project.status === "DRAFT" && "Draft"}
+                        {project.status === "PUBLISHED" && "Published"}
+                        {project.status === "ARCHIVED" && "Archived"}
                       </Badge>
                       {project.featured && (
                         <span className="ml-2 px-2 py-1 rounded bg-gradient-to-r from-blue-600 to-purple-600 text-xs text-white font-bold shadow">
-                          À la une
+                          Featured
                         </span>
                       )}
                     </div>
@@ -141,21 +141,21 @@ export default function ProjectsPage() {
                     <div className="flex gap-3 mt-auto">
                       {project.liveUrl && (
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <span title="Voir le projet en ligne">
+                          <span title="View the project online">
                             <ExternalLink className="w-5 h-5 text-blue-600 hover:text-blue-800 transition" />
                           </span>
                         </Link>
                       )}
                               {project.githubUrl && (
                         <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                          <span title="Voir sur GitHub">
+                          <span title="View on GitHub">
                             <Github className="w-5 h-5 text-gray-700 dark:text-gray-200 hover:text-black dark:hover:text-white transition" />
                           </span>
                         </Link>
                       )}
                       {project.figmaUrl && (
-                        <Link href={project.figmaUrl} target="_blank" rel="noopener noreferrer">
-                          <span title="Voir sur Figma">
+                        <Link  href={project.figmaUrl} target="_blank" rel="noopener noreferrer">
+                          <span title="See on Figma">
                             <Figma className="w-5 h-5 text-pink-500 hover:text-pink-700 transition" />
                           </span>
                         </Link>

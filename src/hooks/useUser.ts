@@ -19,7 +19,7 @@ export function useUser() {
       console.log('User fetched:', res.data);
 
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de l\'utilisateur');
+      setError(err.message || 'Error loading user');
     } finally {
       setLoading(false);
     }

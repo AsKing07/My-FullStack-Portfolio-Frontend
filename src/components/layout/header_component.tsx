@@ -26,12 +26,12 @@ interface HeaderProps {
 
 // Configuration par défaut de la navigation
 const DEFAULT_NAVIGATION: NavigationItem[] = [
-  { name: "Accueil", href: "/" },
-  { name: "À propos", href: "/about" },
-  { name: "Expérience", href: "/experience" },
-  { name: "Éducation", href: "/education" },
-  { name: "Projets", href: "/projects" },
-  { name: "Stats Dev", href: "/github-stats" },  
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Experience", href: "/experience" },
+  { name: "Education", href: "/education" },
+  { name: "Projects", href: "/projects" },
+  { name: "Dev Stats", href: "/github-stats" },  
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ]
@@ -252,11 +252,11 @@ export function Header({
                 onClick={openMenu}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu"
-                aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                aria-label={isOpen ? "Close menu" : "Open menu"}
                 className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 <span className="sr-only">
-                  {isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                  {isOpen ? "Close menu" : "Open menu"}
                 </span>
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
@@ -291,10 +291,10 @@ export function Header({
         variant="ghost"
         size="icon"
         onClick={closeMenu}
-        aria-label="Fermer le menu"
+        aria-label="Close menu"
         className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       >
-        <span className="sr-only">Fermer le menu</span>
+        <span className="sr-only">Close menu</span>
         <X className="h-6 w-6" aria-hidden="true" />
       </Button>
     </div>

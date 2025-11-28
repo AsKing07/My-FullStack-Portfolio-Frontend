@@ -16,7 +16,7 @@ export function useCategory() {
       setCategories(res.data?.items || []);
       console.log('Categories fetched:', res.data.items);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des catégories');
+      setError(err.message || 'Error loading categories');
     } finally {
       setLoading(false);
     }
@@ -29,7 +29,7 @@ export function useCategory() {
       const res = await CategoryService.getCategoryBySlug(slug);
       return res.data.items;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de la catégorie');
+      setError(err.message || 'Error loading category');
       return null;
     } finally {
       setLoading(false);
@@ -43,8 +43,8 @@ export function useCategory() {
       await CategoryService.createCategory(category);
       await fetchCategories();
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création de la catégorie');
-      throw new Error(err.message || 'Erreur lors de la création de la catégorie');
+      setError(err.message || 'Error creating category');
+      throw new Error(err.message || 'Error creating category');
     } finally {
       setLoading(false);
     }

@@ -18,7 +18,7 @@ export function useContacts() {
       const res = await ContactService.getContacts();
       setContacts(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des contacts');
+      setError(err.message || 'Error loading contacts');
     } finally {
       setLoading(false);
     }
@@ -31,8 +31,8 @@ export function useContacts() {
       const res = await ContactService.getContactById(id);
       return res.data.items;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement du contact');
-      throw new Error(err.message || 'Erreur lors du chargement du contact');
+      setError(err.message || 'Error loading contact');
+      throw new Error(err.message || 'Error loading contact');
     } finally {
       setLoading(false);
     }
@@ -45,8 +45,8 @@ export function useContacts() {
       await ContactService.createContact(contact);
 
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création du contact');
-       throw  new Error(err.message || 'Erreur lors de la création du contact');
+      setError(err.message || 'Error creating contact');
+       throw  new Error(err.message || 'Error creating contact');
     } finally {
       setLoading(false);
     }

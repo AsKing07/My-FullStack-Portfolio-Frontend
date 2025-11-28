@@ -12,7 +12,7 @@ export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOpt
     day: 'numeric',
   };
 
-  return new Intl.DateTimeFormat('fr-FR', options || defaultOptions).format(new Date(date));
+  return new Intl.DateTimeFormat('en-US', options || defaultOptions).format(new Date(date));
 }
 
 export function formatDateShort(date: string | Date): string {
@@ -31,16 +31,16 @@ export function calculateDuration(startDate: string | Date, endDate?: string | D
   if (diffYears > 0) {
     const remainingMonths = diffMonths % 12;
     if (remainingMonths > 0) {
-      return `${diffYears} an${diffYears > 1 ? 's' : ''} ${remainingMonths} mois`;
+      return `${diffYears} an${diffYears > 1 ? 's' : ''} ${remainingMonths} months`;
     }
     return `${diffYears} an${diffYears > 1 ? 's' : ''}`;
   }
 
   if (diffMonths > 0) {
-    return `${diffMonths} mois`;
+    return `${diffMonths} months`;
   }
 
-  return 'Moins d\'un mois';
+  return 'Less than a month';
 }
 
 export function generateSlug(text: string): string {
@@ -117,7 +117,7 @@ export function copyToClipboard(text: string): Promise<void> {
     try {
       document.execCommand('copy');
     } catch (error) {
-      console.error('Erreur lors de la copie:', error);
+      console.error('Error while copying:', error);
     } finally {
       textArea.remove();
     }
@@ -147,18 +147,18 @@ export function getRelativeTime(date: string | Date): string {
   const diffMinutes = Math.floor(diffTime / (1000 * 60));
 
   if (diffDays > 0) {
-    return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   }
 
   if (diffHours > 0) {
-    return `Il y a ${diffHours} heure${diffHours > 1 ? 's' : ''}`;
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
   }
 
   if (diffMinutes > 0) {
-    return `Il y a ${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
+    return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
   }
 
-  return 'À l\'instant';
+  return 'Just now';
 }
 
 export const skillCategories = [

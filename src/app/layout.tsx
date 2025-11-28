@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     default: 'Charbel SONON | Portfolio - Développeur Full Stack',
     template: '%s | Portfolio'
   },
-  description: 'Portfolio de Charbel SONON? développeur full stack spécialisé en React, Next.js, Node.js et TypeScript.',
-  keywords: ['portfolio', 'développeur', 'full stack', 'react', 'nextjs', 'nodejs', 'typescript'],
+  description: 'Portfolio de Charbel SONON? développeur full stack spécialisé en Anhular, React, Next.js, Node.js, Java, et TypeScript.',
+  keywords: ['portfolio', 'développeur', 'full stack', 'react', 'nextjs', 'nodejs', 'typescript', 'charbel sonon', 'web development', 'javascript', 'angular', 'java'],
   authors: [{ name: 'Charbel SONON' }],
   creator: 'Charbel SONON',
   openGraph: {

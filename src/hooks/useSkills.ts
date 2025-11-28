@@ -15,7 +15,7 @@ export function useSkills() {
       const res = await SkillsService.getSkills();
       setSkills(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des compétences');
+      setError(err.message || 'Error loading skills');
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ export function useSkills() {
       const res = await SkillsService.getSkillById(id);
       return res.data.items;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de la compétence');
+      setError(err.message || 'Error loading skill');
       return null;
     } finally {
       setLoading(false);

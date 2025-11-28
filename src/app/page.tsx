@@ -47,17 +47,17 @@ export default function HomePage() {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-          <span className="text-5xl mb-2" role="img" aria-label="Triste">😢</span>
-          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">Une erreur est survenue</h2>
+          <span className="text-5xl mb-2" role="img" aria-label="Sad face">😢</span>
+          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">An error has occurred</h2>
           <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            Erreur lors du chargement des données du portfolio :<br />
+           Error loading portfolio data :<br />
             <span className="font-mono break-all">{error}</span>
           </p>
           <button
             onClick={() => window.location.reload()}
             className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
           >
-            Réessayer
+            Try again
           </button>
         </div>
       </div>
@@ -74,12 +74,12 @@ export default function HomePage() {
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl">
               {user?.bio ||
-                "Développeur full stack passionné par React, Next.js, Node.js et TypeScript. J’aime créer des applications web modernes, performantes et accessibles."}
+                "Passionate full stack developer. I like to create modern, efficient and accessible web applications."}
             </p>
             <div className="flex flex-wrap gap-4">
               <Button asChild>
                 <Link href="/about">
-                  Mieux me connaître
+                  Know myself better
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -87,7 +87,7 @@ export default function HomePage() {
                 variant="outline"
                 className="cursor-pointer"
                 onClick={() => {
-                  toast.info("Téléchargement du CV en cours...");
+                  toast.info("CV download in progress...");
                   const resumeUrl = user?.resumeUrl;
                   if (resumeUrl) {
                     const link = document.createElement("a");
@@ -96,11 +96,11 @@ export default function HomePage() {
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    toast.success("Téléchargement du CV terminé !");
+                    toast.success("Resume download completed !");
                   }
                 }}
               >
-                <Download className="mr-2 h-4 w-4" /> Télécharger CV
+                <Download className="mr-2 h-4 w-4" />Download CV
               </Button>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function HomePage() {
               {user?.avatarUrl ? (
                 <Image
                   src={user.avatarUrl}
-                  alt="Photo de profil"
+                  alt="Profile picture"
                   
                  className="object-cover w-full h-full"
                    width={240}
@@ -132,11 +132,11 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold flex items-center gap-2">
               <Briefcase className="w-7 h-7 text-blue-600" />
-              Expériences récentes
+              Recent experiences
             </h2>
             <Button variant="ghost" asChild>
               <Link href="/experience">
-                Voir tout
+                See all
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -156,7 +156,7 @@ export default function HomePage() {
                       {exp.company} — {exp.location}
                     </div>
                     <div className="text-xs text-gray-500 mb-2">
-                      {(exp.startDate ? formatDate(exp.startDate) : exp.startDate)} - {(exp.endDate  ? formatDate(exp.endDate) : exp.endDate || "Aujourd'hui")}
+                      {(exp.startDate ? formatDate(exp.startDate) : exp.startDate)} - {(exp.endDate  ? formatDate(exp.endDate) : exp.endDate || "Today")}
                     </div>
                     <div className="line-clamp-3">{exp.description}</div>
                   </CardContent>
@@ -175,11 +175,11 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold flex items-center gap-2">
               <GraduationCap className="w-7 h-7 text-purple-600" />
-              Formations
+            Education & Formations
             </h2>
             <Button variant="ghost" asChild>
               <Link href="/education">
-                Voir tout
+                See all
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -197,7 +197,7 @@ export default function HomePage() {
                   <CardContent>
                     <div className="text-muted-foreground text-sm mb-2">{edu.school}</div>
                     <div className="text-xs text-gray-500 mb-2">
-                      {edu.startDate   ?  formatDate(edu.startDate)  : edu.startDate} - {edu.endDate  ?   formatDate(edu.endDate) : edu.endDate || "Aujourd'hui"}
+                      {edu.startDate   ?  formatDate(edu.startDate)  : edu.startDate} - {edu.endDate  ?   formatDate(edu.endDate) : edu.endDate || "Today"}
                     </div>
                     <div className="line-clamp-3">{edu.description}</div>
                   </CardContent>
@@ -216,11 +216,11 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold flex items-center gap-2">
              <WorkflowIcon className="w-7 h-7 text-yellow-300" />
-              Projets récents
+              Recent projects
             </h2>
             <Button variant="ghost" asChild>
               <Link href="/projects">
-                Voir tout
+                See all
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -257,7 +257,7 @@ export default function HomePage() {
                     <div  className="line-clamp-3">{proj.description}</div>
                     <Button variant="link" size="sm" asChild>
                       <Link href={`/projects/${proj.slug}`}>
-                        Voir le projet
+                        See the project
                         <ArrowRight className="ml-1 h-4 w-4" />
                       </Link>
                     </Button>
@@ -281,7 +281,7 @@ export default function HomePage() {
                             </h2>
                             <Button variant="ghost" asChild>
                                 <Link href="/blog">
-                                    Voir tout
+                                    See all
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Link>
                             </Button>
@@ -298,12 +298,12 @@ export default function HomePage() {
                                         </CardHeader>
                                         <CardContent>
                                             <div className="text-muted-foreground text-sm mb-2">
-                                                Publié le {formatDate(post.publishedAt)}
+                                                Published on {formatDate(post.publishedAt)}
                                             </div>
                                             <div className="line-clamp-3">{post.excerpt}</div>
                                             <Button variant="link" size="sm" asChild>
                                                 <Link href={`/blog/${post.slug}`}>
-                                                    Lire l'article
+                                                    Read the article
                                                     <ArrowRight className="ml-1 h-4 w-4" />
                                                 </Link>
                                             </Button>
@@ -320,13 +320,13 @@ export default function HomePage() {
       {/* Lien vers la page de contact */}
       <section className="py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Envie de collaborer ?</h2>
+          <h2 className="text-3xl font-bold mb-4">Want to collaborate?</h2>
           <p className="text-lg text-muted-foreground mb-8">
-            N’hésitez pas à me contacter pour discuter d’un projet, d’une mission ou simplement échanger !
+            Do not hesitate to contact me to discuss a project, a mission or simply to exchange ideas!
           </p>
           <Button asChild size="lg">
             <Link href="/contact">
-              Me contacter
+              Contact me
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

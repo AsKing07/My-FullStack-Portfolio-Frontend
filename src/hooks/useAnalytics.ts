@@ -13,7 +13,7 @@ export function useAnalytics(period = "7d") {
       .then(setData)
       .catch(e => {
         setError(e.message)
-        throw new Error(`Erreur lors du chargement des données d'analyse : ${e.message}`);
+        throw new Error(`Error loading scan data : ${e.message}`);
       })
       .finally(() => setLoading(false));
   }, [period]);

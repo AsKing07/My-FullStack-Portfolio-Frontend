@@ -40,7 +40,7 @@ export function Footer() {
             <Button variant="ghost" size="icon" asChild>
               <Link href={user.website} target="_blank" rel="noopener noreferrer">
                 <Globe className="h-5 w-5" />
-                <span className="sr-only">Site web</span>
+                <span className="sr-only">Web Site</span>
               </Link>
             </Button>
           )}
@@ -54,9 +54,9 @@ export function Footer() {
 
         <div className="mt-8 md:order-1 md:mt-0">
           <p className="text-center text-sm leading-5 text-muted-foreground flex items-center justify-center gap-1">
-            &copy; {new Date().getFullYear()} Portfolio. Fait avec{" "}
+            &copy; {new Date().getFullYear()} Portfolio. Made with{" "}
             <Heart className="h-4 w-4 text-red-500 fill-current" />
-            par {user?.name || "Charbel SONON"}.
+            by {user?.name || "Charbel SONON"}.
           </p>
         </div>
       </div>

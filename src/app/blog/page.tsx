@@ -34,17 +34,17 @@ export default function BlogPage() {
       <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
         <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
+         An error has occurred
         </h2>
         <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement des articles&nbsp;:<br />
+         Error loading articles&nbsp;:<br />
           <span className="font-mono break-all">{error}</span>
         </p>
         <button
           onClick={() => window.location.reload()}
           className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
         >
-          Réessayer
+         Try again
         </button>
       </div>
     </div>
@@ -62,10 +62,10 @@ export default function BlogPage() {
         >
               <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
           <BookOpen className="w-10 h-10 text-primary" />
-          Blog
+         Blog
         </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Mes réflexions sur le développement, les technologies et l'innovation
+           My thoughts on development, technologies and innovation
           </p>
         </motion.div>
 
@@ -189,7 +189,7 @@ export default function BlogPage() {
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <p className="text-muted-foreground text-lg">Aucun article trouvé</p>
+            <p className="text-muted-foreground text-lg">No items found</p>
           </motion.div>
         )}
       </div>

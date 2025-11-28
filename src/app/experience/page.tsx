@@ -21,12 +21,12 @@ const typeColors: Record<string, string> = {
 };
 
 const SoftSkills = [
-  "Gestion du temps",
-  "Travail en équipe",
-  "Résolution de problèmes",
+  "Time management",
+  "Teamwork",
+  "Troubleshooting",
   "Communication",
-  "Adaptabilité",
-  "Créativité",
+  "Adaptability",
+  "Creativity",
   "Leadership",
 ];
 
@@ -61,10 +61,10 @@ export default function ExperiencePage() {
       <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
         <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
+          An error has occurred
         </h2>
         <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement des expériences&nbsp;:<br />
+         Error loading experiments&nbsp;:<br />
           <span className="font-mono break-all">{
             errorSkills || errorExp
           }</span>
@@ -73,7 +73,7 @@ export default function ExperiencePage() {
           onClick={() => window.location.reload()}
           className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
         >
-          Réessayer
+          Try again
         </button>
       </div>
     </div>
@@ -86,7 +86,7 @@ export default function ExperiencePage() {
         <div className="flex flex-col items-center justify-center gap-4 mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
           <Briefcase className="w-10 h-10 text-primary" />
-          Expériences professionnelles
+         Professional experiences
         </h1>
           {user?.resumeUrl && (
             <Button
@@ -96,7 +96,7 @@ export default function ExperiencePage() {
             >
               <Link href={user.resumeUrl} target="_blank" rel="noopener noreferrer">
                 <Download className="w-5 h-5" />
-                Télécharger mon CV
+                Download my CV
               </Link>
             </Button>
           )}
@@ -106,7 +106,7 @@ export default function ExperiencePage() {
         <section className="mb-20">
           <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-blue-600" />
-            Parcours professionnel
+           Professional career
           </h2>
         
       
@@ -131,10 +131,10 @@ export default function ExperiencePage() {
                         <div className="flex items-center gap-2">
                           <h3 className="text-xl font-semibold">{exp.title}</h3>
                           <Badge className={cn("ml-2", typeColors[exp.type], "text-white")}>
-                            {exp.type === "FULLTIME" && "CDI"}
-                            {exp.type === "PARTTIME" && "Temps partiel"}
+                            {exp.type === "FULLTIME" && "Fulltime"}
+                            {exp.type === "PARTTIME" && "Parttime"}
                             {exp.type === "FREELANCE" && "Freelance"}
-                            {exp.type === "INTERNSHIP" && "Stage"}
+                            {exp.type === "INTERNSHIP" && "Internship"}
                             {exp.type === "CONTRACT" && "Contrat"}
                           </Badge>
                         </div>
@@ -143,7 +143,7 @@ export default function ExperiencePage() {
                           {formatDateShort(exp.startDate)} 
                           {" - "}
                           {exp.current || !exp.endDate
-                            ? "Aujourd'hui"
+                            ? "Today"
                             : formatDateShort(exp.endDate)}
                           {exp.location && (
                             <>
@@ -177,7 +177,7 @@ export default function ExperiencePage() {
                <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
             {/* <Briefcase className="w-6 h-6 text-blue-600" /> */}
             <Terminal className="w-6 h-6 text-blue-600" />
-           Compétences techniques
+           Hard Skills
           </h2>
           {/* <h2 className="text-2xl font-bold mb-8">Compétences techniques</h2> */}
         

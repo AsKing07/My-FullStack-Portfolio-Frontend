@@ -17,7 +17,7 @@ export function useGitHub() {
       const res = await GitHubService.getGitHubProfile(username);
       setProfile(res.data.items);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement du profil GitHub');
+      setError(err.message || 'Error loading GitHub profile');
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ export function useGitHub() {
       setRepos(res.data.items || []);
     console.log('Fetched Repos:', res.data);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des dépôts GitHub');
+      setError(err.message || 'Error loading GitHub repositories');
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export function useGitHub() {
       setStats(res.data!.items);
     
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des stats GitHub');
+      setError(err.message || 'Error loading GitHub stats');
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export function useGitHub() {
       const res = await GitHubService.getGitHubLanguages(username);
       setLanguages(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des langages GitHub');
+      setError(err.message || 'Error loading GitHub languages');
     } finally {
       setLoading(false);
     }

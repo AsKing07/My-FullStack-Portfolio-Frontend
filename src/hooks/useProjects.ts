@@ -31,7 +31,7 @@ export function useProjects() {
       }
      
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des projets');
+      setError(err.message || 'Error loading projects');
     } finally {
       setLoading(false);
     }

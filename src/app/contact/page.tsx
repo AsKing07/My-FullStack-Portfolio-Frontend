@@ -103,17 +103,17 @@ if (errorUser) {
       <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
         <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
+          An error has occurred
         </h2>
         <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement des informations de contact&nbsp;:<br />
+          Error loading contact information&nbsp;:<br />
           <span className="font-mono break-all">{errorUser}</span>
         </p>
         <button
           onClick={() => window.location.reload()}
           className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
         >
-          Réessayer
+          Try again
         </button>
       </div>
     </div>
@@ -134,7 +134,7 @@ if (errorUser) {
             Contact
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Envie de discuter d'un projet ou simplement dire bonjour ? N'hésitez pas à me contacter !
+            Want to discuss a project or just say hello? Do not hesitate to contact me!
           </p>
         </motion.div>
 
@@ -149,7 +149,7 @@ if (errorUser) {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Send className="w-5 h-5" />
-                  Envoyez-moi un message
+                  Send me a message
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -157,7 +157,7 @@ if (errorUser) {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Nom *
+                        Name *
                       </label>
                       <Input
                         id="name"
@@ -186,7 +186,7 @@ if (errorUser) {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        Téléphone
+                        Phone
                       </label>
                       <Input
                         id="phone"
@@ -198,7 +198,7 @@ if (errorUser) {
                     </div>
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium mb-2">
-                        Société
+                        Company
                       </label>
                       <Input
                         id="company"
@@ -211,7 +211,7 @@ if (errorUser) {
                   </div>
                   <div>
                     <label htmlFor="website" className="block text-sm font-medium mb-2">
-                      Site web
+                      Web Site
                     </label>
                     <Input
                       id="website"
@@ -223,7 +223,7 @@ if (errorUser) {
                   </div>
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                      Sujet *
+                      Subject *
                     </label>
                     <Input
                       id="subject"
@@ -269,11 +269,11 @@ if (errorUser) {
           >
             <Card>
               <CardHeader>
-                <CardTitle>Informations de Contact</CardTitle>
+                <CardTitle>Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {contactInfo.length === 0 && (
-                  <div className="text-muted-foreground">Aucune information de contact disponible.</div>
+                  <div className="text-muted-foreground">No contact information available.</div>
                 )}
                 {contactInfo.map((info, index) => (
                   <motion.div
@@ -304,12 +304,12 @@ if (errorUser) {
 
             <Card>
               <CardHeader>
-                <CardTitle>Réseaux Sociaux</CardTitle>
+                <CardTitle>Social Networks</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex gap-4">
                   {socialLinks.length === 0 && (
-                    <span className="text-muted-foreground">Aucun réseau social renseigné.</span>
+                    <span className="text-muted-foreground">No social networks entered.</span>
                   )}
                   {socialLinks.map((social, index) => (
                     <motion.a
@@ -331,16 +331,16 @@ if (errorUser) {
 
             <Card>
               <CardHeader>
-                <CardTitle>Disponibilité</CardTitle>
+                <CardTitle>Availability</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span>Disponible pour nouveaux projets</span>
+                    <span>Available for new projects</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Je réponds généralement sous 24h
+                   I usually respond within 24 hours
                   </p>
                 </div>
               </CardContent>

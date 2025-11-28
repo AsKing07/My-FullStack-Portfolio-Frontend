@@ -17,9 +17,9 @@ const Football = createLucideIcon('Football', soccerBall);
 
 const interests = [
   { icon: Football , name: 'Football', color: 'bg-green-600' },
-  { icon: Music, name: 'Musique', color: 'bg-purple-500' },
-  { icon: Gamepad, name: 'Jeux Vidéos', color: 'bg-blue-500' },
-  { icon: Book, name: 'Lecture', color: 'bg-amber-600' }
+  { icon: Music, name: 'Music', color: 'bg-purple-500' },
+  { icon: Gamepad, name: 'Video Games', color: 'bg-blue-500' },
+  { icon: Book, name: 'Reading', color: 'bg-amber-600' }
 ];
 
 export default function AboutPage() {
@@ -44,17 +44,17 @@ if (error) {
       <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
         <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
+        An error has occurred
         </h2>
         <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement des informations&nbsp;:<br />
+          Error loading information&nbsp;:<br />
           <span className="font-mono break-all">{error}</span>
         </p>
         <button
           onClick={() => window.location.reload()}
           className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
         >
-          Réessayer
+         Try again
         </button>
       </div>
     </div>
@@ -72,7 +72,7 @@ if (error) {
         >
         <h1 className="text-4xl md:text-5xl font-bold bg-primary bg-clip-text text-transparent mb-12 drop-shadow flex items-center justify-center gap-3">
           <Info className="w-10 h-10 text-primary" />
-         A Propos de Moi
+         About Me
         </h1>
        
         </motion.div>
@@ -88,7 +88,7 @@ if (error) {
               <CardHeader>
               <CardTitle className="flex justify-center text-center items-center gap-2">
                 <Code className="w-5 h-5" />
-                Mon Histoire
+                My Story
               </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -125,7 +125,7 @@ if (error) {
                 )}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                Disponible pour projets
+                Available for projects
                 </div>
               
               </div>
@@ -141,7 +141,7 @@ if (error) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <h2 className="text-3xl font-bold text-center mb-12">Centres d'Intérêt</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Centers of Interest</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {interests.map((interest, index) => (
               <motion.div

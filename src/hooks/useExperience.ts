@@ -17,7 +17,7 @@ export function useExperiences() {
       const res = await ExperienceService.getExperiences();
       setExperiences(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des expériences');
+      setError(err.message || 'Error loading experiments');
     } finally {
       setLoading(false);
     }
@@ -30,7 +30,7 @@ export function useExperiences() {
       const res = await ExperienceService.getExperienceById(id);
       return res.data.items;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de l\'expérience');
+      setError(err.message || 'Error loading experience');
       return null;
     } finally {
       setLoading(false);

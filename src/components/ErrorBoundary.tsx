@@ -60,7 +60,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <div className="flex flex-col items-center justify-center p-6 min-h-[200px] bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900 rounded-lg text-center">
           <AlertTriangle className="h-12 w-12 text-red-500 mb-4" aria-hidden="true" />
           <h2 className="text-xl font-semibold text-red-700 dark:text-red-400 mb-2">
-            Une erreur est survenue
+            An error has occurred
           </h2>
           <p className="text-slate-600 dark:text-slate-300 mb-4 max-w-md">
             {this.state.error?.message || "Quelque chose s'est mal passé lors du chargement de cette section."}
@@ -72,13 +72,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               className="flex items-center gap-2"
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
-              Réessayer
+              Try again
             </Button>
             <Button 
               onClick={() => window.location.reload()} 
               variant="default"
             >
-              Actualiser la page
+             Refresh page
             </Button>
           </div>
         </div>

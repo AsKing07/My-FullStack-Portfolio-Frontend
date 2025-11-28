@@ -29,17 +29,17 @@ if (error) {
       <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
         <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
         <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          Une erreur est survenue
+          An error has occurred
         </h2>
         <p className="text-sm text-red-600 dark:text-red-200 text-center">
-          Erreur lors du chargement du parcours de formation&nbsp;:<br />
+          Error loading training course&nbsp;:<br />
           <span className="font-mono break-all">{error}</span>
         </p>
         <button
           onClick={() => window.location.reload()}
           className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
         >
-          Réessayer
+          Try again
         </button>
       </div>
     </div>
@@ -51,7 +51,7 @@ if (error) {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
           <GraduationCap className="w-10 h-10 text-primary" />
-          Parcours scolaire & formations
+         School career & training
         </h1>
 
         

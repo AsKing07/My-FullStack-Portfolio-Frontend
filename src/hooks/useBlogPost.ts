@@ -15,7 +15,7 @@ const {isAuthenticated} = useAuthStore();
       const res = await BlogService.getBlogPosts();
       setPosts(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des articles');
+      setError(err.message || 'Error loading articles');
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ const {isAuthenticated} = useAuthStore();
       const res = await BlogService.getBlogPostsByAdmin();
       setPosts(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des articles (admin)');
+      setError(err.message || 'Error loading articles (admin)');
     } finally {
       setLoading(false);
     }
@@ -41,8 +41,8 @@ const {isAuthenticated} = useAuthStore();
       const res = await BlogService.getBlogPostBySlug(slug);
       return res.data.items;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de l\'article');
-      throw new Error(err.message || 'Erreur lors du chargement de l\'article');
+      setError(err.message || 'Error loading article');
+      throw new Error(err.message || 'Error loading article');
     
     } finally {
       setLoading(false);
@@ -56,8 +56,8 @@ const {isAuthenticated} = useAuthStore();
       await BlogService.createBlogPost(blogPost);
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création de l\'article');
-      throw new Error(err.message || 'Erreur lors de la création de l\'article');
+      setError(err.message || 'Error creating article');
+      throw new Error(err.message || 'Error creating article');
     } finally {
       setLoading(false);
     }
@@ -71,8 +71,8 @@ const {isAuthenticated} = useAuthStore();
       await BlogService.updateBlogPost(id, blogPost);
       await fetchBlogPostsByAdmin();
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la modification de l\'article');
-      throw new Error(err.message || 'Erreur lors de la modification de l\'article');
+      setError(err.message || 'Error while editing article');
+      throw new Error(err.message || 'Error while editing article');
     } finally {
       setLoading(false);
     }

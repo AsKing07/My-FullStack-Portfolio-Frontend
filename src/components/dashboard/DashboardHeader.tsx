@@ -47,18 +47,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
     const pageName = segments[1];
     const formatted = pageName.charAt(0).toUpperCase() + pageName.slice(1);
     
-    // Traductions personnalisées
-    const translations: Record<string, string> = {
-      'Blog': 'Articles',
-      'Projects': 'Projets',
-      'Media': 'Médias',
-      'Messages': 'Messages',
-      'Profile': 'Profil',
-      'Settings': 'Paramètres',
-      'Github': 'GitHub'
-    };
-    
-    return translations[formatted] || formatted;
+    return formatted;
   }, [pathname]);
 
   // Breadcrumb pour une meilleure navigation
@@ -86,7 +75,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
             isMobile ? "flex" : "hidden lg:flex"
           )}
           onClick={toggle}
-          aria-label={isCollapsed ? "Développer le menu" : "Réduire le menu"}
+          aria-label={isCollapsed ? "Expand menu" : "Collapse menu"}
         >
           <Menu className="h-5 w-5" />
         </Button>
@@ -153,7 +142,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                 className="flex items-center gap-2"
               >
                 <Sun className="h-4 w-4" />
-                <span>Clair</span>
+                <span>Light</span>
                 {theme === 'light' && <span className="ml-auto text-blue-600">✓</span>}
               </DropdownMenu.Item>
               <DropdownMenu.Item 
@@ -161,7 +150,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                 className="flex items-center gap-2"
               >
                 <Moon className="h-4 w-4" />
-                <span>Sombre</span>
+                <span>Dark</span>
                 {theme === 'dark' && <span className="ml-auto text-blue-600">✓</span>}
               </DropdownMenu.Item>
               <DropdownMenu.Item 
@@ -169,7 +158,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                 className="flex items-center gap-2"
               >
                 <Laptop className="h-4 w-4" />
-                <span>Système</span>
+                <span>System</span>
                 {theme === 'system' && <span className="ml-auto text-blue-600">✓</span>}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
@@ -241,7 +230,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
               <DropdownMenu.Item asChild>
                 <Link href="/dashboard/profile" className="flex items-center gap-3 py-2">
                   <UserIcon className="h-4 w-4" />
-                  <span>Mon Profil</span>
+                  <span>My Profile</span>
                 </Link>
               </DropdownMenu.Item>
              
@@ -255,7 +244,7 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
                     className="flex w-full items-center gap-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
                     <LogOut className="h-4 w-4" />
-                    <span>Déconnexion</span>
+                    <span>Log out</span>
                   </button>
                 </form>
               </DropdownMenu.Item>

@@ -71,17 +71,17 @@ export default function GitHubStatsPage() {
         <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
           <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
           <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-            Une erreur est survenue
+           An error has occurred
           </h2>
           <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            Erreur lors du chargement des statistiques GitHub&nbsp;:<br />
+            Error loading statistics&nbsp;:<br />
             <span className="font-mono break-all">{error}</span>
           </p>
           <button
             onClick={() => window.location.reload()}
             className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
           >
-            Réessayer
+            Try again
           </button>
         </div>
       </div>
@@ -99,11 +99,10 @@ export default function GitHubStatsPage() {
         >
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12 drop-shadow flex items-center justify-center gap-3">
             <BarChartIcon className="w-10 h-10 text-primary" />
-            Statistiques de développement
+            Development statistics
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Aperçu de mon activité de développement et de mes contributions open
-            source
+            Overview of my development activity and open source contributions
           </p>
         </motion.div>
 
@@ -188,7 +187,7 @@ export default function GitHubStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="w-5 h-5" />
-                Pourcentage de langage sur la dernière année
+                Language percentage over the last year
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -199,7 +198,7 @@ export default function GitHubStatsPage() {
                   height="100%"
                   frameBorder="0"
                   className="rounded-lg"
-                  title="Pourcentage de langage sur la dernière année"
+                  title="Language percentage over the last year"
                 />
               </div>
             </CardContent>
@@ -210,7 +209,7 @@ export default function GitHubStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5" />
-                Activité de développement personnel les 30 derniers jours
+               Personal development activity last 30 days
               </CardTitle>
             </CardHeader>
            <CardContent>
@@ -221,7 +220,7 @@ export default function GitHubStatsPage() {
                   height="100%"
                   frameBorder="0"
                   className="rounded-lg"
-                  title="Activité de codage les 30 derniers jours"
+                  title="Coding activity last 30 days"
                 />
               </div>
             </CardContent>
@@ -232,7 +231,7 @@ export default function GitHubStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Monitor className="w-5 h-5" />
-                Éditeurs utilisés sur la dernière année
+                Editors used in the last year
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -243,7 +242,7 @@ export default function GitHubStatsPage() {
                   height="100%"
                   frameBorder="0"
                   className="rounded-lg"
-                  title="Éditeurs utilisés sur la dernière année"
+                  title="Editors used in the last year"
                 />
               </div>
             </CardContent>
@@ -257,7 +256,7 @@ export default function GitHubStatsPage() {
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <h2 className="text-3xl font-bold text-center mb-8">
-            Repositories Populaires
+           Popular Repositories
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {repos?.slice(0, 6).map((repo, index) => (
@@ -285,7 +284,7 @@ export default function GitHubStatsPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                      {repo.description || "Aucune description disponible"}
+                      {repo.description || "No description available"}
                     </p>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -306,12 +305,12 @@ export default function GitHubStatsPage() {
                     </div>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
-                      Mis à jour le{" "}
+                      Updated on{" "}
                       {repo.updated_at
                         ? new Date(
                             Date.parse(repo.updated_at)
-                          ).toLocaleDateString("fr-FR")
-                        : "Date inconnue"}
+                          ).toLocaleDateString("en-US")
+                        : "Date unknown"}
                     </div>
                     {/* topics badge */}
                     {repo.topics && repo.topics.length > 0 && (

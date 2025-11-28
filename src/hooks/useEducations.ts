@@ -15,7 +15,7 @@ export function useEducations() {
       const res = await EducationService.getEducations();
       setEducations(res.data.items || []);
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement des formations');
+      setError(err.message || 'Error loading training');
     } finally {
       setLoading(false);
     }
@@ -28,8 +28,8 @@ export function useEducations() {
       const res = await EducationService.getEducationById(id);
       return res.data;
     } catch (err: any) {
-      setError(err.message || 'Erreur lors du chargement de la formation');
-      throw new Error(err.message || 'Erreur lors du chargement de la formation');
+      setError(err.message || 'Error loading training');
+      throw new Error(err.message || 'Error loading training');
       return null;
     } finally {
       setLoading(false);

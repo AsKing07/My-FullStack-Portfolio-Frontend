@@ -38,17 +38,17 @@ export default function BlogPostPage() {
         <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
           <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
           <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-            Article introuvable
+            Item not found
           </h2>
           <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            Impossible de charger cet article.<br />
+            Unable to load this blog item.<br />
             <span className="font-mono break-all">{error}</span>
           </p>
           <Link
             href="/blog"
             className="mt-2 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer"
           >
-            Retour au blog
+            Back to blog
           </Link>
         </div>
       </div>
@@ -85,7 +85,7 @@ export default function BlogPostPage() {
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
-                {post.readingTime ?? post.readingTime} min de lecture
+                {post.readingTime ?? post.readingTime} min of reading
               </div>
               {post.user && (
                 <div className="flex items-center gap-1">
@@ -107,7 +107,7 @@ export default function BlogPostPage() {
             href="/blog"
             className="inline-block px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
           >
-            ← Retour au blog
+            ← Back to blog
           </Link>
         </div>
       </div>
