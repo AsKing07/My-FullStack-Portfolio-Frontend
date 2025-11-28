@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge_component";
 import { useToast } from "@/hooks/useToast";
 import { useBlog } from "@/hooks/useBlogPost";
 import { formatDate } from "@/lib/utils";
+import { PersonSchema, WebsiteSchema } from "@/components/seo/StructuredData";
 
 export default function HomePage() {
   const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
@@ -65,8 +66,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col w-full">
-      <section className="relative isolate overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 py-24 sm:py-32">
+    <>
+      <div className="flex flex-col w-full">
+        <section className="relative isolate overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 py-24 sm:py-32">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-10">
           <div className="flex-1 space-y-6">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -333,5 +335,32 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    
+    {/* Données structurées pour le SEO */}
+    {user && (
+      <>
+        <PersonSchema
+          name={user.name || "Charbel SONON"}
+          jobTitle="Développeur Full Stack"
+          bio={user.bio || "Développeur full stack passionné par les technologies web modernes"}
+          url={process.env.NEXT_PUBLIC_APP_URL || ""}
+          image={user.avatarUrl}
+          email={user.email}
+          sameAs={[
+            `${user.linkedin}`,
+            `${user.twitter}`,
+            `${user.github}`,
+            `${user.twitter}`,
+          ]}
+        />
+        <WebsiteSchema
+          name="Portfolio - Charbel SONON"
+          url={process.env.NEXT_PUBLIC_APP_URL || ""}
+          description="Portfolio de Charbel SONON, développeur full stack"
+          author={user.name || "Charbel SONON"}
+        />
+      </>
+    )}
+  </>
   );
 }

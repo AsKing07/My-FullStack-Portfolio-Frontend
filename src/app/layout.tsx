@@ -16,47 +16,98 @@ import Script from "next/script";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com'),
+  
   icons: {
     icon: '/logo.png',
+    apple: '/logo.png',
+    shortcut: '/logo.png',
   },
+  
   title: {
     default: 'Charbel SONON | Portfolio - Développeur Full Stack',
-    template: '%s | Portfolio'
+    template: '%s | Charbel SONON'
   },
-  description: 'Portfolio de Charbel SONON? développeur full stack spécialisé en Anhular, React, Next.js, Node.js, Java, et TypeScript.',
-  keywords: ['portfolio', 'développeur', 'full stack', 'react', 'nextjs', 'nodejs', 'typescript', 'charbel sonon', 'web development', 'javascript', 'angular', 'java'],
-  authors: [{ name: 'Charbel SONON' }],
+  
+  description: 'Portfolio de Charbel SONON, développeur full stack spécialisé en Angular, React, Next.js, Node.js, Java, TypeScript et plein d\' autres technologies modernes. Découvrez mes projets, expériences et compétences.',
+  
+  keywords: [
+    'charbel sonon', 'portfolio', 'développeur full stack', 'développeur web',
+    'react', 'nextjs', 'angular', 'nodejs', 'typescript', 'javascript', 'java',
+    'web development', 'frontend', 'backend', 'freelance', 'développeur france',
+    'applications web', 'sites web responsives', 'api rest', 'mongodb', 'mysql'
+  ],
+  
+  authors: [{ name: 'Charbel SONON', url: process.env.NEXT_PUBLIC_APP_URL }],
   creator: 'Charbel SONON',
+  publisher: 'Charbel SONON',
+  
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
     url: process.env.NEXT_PUBLIC_APP_URL,
     title: 'Charbel SONON | Portfolio - Développeur Full Stack',
-    description: 'Portfolio de développeur full stack spécialisé en React, Next.js, Node.js et TypeScript.',
+    description: 'Portfolio de Charbel SONON, développeur full stack spécialisé en technologies web modernes. Projets, expériences et expertise en développement.',
     siteName: 'Portfolio - Charbel SONON',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Charbel SONON - Portfolio Développeur Full Stack',
+      },
+    ],
   },
+  
   twitter: {
     card: 'summary_large_image',
-    title: 'Portfolio - Développeur Full Stack',
+    title: 'Charbel SONON | Portfolio - Développeur Full Stack',
     description: 'Portfolio de Charbel SONON, développeur full stack spécialisé en React, Next.js, Node.js et TypeScript.',
-    creator: '@charbel_asking',
+    creator: '@charbel_sonon',
+    images: ['/logo.png'],
   },
+  
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
-
+  
+  verification: {
+    // Ajouter vos codes de vérification ici
+    // google: 'votre-code-google',
+    // yandex: 'votre-code-yandex',
+    // yahoo: 'votre-code-yahoo',
+    // other: {
+    //   'msvalidate.01': 'votre-code-bing',
+    // },
+  },
+  
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_APP_URL,
+  },
+  
+  other: {
+    'theme-color': '#0ea5e9',
+    'color-scheme': 'light dark',
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { readonly children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={inter.className}>
