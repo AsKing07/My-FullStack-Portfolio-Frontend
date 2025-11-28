@@ -92,6 +92,8 @@ export default function NewExperiencePage() {
                 <Select.Item value={ExperienceType.FREELANCE}>Freelance</Select.Item>
                 <Select.Item value={ExperienceType.INTERNSHIP}>Stage</Select.Item>
                 <Select.Item value={ExperienceType.CONTRACT}>Contrat</Select.Item>
+                <Select.Item value={ExperienceType.APPRENTICESHIP}>Apprentissage</Select.Item>
+                <Select.Item value={ExperienceType.VOLUNTEER}>Bénévolat</Select.Item>
               </Select.Content>
             </Select.Root>
             <div className="flex gap-2 items-center">
