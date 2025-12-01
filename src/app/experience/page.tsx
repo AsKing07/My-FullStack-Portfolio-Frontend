@@ -18,6 +18,9 @@ const typeColors: Record<string, string> = {
   FREELANCE: "bg-purple-600",
   INTERNSHIP: "bg-yellow-500",
   CONTRACT: "bg-pink-600",
+  APPRENTICESHIP: "bg-orange-600",
+   VOLUNTEER: "bg-teal-600",
+
 };
 
 const SoftSkills = [
@@ -136,6 +139,8 @@ export default function ExperiencePage() {
                             {exp.type === "FREELANCE" && "Freelance"}
                             {exp.type === "INTERNSHIP" && "Internship"}
                             {exp.type === "CONTRACT" && "Contrat"}
+                            {exp.type === "APPRENTICESHIP" && "Apprenticeship"} 
+                            {exp.type === "VOLUNTEER" && "Volunteer"}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
