@@ -24,6 +24,16 @@ const formSchema = z.object({
   startDate: z.date(),
   endDate: z.date().optional(),
   current: z.boolean().optional(),
+}).refine((data) => {
+  // Si c'est un emploi actuel, la date de fin n'est pas requise
+  if (data.current) {
+    return true;
+  }
+  // Si ce n'est pas un emploi actuel, la date de fin est requise
+  return data.endDate !== undefined;
+}, {
+  message: "La date de fin est requise si ce n'est pas un emploi actuel",
+  path: ["endDate"],
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -49,21 +59,24 @@ export default function NewExperiencePage() {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await createExperience(values).then(()=>{
-
-         if (error) 
-      {
-                toast.error(`Erreur lors de la création : ${error}`);
-
-
-      }
-      else{
- toast.success('Expérience créée');
+      // Si c'est un emploi actuel, on supprime la date de fin
+      const experienceData: any = {
+        ...values,
+      };
       
-      router.push('/dashboard/experiences');
+      // Si c'est un emploi actuel, on supprime complètement endDate
+      if (values.current) {
+        delete experienceData.endDate;
       }
+
+      await createExperience(experienceData).then(()=>{
+        if (error) {
+          toast.error(`Erreur lors de la création : ${error}`);
+        } else {
+          toast.success('Expérience créée avec succès');
+          router.push('/dashboard/experiences');
+        }
       });
-     
      
     } catch(error) {
       toast.error(`Erreur lors de la création : ${error}`);
@@ -78,14 +91,26 @@ export default function NewExperiencePage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input {...form.register('title')} placeholder="Titre du poste" />
-            <Input {...form.register('company')} placeholder="Entreprise" />
+            <div>
+              <Input {...form.register('title')} placeholder="Titre du poste" />
+              {form.formState.errors.title && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.title.message}</p>
+              )}
+            </div>
+            
+            <div>
+              <Input {...form.register('company')} placeholder="Entreprise" />
+              {form.formState.errors.company && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.company.message}</p>
+              )}
+            </div>
+            
             <Input {...form.register('location')} placeholder="Lieu" />
             <Textarea {...form.register('description')} placeholder="Description" rows={3} />
             <Input {...form.register('technologies')} placeholder="Technologies (séparées par des virgules)" />
+            
             <Select.Root value={form.watch('type')} onValueChange={val => form.setValue('type', val as ExperienceType)}>
               <Select.Trigger placeholder='Type de contrat' />
-               
               <Select.Content>
                 <Select.Item value={ExperienceType.FULLTIME}>CDI</Select.Item>
                 <Select.Item value={ExperienceType.PARTTIME}>Temps partiel</Select.Item>
@@ -96,22 +121,45 @@ export default function NewExperiencePage() {
                 <Select.Item value={ExperienceType.VOLUNTEER}>Bénévolat</Select.Item>
               </Select.Content>
             </Select.Root>
+            
             <div className="flex gap-2 items-center">
-              <Checkbox checked={form.watch('current')} onCheckedChange={val => form.setValue('current', !!val)} />
+              <Checkbox 
+                checked={form.watch('current')} 
+                onCheckedChange={val => {
+                  form.setValue('current', !!val);
+                  // Effacer la date de fin si emploi actuel
+                  if (val) {
+                    form.setValue('endDate', undefined);
+                  }
+                }} 
+              />
               <span>Poste actuel</span>
             </div>
-            <Input
-              type="date"
-              {...form.register('startDate', { valueAsDate: true })}
-              placeholder="Date de début"
-            />
-            {!form.watch('current') && (
+            
+            <div>
               <Input
                 type="date"
-                {...form.register('endDate', { valueAsDate: true })}
-                placeholder="Date de fin"
+                {...form.register('startDate', { valueAsDate: true })}
+                placeholder="Date de début"
               />
+              {form.formState.errors.startDate && (
+                <p className="text-red-500 text-sm mt-1">{form.formState.errors.startDate.message}</p>
+              )}
+            </div>
+            
+            {!form.watch('current') && (
+              <div>
+                <Input
+                  type="date"
+                  {...form.register('endDate', { valueAsDate: true })}
+                  placeholder="Date de fin"
+                />
+                {form.formState.errors.endDate && (
+                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.endDate.message}</p>
+                )}
+              </div>
             )}
+            
             <div className="flex justify-end">
               <Button type="submit" disabled={loading}>
                 Enregistrer

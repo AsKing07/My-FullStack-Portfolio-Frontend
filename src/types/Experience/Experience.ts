@@ -20,7 +20,7 @@ export interface Experience {
     technologies?: string; // Comma-separated list of technologies used
     type: ExperienceType;
     startDate: Date;
-    endDate?: Date; // Nullable for current positions
+    endDate?: Date | null; // Nullable for current positions
     current: boolean; // Indicates if the position is ongoing
     createdAt: Date;
     updatedAt: Date;
