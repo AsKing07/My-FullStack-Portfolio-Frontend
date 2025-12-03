@@ -23,17 +23,6 @@ import {
 import { useGitHub } from "@/hooks/useGithub";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
-const languageColors: Record<string, string> = {
-  JavaScript: "#f1e05a",
-  TypeScript: "#3178c6",
-  Python: "#3572A5",
-  Java: "#b07219",
-  "C++": "#f34b7d",
-  CSS: "#1572B6",
-  HTML: "#e34c26",
-  React: "#61dafb",
-  Vue: "#4FC08D",
-};
 
 export default function GitHubStatsPage() {
   const { fetchStats, fetchRepos, repos, stats, loading, error } = useGitHub();
@@ -250,6 +239,7 @@ export default function GitHubStatsPage() {
         </motion.div>
 
         {/* Popular Repositories */}
+        {/*  
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -312,7 +302,7 @@ export default function GitHubStatsPage() {
                           ).toLocaleDateString("en-US")
                         : "Date unknown"}
                     </div>
-                    {/* topics badge */}
+                    //topics badge 
                     {repo.topics && repo.topics.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-2">
                         {repo.topics.map((topic) => (
@@ -332,6 +322,7 @@ export default function GitHubStatsPage() {
             ))}
           </div>
         </motion.div>
+        */}
       </div>
     </div>
   );

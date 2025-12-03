@@ -110,13 +110,12 @@ const handleDownloadCV = () => {
           <CardTitle>Liste des expériences</CardTitle>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div>Chargement...</div>
-          ) : error ? (
-            <div className="text-red-500">{error}</div>
-          ) : experiences.length === 0 ? (
+          {loading && <div>Chargement...</div>}
+          {error && <div className="text-red-500">{error}</div>}
+          {!loading && !error && experiences.length === 0 && (
             <div>Aucune expérience enregistrée.</div>
-          ) : (
+          )}
+          {!loading && !error && experiences.length > 0 && (
             <div className="space-y-4">
               {experiences.map((exp) => (
                 <div key={exp.id} className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-2 gap-2">
@@ -129,7 +128,7 @@ const handleDownloadCV = () => {
                     </div>
                     <div className="text-xs mt-1">
                       {exp.startDate && formatDate(exp.startDate)} 
-                      {exp.endDate ? ` - ${formatDate(exp.endDate)}` : " - En cours"}
+                      { exp.current?   " - En cours" : ` - ${formatDate(exp.endDate!)}`}
                     </div>
                   </div>
                   <div className="flex gap-2">

@@ -261,9 +261,7 @@ export default function HomePage() {
                           ? formatDate(exp.startDate)
                           : exp.startDate}{" "}
                         →{" "}
-                        {exp.endDate
-                          ? formatDate(exp.endDate)
-                          : exp.endDate ?? "Present"}
+                        {   exp.current || !exp.endDate ? "Present" : formatDate(exp.endDate)}
                       </div>
                       <div className="line-clamp-3 text-gray-700 dark:text-gray-300">
                         {exp.description}
