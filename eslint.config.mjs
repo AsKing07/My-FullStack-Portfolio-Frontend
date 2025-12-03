@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript", "react-app", "eslint:recommended"),
+  ...compat.extends("next/core-web-vitals", "next/typescript", "eslint:recommended"),
   {
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {

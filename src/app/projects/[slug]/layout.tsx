@@ -4,12 +4,13 @@ import { generateProjectMetadata } from '@/lib/seo';
 
 interface ProjectLayoutProps {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: ProjectLayoutProps): Promise<Metadata> {
   try {
-    const response = await ProjectsService.getProjectBySlug(params.slug);
+    const { slug } = await params;
+    const response = await ProjectsService.getProjectBySlug(slug);
     const project = response.data.items;
 
     if (!project) {
