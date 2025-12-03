@@ -19,6 +19,8 @@ import {
   BarChartIcon,
   Monitor,
   TrendingUp,
+  Github,
+  ExternalLink,
 } from "lucide-react";
 import { useGitHub } from "@/hooks/useGithub";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
@@ -67,7 +69,7 @@ export default function GitHubStatsPage() {
             <span className="font-mono break-all">{error}</span>
           </p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => globalThis.location.reload()}
             className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
           >
             Try again
@@ -236,6 +238,42 @@ export default function GitHubStatsPage() {
               </div>
             </CardContent>
           </Card>
+        </motion.div>
+
+        {/* Floating GitHub Profile Button */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="fixed bottom-8 right-8 z-50"
+        >
+          <a
+            href="https://github.com/AsKing07"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex items-center gap-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-6 py-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+          >
+            {/* GitHub Icon */}
+            <Github className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            
+            {/* Text (hidden on mobile, visible on hover/desktop) */}
+            <span className="hidden md:block font-semibold whitespace-nowrap group-hover:text-blue-400 dark:group-hover:text-blue-600 transition-colors duration-300">
+              Visit my GitHub
+            </span>
+            
+            {/* External Link Icon */}
+            <ExternalLink className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {/* Tooltip for mobile */}
+            <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 text-sm rounded-lg opacity-0 md:hidden group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+              Visit my GitHub
+              <div className="absolute top-full right-4 border-4 border-transparent border-t-gray-800 dark:border-t-gray-200"></div>
+            </div>
+            
+            {/* Pulse animation ring */}
+            <div className="absolute inset-0 rounded-full bg-gray-900 dark:bg-gray-100 animate-ping opacity-20"></div>
+            <div className="absolute inset-0 rounded-full bg-gray-900 dark:bg-gray-100 animate-pulse opacity-10"></div>
+          </a>
         </motion.div>
       </div>
     </div>
