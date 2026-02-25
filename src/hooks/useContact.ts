@@ -2,27 +2,30 @@ import { useState, useEffect, useCallback } from 'react';
 import { ContactService } from '@/services/contact.service';
 import { Contact } from '@/types/Contact/Contact';
 import { ContactRequest } from '@/types/Contact/ContactRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 import { useAuthStore } from '@/stores/auth_store';
 
-export function useContacts() {
+export function useContacts(defaultParams?: PaginationParams) {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { isAuthenticated } = useAuthStore();
 
-  const fetchContacts = useCallback(async () => {
+  const fetchContacts = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await ContactService.getContacts();
+      const res = await ContactService.getContacts({ ...defaultParams, ...params });
       setContacts(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading contacts');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getContactById = useCallback(async (id: string) => {
     setLoading(true);
@@ -102,6 +105,7 @@ fetchContacts();
 
   return {
     contacts,
+    pagination,
     loading,
     error,
     fetchContacts,

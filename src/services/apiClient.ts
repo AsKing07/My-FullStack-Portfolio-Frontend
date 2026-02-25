@@ -1,7 +1,24 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/stores/auth_store';
+import { PaginationParams } from '@/types/api/ApiResponse';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+
+/**
+ * Construit une query string à partir de PaginationParams.
+ * Filtre les valeurs undefined/null.
+ */
+export function buildQueryParams(params?: PaginationParams): string {
+  if (!params) return '';
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      searchParams.append(key, String(value));
+    }
+  });
+  const qs = searchParams.toString();
+  return qs ? `?${qs}` : '';
+}
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,

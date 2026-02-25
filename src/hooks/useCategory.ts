@@ -2,25 +2,28 @@ import { useState, useEffect, useCallback } from 'react';
 import CategoryService from '@/services/category.service';
 import { Category } from '@/types/Category/Category';
 import { CategoryRequest } from '@/types/Category/CategoryRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 
-export function useCategory() {
+export function useCategory(defaultParams?: PaginationParams) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCategories = useCallback(async () => {
+  const fetchCategories = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await CategoryService.getCategories();
+      const res = await CategoryService.getCategories({ ...defaultParams, ...params });
       setCategories(res.data?.items || []);
+      setPagination(res.data?.pagination || null);
       console.log('Categories fetched:', res.data.items);
     } catch (err: any) {
       setError(err.message || 'Error loading categories');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getCategoryBySlug = useCallback(async (slug: string) => {
     setLoading(true);
@@ -84,6 +87,7 @@ export function useCategory() {
 
   return {
     categories,
+    pagination,
     loading,
     error,
     fetchCategories,

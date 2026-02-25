@@ -2,31 +2,36 @@ import { useState, useEffect, useCallback } from 'react';
 import { ProjectsService } from '@/services/projects.service';
 import { Project } from '@/types/Project/Project';
 import { ProjectRequest } from '@/types/Project/ProjectRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 import { useAuthStore } from '@/stores/auth_store';
 
 
-export function useProjects() {
+export function useProjects(defaultParams?: PaginationParams) {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { isAuthenticated } = useAuthStore();
 
 
-  const fetchProjects = useCallback(async () => {
+  const fetchProjects = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
+      const mergedParams = { ...defaultParams, ...params };
       if(isAuthenticated)
       {
 
-              const res = await ProjectsService.getAllProjects();
+              const res = await ProjectsService.getAllProjects(mergedParams);
                setProjects(res.data.items || []);
+               setPagination(res.data.pagination || null);
 
       }
       else{
-              const res = await ProjectsService.getProjects();
+              const res = await ProjectsService.getProjects(mergedParams);
                setProjects(res.data.items || []);
+               setPagination(res.data.pagination || null);
 
       }
      
@@ -35,7 +40,7 @@ export function useProjects() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const saveProjectImages = useCallback(async (images: File | File[]) => {
     setLoading(true);
@@ -130,6 +135,7 @@ export function useProjects() {
 
   return {
     projects,
+    pagination,
     loading,
     error,
     fetchProjects,

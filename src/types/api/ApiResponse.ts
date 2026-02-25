@@ -5,7 +5,11 @@ export interface Pagination {
   pages: number;
 }
 
-
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  [key: string]: string | number | boolean | undefined;
+}
 
 export interface ApiResponse<T = any > {
 success?: boolean;

@@ -2,24 +2,27 @@ import { useState, useEffect, useCallback } from 'react';
 import { EducationService } from '@/services/education.service';
 import { Education } from '@/types/Education/Education';
 import { EducationRequest } from '@/types/Education/EducationRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 
-export function useEducations() {
+export function useEducations(defaultParams?: PaginationParams) {
   const [educations, setEducations] = useState<Education[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchEducations = useCallback(async () => {
+  const fetchEducations = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await EducationService.getEducations();
+      const res = await EducationService.getEducations({ ...defaultParams, ...params });
       setEducations(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading training');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getEducationById = useCallback(async (id: string) => {
     setLoading(true);
@@ -84,6 +87,7 @@ export function useEducations() {
 
   return {
     educations,
+    pagination,
     loading,
     error,
     fetchEducations,

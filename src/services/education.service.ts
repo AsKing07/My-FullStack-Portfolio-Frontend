@@ -1,5 +1,5 @@
-import apiClient from './apiClient';
-import { ApiResponse } from '@/types/api/ApiResponse';
+import apiClient, { buildQueryParams } from './apiClient';
+import { ApiResponse, PaginationParams } from '@/types/api/ApiResponse';
 
 
 import { Education } from '@/types/Education/Education';
@@ -7,8 +7,8 @@ import { EducationRequest } from '@/types/Education/EducationRequest';
 
 
 export const EducationService = {
-  getEducations: async (): Promise<ApiResponse<Education[]>> =>
-    (await apiClient.get('/educations')).data,
+  getEducations: async (params?: PaginationParams): Promise<ApiResponse<Education[]>> =>
+    (await apiClient.get(`/educations${buildQueryParams(params)}`)).data,
 
   getEducationById: async (id: string): Promise<ApiResponse<Education>> =>
     (await apiClient.get(`/educations/${id}`)).data,

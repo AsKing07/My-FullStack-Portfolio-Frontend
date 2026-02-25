@@ -1,14 +1,14 @@
 
 
-import apiClient from './apiClient';
-import { ApiResponse } from '@/types/api/ApiResponse';
+import apiClient, { buildQueryParams } from './apiClient';
+import { ApiResponse, PaginationParams } from '@/types/api/ApiResponse';
 
 import { Experience } from '@/types/Experience/Experience';
 import { ExperienceRequest } from '@/types/Experience/ExperienceRequest';
 
 export const ExperienceService = {
-  getExperiences: async (): Promise<ApiResponse<Experience[]>> =>
-    (await apiClient.get('/experiences')).data,
+  getExperiences: async (params?: PaginationParams): Promise<ApiResponse<Experience[]>> =>
+    (await apiClient.get(`/experiences${buildQueryParams(params)}`)).data,
     getExperienceById: async (id: string): Promise<ApiResponse<Experience>> =>
     (await apiClient.get(`/experiences/${id}`)).data,
     createExperience: async (experience: ExperienceRequest): Promise<ApiResponse<Experience>> =>

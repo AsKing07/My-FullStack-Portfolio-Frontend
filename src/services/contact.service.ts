@@ -1,5 +1,5 @@
-import apiClient from './apiClient';
-import { ApiResponse } from '@/types/api/ApiResponse';
+import apiClient, { buildQueryParams } from './apiClient';
+import { ApiResponse, PaginationParams } from '@/types/api/ApiResponse';
 
 import { Contact } from '@/types/Contact/Contact';
 import { ContactRequest } from '@/types/Contact/ContactRequest';
@@ -8,8 +8,8 @@ export const ContactService = {
   createContact: async (contact: ContactRequest): Promise<ApiResponse<Contact>> =>
     (await apiClient.post('/contacts', contact)).data,
 
-  getContacts: async (): Promise<ApiResponse<Contact[]>> =>
-    (await apiClient.get('/contacts')).data,
+  getContacts: async (params?: PaginationParams): Promise<ApiResponse<Contact[]>> =>
+    (await apiClient.get(`/contacts${buildQueryParams(params)}`)).data,
 
   getContactById: async (id: string): Promise<ApiResponse<Contact>> =>
     (await apiClient.get(`/contacts/${id}`)).data,

@@ -1,14 +1,14 @@
 
-import apiClient from './apiClient';
-import { ApiResponse } from '@/types/api/ApiResponse';
+import apiClient, { buildQueryParams } from './apiClient';
+import { ApiResponse, PaginationParams } from '@/types/api/ApiResponse';
 import { Category } from '@/types/Category/Category';
 import { CategoryRequest } from '@/types/Category/CategoryRequest';
 
 
 
 export const CategoryService = {
-  getCategories: async (): Promise<ApiResponse<Category[]>> =>
-    (await apiClient.get('/categories')).data,
+  getCategories: async (params?: PaginationParams): Promise<ApiResponse<Category[]>> =>
+    (await apiClient.get(`/categories${buildQueryParams(params)}`)).data,
 
   getCategoryBySlug: async (slug: string): Promise<ApiResponse<Category>> =>
     (await apiClient.get(`/categories/${slug}`)).data,

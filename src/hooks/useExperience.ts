@@ -2,26 +2,29 @@ import { useState, useEffect, useCallback } from 'react';
 import { ExperienceService } from '@/services/experience.service';
 import { Experience } from '@/types/Experience/Experience';
 import { ExperienceRequest } from '@/types/Experience/ExperienceRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 import { th } from 'zod/v4/locales';
 import { UserService } from '@/services';
 
-export function useExperiences() {
+export function useExperiences(defaultParams?: PaginationParams) {
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchExperiences = useCallback(async () => {
+  const fetchExperiences = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await ExperienceService.getExperiences();
+      const res = await ExperienceService.getExperiences({ ...defaultParams, ...params });
       setExperiences(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading experiments');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getExperienceById = useCallback(async (id: string) => {
     setLoading(true);
@@ -105,6 +108,7 @@ const createExperience = useCallback(async (experience: ExperienceRequest) => {
 
   return {
     experiences,
+    pagination,
     loading,
     error,
     updateResume,

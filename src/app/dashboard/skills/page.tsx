@@ -18,7 +18,7 @@ type ViewMode = 'grid' | 'list';
 
 export default function SkillsPage() {
   const router = useRouter();
-  const { skills, loading, deleteSkill } = useSkills();
+  const { skills, loading, deleteSkill } = useSkills({limit: 100});
   const { categories } = useCategory();
   const { toast } = useToast();
   

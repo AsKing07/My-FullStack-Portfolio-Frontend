@@ -35,7 +35,7 @@ const SoftSkills = [
 
 export default function ExperiencePage() {
   const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
-  const { skills, loading: loadingSkills, error: errorSkills } = useSkills();
+  const { skills, loading: loadingSkills, error: errorSkills } = useSkills({limit:100});
   const { categories } = useCategory();
   const { user, loading: loadingUser, error: errorUser } = useUser();
 

@@ -1,11 +1,11 @@
-import apiClient from './apiClient';
-import { ApiResponse } from '@/types/api/ApiResponse';
+import apiClient, { buildQueryParams } from './apiClient';
+import { ApiResponse, PaginationParams } from '@/types/api/ApiResponse';
 import  {Skill} from '@/types/Skill/Skill';
 import { SkillRequest } from '@/types/Skill/SkillRequest';
 
 export const SkillsService = {
-  getSkills: async (): Promise<ApiResponse<Skill[]>> =>
-    (await apiClient.get('/skills')).data,
+  getSkills: async (params?: PaginationParams): Promise<ApiResponse<Skill[]>> =>
+    (await apiClient.get(`/skills${buildQueryParams(params)}`)).data,
 
   getSkillById: async (id: string): Promise<ApiResponse<Skill>> =>
     (await apiClient.get(`/skills/${id}`)).data,

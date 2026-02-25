@@ -2,24 +2,27 @@ import { useState, useEffect, useCallback } from 'react';
 import { SkillsService } from '@/services/skills.service';
 import { Skill } from '@/types/Skill/Skill';
 import { SkillRequest } from '@/types/Skill/SkillRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 
-export function useSkills() {
+export function useSkills(defaultParams?: PaginationParams) {
   const [skills, setSkills] = useState<Skill[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSkills = useCallback(async () => {
+  const fetchSkills = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await SkillsService.getSkills();
+      const res = await SkillsService.getSkills({ ...defaultParams, ...params });
       setSkills(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading skills');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getSkillById = useCallback(async (id: string) => {
     setLoading(true);
@@ -81,5 +84,5 @@ export function useSkills() {
     fetchSkills();
   }, [fetchSkills]);
 
-  return { skills, loading, error, fetchSkills, getSkillById, createSkill, updateSkill, deleteSkill };
+  return { skills, pagination, loading, error, fetchSkills, getSkillById, createSkill, updateSkill, deleteSkill };
 }

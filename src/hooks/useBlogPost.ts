@@ -2,37 +2,41 @@ import { useState, useEffect, useCallback } from 'react';
 import { BlogService } from '@/services/blog.service';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
 import { BlogPostRequest } from '@/types/BlogPost/BlogPostRequest';
+import { Pagination, PaginationParams } from '@/types/api/ApiResponse';
 import {useAuthStore} from '@/stores/auth_store';
-export function useBlog() {
+export function useBlog(defaultParams?: PaginationParams) {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 const {isAuthenticated} = useAuthStore();
-  const fetchBlogPosts = useCallback(async () => {
+  const fetchBlogPosts = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await BlogService.getBlogPosts();
+      const res = await BlogService.getBlogPosts({ ...defaultParams, ...params });
       setPosts(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading articles');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
-  const fetchBlogPostsByAdmin = useCallback(async () => {
+  const fetchBlogPostsByAdmin = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await BlogService.getBlogPostsByAdmin();
+      const res = await BlogService.getBlogPostsByAdmin({ ...defaultParams, ...params });
       setPosts(res.data.items || []);
+      setPagination(res.data.pagination || null);
     } catch (err: any) {
       setError(err.message || 'Error loading articles (admin)');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [defaultParams]);
 
   const getBlogPostBySlug = useCallback(async (slug: string) => {
     setLoading(true);
@@ -118,6 +122,7 @@ const {isAuthenticated} = useAuthStore();
 
   return {
     posts,
+    pagination,
     loading,
     error,
     fetchBlogPosts,
