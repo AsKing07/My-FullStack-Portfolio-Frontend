@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ExperienceService } from '@/services/experience.service';
 import { Experience } from '@/types/Experience/Experience';
 import { ExperienceRequest } from '@/types/Experience/ExperienceRequest';
@@ -12,11 +12,14 @@ export function useExperiences(defaultParams?: PaginationParams) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchExperiences = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await ExperienceService.getExperiences({ ...defaultParams, ...params });
+      const res = await ExperienceService.getExperiences({ ...defaultParamsRef.current, ...params });
       setExperiences(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -24,7 +27,7 @@ export function useExperiences(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getExperienceById = useCallback(async (id: string) => {
     setLoading(true);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { BlogService } from '@/services/blog.service';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
 import { BlogPostRequest } from '@/types/BlogPost/BlogPostRequest';
@@ -10,11 +10,15 @@ export function useBlog(defaultParams?: PaginationParams) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 const {isAuthenticated} = useAuthStore();
+
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchBlogPosts = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await BlogService.getBlogPosts({ ...defaultParams, ...params });
+      const res = await BlogService.getBlogPosts({ ...defaultParamsRef.current, ...params });
       setPosts(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -22,13 +26,13 @@ const {isAuthenticated} = useAuthStore();
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const fetchBlogPostsByAdmin = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await BlogService.getBlogPostsByAdmin({ ...defaultParams, ...params });
+      const res = await BlogService.getBlogPostsByAdmin({ ...defaultParamsRef.current, ...params });
       setPosts(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -36,7 +40,7 @@ const {isAuthenticated} = useAuthStore();
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getBlogPostBySlug = useCallback(async (slug: string) => {
     setLoading(true);

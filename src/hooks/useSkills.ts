@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { SkillsService } from '@/services/skills.service';
 import { Skill } from '@/types/Skill/Skill';
 import { SkillRequest } from '@/types/Skill/SkillRequest';
@@ -10,11 +10,14 @@ export function useSkills(defaultParams?: PaginationParams) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchSkills = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await SkillsService.getSkills({ ...defaultParams, ...params });
+      const res = await SkillsService.getSkills({ ...defaultParamsRef.current, ...params });
       setSkills(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -22,7 +25,7 @@ export function useSkills(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getSkillById = useCallback(async (id: string) => {
     setLoading(true);

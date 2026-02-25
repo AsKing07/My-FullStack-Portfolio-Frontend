@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ContactService } from '@/services/contact.service';
 import { Contact } from '@/types/Contact/Contact';
 import { ContactRequest } from '@/types/Contact/ContactRequest';
@@ -13,11 +13,14 @@ export function useContacts(defaultParams?: PaginationParams) {
 
   const { isAuthenticated } = useAuthStore();
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchContacts = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await ContactService.getContacts({ ...defaultParams, ...params });
+      const res = await ContactService.getContacts({ ...defaultParamsRef.current, ...params });
       setContacts(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -25,7 +28,7 @@ export function useContacts(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getContactById = useCallback(async (id: string) => {
     setLoading(true);

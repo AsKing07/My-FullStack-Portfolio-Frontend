@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ProjectsService } from '@/services/projects.service';
 import { Project } from '@/types/Project/Project';
 import { ProjectRequest } from '@/types/Project/ProjectRequest';
@@ -14,12 +14,14 @@ export function useProjects(defaultParams?: PaginationParams) {
 
   const { isAuthenticated } = useAuthStore();
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
 
   const fetchProjects = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const mergedParams = { ...defaultParams, ...params };
+      const mergedParams = { ...defaultParamsRef.current, ...params };
       if(isAuthenticated)
       {
 
@@ -40,7 +42,7 @@ export function useProjects(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const saveProjectImages = useCallback(async (images: File | File[]) => {
     setLoading(true);

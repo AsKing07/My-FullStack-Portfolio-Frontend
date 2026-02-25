@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import CategoryService from '@/services/category.service';
 import { Category } from '@/types/Category/Category';
 import { CategoryRequest } from '@/types/Category/CategoryRequest';
@@ -10,11 +10,14 @@ export function useCategory(defaultParams?: PaginationParams) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchCategories = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await CategoryService.getCategories({ ...defaultParams, ...params });
+      const res = await CategoryService.getCategories({ ...defaultParamsRef.current, ...params });
       setCategories(res.data?.items || []);
       setPagination(res.data?.pagination || null);
       console.log('Categories fetched:', res.data.items);
@@ -23,7 +26,7 @@ export function useCategory(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getCategoryBySlug = useCallback(async (slug: string) => {
     setLoading(true);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { EducationService } from '@/services/education.service';
 import { Education } from '@/types/Education/Education';
 import { EducationRequest } from '@/types/Education/EducationRequest';
@@ -10,11 +10,14 @@ export function useEducations(defaultParams?: PaginationParams) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultParamsRef = useRef(defaultParams);
+  defaultParamsRef.current = defaultParams;
+
   const fetchEducations = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await EducationService.getEducations({ ...defaultParams, ...params });
+      const res = await EducationService.getEducations({ ...defaultParamsRef.current, ...params });
       setEducations(res.data.items || []);
       setPagination(res.data.pagination || null);
     } catch (err: any) {
@@ -22,7 +25,7 @@ export function useEducations(defaultParams?: PaginationParams) {
     } finally {
       setLoading(false);
     }
-  }, [defaultParams]);
+  }, []);
 
   const getEducationById = useCallback(async (id: string) => {
     setLoading(true);
