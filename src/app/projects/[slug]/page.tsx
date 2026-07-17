@@ -23,6 +23,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDate, cn } from '@/lib/utils';
+import { ProjectSchema } from '@/components/seo/StructuredData';
 
 const statusColors: Record<string, string> = {
   DRAFT: "bg-gray-400",
@@ -107,9 +108,19 @@ export default function ProjectDetailPage() {
   }
 
   const galleryImages = project.gallery ? project.gallery.split(',').map(url => url.trim()) : [];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-8 mt-8 z-999">
+      <ProjectSchema
+        name={project.title}
+        description={project.shortDesc || project.description || ''}
+        url={`${baseUrl}/projects/${project.slug}`}
+        author="Charbel SONON"
+        programmingLanguage={project.technologies ? project.technologies.split(',').map(t => t.trim()) : []}
+        dateCreated={project.createdAt?.toString()}
+        dateModified={project.updatedAt?.toString()}
+      />
       <div className="container mx-auto px-4">
         {/* Header avec navigation */}
         <div className="flex items-center justify-between mb-8">

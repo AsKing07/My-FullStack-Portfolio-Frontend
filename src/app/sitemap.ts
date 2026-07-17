@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
+import { ProjectsService } from '@/services/projects.service';
+import { BlogService } from '@/services/blog.service';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com';
   
   const staticRoutes = [
@@ -54,27 +56,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // TODO: Ajouter dynamiquement les projets et articles de blog
-  // Pour cela, vous devrez récupérer les données depuis votre API
-  // const projects = await getProjects();
-  // const projectRoutes = projects.map((project) => ({
-  //   url: `${baseUrl}/projects/${project.slug}`,
-  //   lastModified: new Date(project.updatedAt),
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.7,
-  // }));
-
-  // const posts = await getBlogPosts();
-  // const postRoutes = posts.map((post) => ({
-  //   url: `${baseUrl}/blog/${post.slug}`,
-  //   lastModified: new Date(post.updatedAt),
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.8,
-  // }));
+  const [projectRoutes, postRoutes] = await Promise.all([
+    ProjectsService.getProjects({ limit: 1000 })
+      .then(({ data }) =>
+        data.items.map((project) => ({
+          url: `${baseUrl}/projects/${project.slug}`,
+          lastModified: new Date(project.updatedAt),
+          changeFrequency: 'monthly' as const,
+          priority: 0.7,
+        }))
+      )
+      .catch(() => []),
+    BlogService.getBlogPosts({ limit: 1000 })
+      .then(({ data }) =>
+        data.items.map((post) => ({
+          url: `${baseUrl}/blog/${post.slug}`,
+          lastModified: new Date(post.updatedAt),
+          changeFrequency: 'monthly' as const,
+          priority: 0.8,
+        }))
+      )
+      .catch(() => []),
+  ]);
 
   return [
     ...staticRoutes,
-    // ...projectRoutes,
-    // ...postRoutes,
+    ...projectRoutes,
+    ...postRoutes,
   ];
 }

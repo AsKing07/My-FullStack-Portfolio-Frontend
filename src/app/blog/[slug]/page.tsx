@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_c
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
+import { BlogPostSchema } from '@/components/seo/StructuredData';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -55,8 +56,19 @@ export default function BlogPostPage() {
     );
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com';
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-12">
+      <BlogPostSchema
+        title={post.title}
+        description={post.excerpt || post.metaDesc || ''}
+        url={`${baseUrl}/blog/${post.slug}`}
+        datePublished={post.publishedAt.toString()}
+        dateModified={post.updatedAt?.toString()}
+        author={post.user?.name || 'Charbel SONON'}
+        image={post.image}
+      />
       <div className="container mx-auto px-4 max-w-3xl">
         <Card>
           {post.image && (
