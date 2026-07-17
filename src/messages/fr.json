@@ -1,0 +1,310 @@
+{
+  "Metadata": {
+    "titleTemplate": "%s | Charbel SONON",
+    "defaultTitle": "Charbel SONON | Portfolio - Développeur Full Stack",
+    "defaultDescription": "Portfolio de Charbel SONON, développeur full stack spécialisé en Angular, React, Next.js, Node.js, Java, TypeScript et plein d'autres technologies web modernes. Découvrez mes projets, expériences et compétences.",
+    "siteName": "Portfolio - Charbel SONON",
+    "ogImageAlt": "Charbel SONON - Portfolio Développeur Full Stack"
+  },
+  "Common": {
+    "errorTitle": "Une erreur est survenue",
+    "tryAgain": "Réessayer",
+    "backToBlog": "Retour au blog",
+    "backToProjects": "Tous les projets",
+    "back": "Retour"
+  },
+  "About": {
+    "pageTitle": "À propos de moi",
+    "myStory": "Mon parcours",
+    "bioFallback": "Développeur fullstack passionné par la création d'applications web modernes, performantes et accessibles.",
+    "availableForProjects": "Disponible pour de nouveaux projets",
+    "interestsTitle": "Centres d'intérêt",
+    "interests": {
+      "football": "Football",
+      "music": "Musique",
+      "videoGames": "Jeux vidéo",
+      "reading": "Lecture"
+    },
+    "errorPrefix": "Erreur lors du chargement des informations :"
+  },
+  "Experience": {
+    "heroTitle": "Parcours Professionnel",
+    "heroSubtitle": "Découvrez mes expériences professionnelles et les compétences que j'ai développées au fil de ma carrière",
+    "downloadResume": "Télécharger le CV",
+    "timelineTitle": "Chronologie de carrière",
+    "timelineSubtitle": "Un parcours chronologique à travers mes expériences professionnelles",
+    "present": "Présent",
+    "employmentTypes": {
+      "FULLTIME": "Temps plein",
+      "PARTTIME": "Temps partiel",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Stage",
+      "CONTRACT": "CDD",
+      "APPRENTICESHIP": "Alternance",
+      "VOLUNTEER": "Bénévolat"
+    },
+    "skillsTitle": "Compétences Techniques",
+    "skillsSubtitle": "Les technologies et outils avec lesquels je donne vie aux idées",
+    "skillsCount": "{count} compétences",
+    "levels": {
+      "BEGINNER": "Débutant",
+      "INTERMEDIATE": "Intermédiaire",
+      "ADVANCED": "Avancé",
+      "EXPERT": "Expert"
+    },
+    "softSkillsTitle": "Savoir-être",
+    "softSkillsSubtitle": "Les qualités personnelles et relationnelles qui favorisent la collaboration et la réussite",
+    "softSkillsList": ["Gestion du temps", "Travail d'équipe", "Résolution de problèmes", "Communication", "Adaptabilité", "Créativité", "Leadership"],
+    "errorPrefix": "Erreur lors du chargement de l'expérience :"
+  },
+  "Education": {
+    "heroTitle": "Parcours Académique",
+    "heroSubtitle": "Mon parcours académique et mon apprentissage continu qui ont façonné mes connaissances et compétences",
+    "timelineTitle": "Chronologie Académique",
+    "timelineSubtitle": "Un parcours chronologique à travers mes étapes et réussites académiques",
+    "present": "Présent",
+    "highlightsTitle": "Faits Marquants",
+    "highlightsSubtitle": "Principales réussites et étapes clés de mon parcours académique",
+    "degreesAndCertifications": "Diplômes & Certifications",
+    "gradedAchievements": "Résultats notés",
+    "yearsOfLearning": "Années d'apprentissage",
+    "errorPrefix": "Erreur lors du chargement de la formation :"
+  },
+  "Projects": {
+    "pageTitle": "Projets réalisés",
+    "all": "Tous",
+    "status": {
+      "DRAFT": "Brouillon",
+      "PUBLISHED": "Publié",
+      "ARCHIVED": "Archivé"
+    },
+    "featured": "En vedette",
+    "viewLive": "Voir le projet en ligne",
+    "viewGithub": "Voir sur GitHub",
+    "viewFigma": "Voir sur Figma",
+    "moreDetails": "Plus de détails",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "showingRange": "Affichage de {start}-{end} sur {total} projets",
+    "inCategory": " dans la catégorie « {category} »"
+  },
+  "ProjectDetail": {
+    "back": "Retour",
+    "featured": "En vedette",
+    "viewProject": "Voir le projet",
+    "viewOnline": "Voir en ligne",
+    "allProjects": "Tous les projets",
+    "status": {
+      "DRAFT": "Brouillon",
+      "PUBLISHED": "Publié",
+      "ARCHIVED": "Archivé",
+      "IN_PROGRESS": "En cours",
+      "PLANNED": "Planifié",
+      "COMPLETED": "Terminé"
+    },
+    "technologiesUsed": "Technologies utilisées",
+    "projectDescription": "Description du projet",
+    "technicalDetails": "Détails techniques",
+    "gallery": "Galerie ({count})",
+    "informations": "Informations",
+    "statusLabel": "Statut :",
+    "createdOn": "Créé le :",
+    "updatedOn": "Mis à jour le :",
+    "actions": "Actions",
+    "notFound": "Projet non trouvé",
+    "errorLoading": "Erreur de chargement",
+    "errorPrefix": "Impossible de charger les détails du projet :"
+  },
+  "BlogList": {
+    "pageTitle": "Blog",
+    "pageSubtitle": "Mes réflexions sur le développement, les technologies et l'innovation",
+    "searchPlaceholder": "Rechercher des articles...",
+    "allTags": "Tous",
+    "minRead": "{minutes} min de lecture",
+    "noItemsFound": "Aucun élément trouvé",
+    "errorPrefix": "Erreur lors du chargement des articles :"
+  },
+  "BlogDetail": {
+    "notFound": "Élément non trouvé",
+    "errorPrefix": "Impossible de charger cet article.",
+    "backToBlog": "Retour au blog",
+    "minRead": "{minutes} min de lecture"
+  },
+  "Contact": {
+    "pageTitle": "Contact",
+    "pageSubtitle": "Envie de discuter d'un projet ou simplement de dire bonjour ? N'hésitez pas à me contacter !",
+    "sendMessage": "Envoyez-moi un message",
+    "form": {
+      "name": "Nom *",
+      "namePlaceholder": "Votre nom",
+      "email": "Email *",
+      "emailPlaceholder": "votre@email.com",
+      "phone": "Téléphone",
+      "phonePlaceholder": "Votre numéro",
+      "company": "Société",
+      "companyPlaceholder": "Votre société",
+      "website": "Site web",
+      "websitePlaceholder": "https://votre-site.com",
+      "subject": "Sujet *",
+      "subjectPlaceholder": "Sujet de votre message",
+      "message": "Message *",
+      "messagePlaceholder": "Votre message...",
+      "sending": "Envoi...",
+      "send": "Envoyer le message",
+      "successToast": "Message envoyé avec succès !",
+      "errorToast": "Erreur lors de l'envoi du message"
+    },
+    "infoLabels": {
+      "email": "Email",
+      "phone": "Téléphone",
+      "location": "Localisation",
+      "website": "Site web"
+    },
+    "contactInformation": "Informations de contact",
+    "noContactInfo": "Aucune information de contact disponible.",
+    "socialNetworks": "Réseaux sociaux",
+    "noSocialNetworks": "Aucun réseau social renseigné.",
+    "availability": "Disponibilité",
+    "availableForProjects": "Disponible pour de nouveaux projets",
+    "responseTime": "Je réponds généralement sous 24 heures",
+    "errorPrefix": "Erreur lors du chargement des informations de contact :"
+  },
+  "DevStats": {
+    "pageTitle": "Statistiques de développement",
+    "pageSubtitle": "Aperçu de mon activité de développement et de mes contributions open source",
+    "repositories": "Dépôts",
+    "totalStars": "Étoiles totales",
+    "totalForks": "Forks totaux",
+    "commitsThisYear": "Commits ({year})",
+    "languagePercentage": "Pourcentage de langages sur la dernière année",
+    "codingActivity": "Activité de développement personnelle des 30 derniers jours",
+    "editors": "Éditeurs utilisés au cours de la dernière année",
+    "visitGithub": "Visiter mon GitHub",
+    "errorTitle": "Une erreur est survenue",
+    "errorPrefix": "Erreur lors du chargement des statistiques :",
+    "tryAgain": "Réessayer"
+  },
+  "SEO": {
+    "projectSuffix": "Projet | Charbel SONON",
+    "blogSuffix": "Blog | Charbel SONON",
+    "about": {
+      "title": "À propos - Charbel SONON | Développeur Full Stack",
+      "description": "En savoir plus sur Charbel SONON, développeur full stack avec une expertise en technologies web modernes et une passion pour l'innovation.",
+      "keywords": ["à propos", "profil", "compétences", "parcours"]
+    },
+    "experience": {
+      "title": "Expérience Professionnelle - Charbel SONON",
+      "description": "Découvrez l'expérience professionnelle de Charbel SONON, son parcours, ses missions, projets et responsabilités en développement.",
+      "keywords": ["expérience", "carrière", "missions", "projets professionnels"]
+    },
+    "education": {
+      "title": "Formation & Éducation - Charbel SONON",
+      "description": "Parcours éducatif et formations de Charbel SONON en développement logiciel, web et technologies informatiques.",
+      "keywords": ["formation", "éducation", "diplômes", "certifications"]
+    },
+    "projects": {
+      "title": "Projets - Charbel SONON | Portfolio",
+      "description": "Explorez les projets réalisés par Charbel SONON : logiciels, applications web, APIs, sites responsives et solutions innovantes.",
+      "keywords": ["projets", "réalisations", "applications web", "portfolio", "logiciels"]
+    },
+    "blog": {
+      "title": "Blog - Charbel SONON | Articles Tech",
+      "description": "Articles et tutoriels sur le développement web, les technologies modernes et les bonnes pratiques par Charbel SONON.",
+      "keywords": ["blog", "articles", "tutoriels", "développement web", "tech"]
+    },
+    "contact": {
+      "title": "Contact - Charbel SONON | Développeur Full Stack",
+      "description": "Contactez Charbel SONON pour vos projets de développement web et logiciel, collaborations ou opportunités professionnelles.",
+      "keywords": ["contact", "collaboration", "freelance", "mission"]
+    },
+    "githubStats": {
+      "title": "Statistiques - Charbel SONON",
+      "description": "Consultez les statistiques de développement de Charbel SONON : contributions, projets open source et activité de développement.",
+      "keywords": ["github", "statistiques", "open source", "contributions"]
+    }
+  },
+  "Nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "experience": "Expérience",
+    "education": "Formation",
+    "projects": "Projets",
+    "devStats": "Statistiques",
+    "blog": "Blog",
+    "contact": "Contact",
+    "dashboard": "Tableau de bord",
+    "logoAriaLabel": "Retour à l'accueil",
+    "mainNavAriaLabel": "Navigation principale",
+    "mobileNavAriaLabel": "Navigation mobile",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "mobileMenuTitle": "Navigation",
+    "languageSwitcherAriaLabel": "Changer de langue"
+  },
+  "Footer": {
+    "madeWithPrefix": "Portfolio. Réalisé avec",
+    "madeWithSuffix": "par",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter",
+    "website": "Site web",
+    "contact": "Contact"
+  },
+  "Home": {
+    "hero": {
+      "greeting": "Bonjour, je suis",
+      "role": "Développeur Full Stack",
+      "bioFallback": "Passionné par la création d'applications web modernes, performantes et accessibles. Je transforme des idées en expériences numériques qui font la différence.",
+      "jobTitle": "Développeur Full Stack",
+      "personSchemaBioFallback": "Développeur full stack passionné par les technologies web modernes",
+      "websiteSchemaDescription": "Portfolio de Charbel SONON, développeur full stack",
+      "discoverStory": "Découvrir mon parcours",
+      "downloadResume": "Télécharger le CV",
+      "downloadToast": "Téléchargement du CV en cours...",
+      "downloadSuccess": "Téléchargement du CV terminé !",
+      "availableForOpportunities": "Disponible pour de nouvelles opportunités",
+      "profileAlt": "Photo de profil"
+    },
+    "error": {
+      "title": "Une erreur est survenue",
+      "prefix": "Erreur lors du chargement des données du portfolio :",
+      "tryAgain": "Réessayer"
+    },
+    "experience": {
+      "title": "Parcours Professionnel",
+      "subtitle": "Découvrez mes expériences professionnelles et les compétences que j'ai développées",
+      "present": "Présent",
+      "viewAll": "Voir toutes les expériences"
+    },
+    "education": {
+      "title": "Formation & Apprentissage",
+      "subtitle": "Mon parcours académique et mon apprentissage continu",
+      "present": "Présent",
+      "viewAll": "Voir toute la formation"
+    },
+    "projects": {
+      "title": "Projets Phares",
+      "subtitle": "Découvrez les projets que j'ai réalisés avec passion et rigueur",
+      "moreTech": "+{count} de plus",
+      "exploreProject": "Découvrir le projet",
+      "viewAll": "Voir tous les projets"
+    },
+    "blog": {
+      "title": "Derniers Articles",
+      "subtitle": "Réflexions, tutoriels et enseignements tirés de mon parcours de développeur",
+      "published": "Publié le {date}",
+      "readArticle": "Lire l'article",
+      "viewAll": "Voir tous les articles"
+    },
+    "cta": {
+      "titlePrefix": "Prêt à",
+      "titleHighlight": "collaborer",
+      "subtitle": "Donnons vie à vos idées ! Je suis passionné par la création de solutions innovantes et j'aimerais échanger sur votre prochain projet.",
+      "letsTalk": "Discutons-en",
+      "responseTime": "Je réponds généralement sous 24 heures",
+      "statsProjects": "Projets réalisés",
+      "statsClients": "Clients satisfaits",
+      "statsExperience": "Années d'expérience"
+    }
+  }
+}

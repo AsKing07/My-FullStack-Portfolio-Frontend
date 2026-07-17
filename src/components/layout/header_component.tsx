@@ -1,13 +1,15 @@
 "use client"
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { Link, usePathname, useRouter } from "@/i18n/navigation"
+import NextLink from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button_component"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth_store"
 import { ThemeToggle } from "../ui/theme_toggle"
+import { LanguageSwitcher } from "../ui/language_switcher"
 
 // Types pour une meilleure sécurité de type
 interface NavigationItem {
@@ -23,18 +25,6 @@ interface HeaderProps {
   showAuthButton?: boolean
   navigation?: NavigationItem[]
 }
-
-// Configuration par défaut de la navigation
-const DEFAULT_NAVIGATION: NavigationItem[] = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Experience", href: "/experience" },
-  { name: "Education", href: "/education" },
-  { name: "Projects", href: "/projects" },
-  { name: "Dev Stats", href: "/github-stats" },  
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-]
 
 // Hook personnalisé pour la gestion du menu mobile
 const useMobileMenu = () => {
@@ -126,17 +116,29 @@ const useFocusManagement = () => {
   return { focusedIndex, handleKeyNavigation, setFocusedIndex }
 }
 
-export function Header({ 
+export function Header({
   className = "",
   variant = 'default',
   showAuthButton = true,
-  navigation = DEFAULT_NAVIGATION 
+  navigation
 }: HeaderProps) {
+  const t = useTranslations('Nav')
   const pathname = usePathname()
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
   const { isOpen, openMenu, closeMenu, menuRef, buttonRef } = useMobileMenu()
   const { focusedIndex, handleKeyNavigation, setFocusedIndex } = useFocusManagement()
+
+  const navigationItems: NavigationItem[] = useMemo(() => navigation ?? [
+    { name: t('home'), href: "/" },
+    { name: t('about'), href: "/about" },
+    { name: t('experience'), href: "/experience" },
+    { name: t('education'), href: "/education" },
+    { name: t('projects'), href: "/projects" },
+    { name: t('devStats'), href: "/github-stats" },
+    { name: t('blog'), href: "/blog" },
+    { name: t('contact'), href: "/contact" },
+  ], [navigation, t])
 
   // Mémorisation des styles de variantes
   const headerStyles = useMemo(() => {
@@ -166,7 +168,7 @@ export function Header({
 
   // Mémorisation des éléments de navigation
   const navigationElements = useMemo(() => {
-    return navigation.map((item, index) => (
+    return navigationItems.map((item, index) => (
       <Link
         key={item.name}
         href={item.href}
@@ -184,11 +186,11 @@ export function Header({
         {item.name}
       </Link>
     ))
-  }, [navigation, pathname, handleNavigationClick, focusedIndex, setFocusedIndex])
+  }, [navigationItems, pathname, handleNavigationClick, focusedIndex, setFocusedIndex])
 
   // Mémorisation des éléments de navigation mobile
   const mobileNavigationElements = useMemo(() => {
-    return navigation.map((item, index) => (
+    return navigationItems.map((item, index) => (
       <Link
         key={item.name}
         href={item.href}
@@ -204,45 +206,46 @@ export function Header({
         {item.name}
       </Link>
     ))
-  }, [navigation, pathname, handleNavigationClick])
+  }, [navigationItems, pathname, handleNavigationClick])
 
   return (
     <header className={cn(headerStyles, className)} role="banner">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="text-xl font-bold text-gradient focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md"
-            aria-label="Retour à l'accueil"
+            aria-label={t('logoAriaLabel')}
           >
             Charbel's Portfolio
           </Link>
 
           {/* Desktop Navigation */}
-          <nav 
-            className="hidden lg:flex space-x-6" 
+          <nav
+            className="hidden lg:flex space-x-6"
             role="navigation"
-            aria-label="Navigation principale"
-            onKeyDown={(e) => handleKeyNavigation(e, navigation.length)}
+            aria-label={t('mainNavAriaLabel')}
+            onKeyDown={(e) => handleKeyNavigation(e, navigationItems.length)}
           >
             {navigationElements}
           </nav>
 
           {/* Right section */}
           <div className="flex items-center space-x-4">
+            <LanguageSwitcher />
             <ThemeToggle />
             {showAuthButton && isAuthenticated && (
               <Button variant="outline" size="sm" asChild>
-                <Link 
+                <NextLink
                   href="/dashboard"
                   className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
-                  Dashboard
-                </Link>
+                  {t('dashboard')}
+                </NextLink>
               </Button>
             )}
-            
+
             {/* Mobile menu button */}
             <div className="lg:hidden">
               <Button
@@ -252,11 +255,11 @@ export function Header({
                 onClick={openMenu}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu"
-                aria-label={isOpen ? "Close menu" : "Open menu"}
+                aria-label={isOpen ? t('closeMenu') : t('openMenu')}
                 className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 <span className="sr-only">
-                  {isOpen ? "Close menu" : "Open menu"}
+                  {isOpen ? t('closeMenu') : t('openMenu')}
                 </span>
                 <Menu className="h-6 w-6" aria-hidden="true" />
               </Button>
@@ -285,24 +288,27 @@ export function Header({
   >
     <div className="flex items-center justify-between p-6 border-b bg-white dark:bg-slate-900 text-foreground">
       <h2 id="mobile-menu-title" className="text-lg font-semibold">
-        Navigation
+        {t('mobileMenuTitle')}
       </h2>
       <Button
         variant="ghost"
         size="icon"
         onClick={closeMenu}
-        aria-label="Close menu"
+        aria-label={t('closeMenu')}
         className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       >
-        <span className="sr-only">Close menu</span>
+        <span className="sr-only">{t('closeMenu')}</span>
         <X className="h-6 w-6" aria-hidden="true" />
       </Button>
     </div>
 
-    <nav 
+    <div className="px-6 pt-4">
+      <LanguageSwitcher />
+    </div>
+    <nav
       className="px-6 py-4 space-y-2 bg-white dark:bg-slate-900 rounded-b-2xl text-foreground"
       role="navigation"
-      aria-label="Navigation mobile"
+      aria-label={t('mobileNavAriaLabel')}
     >
       {mobileNavigationElements}
     </nav>
@@ -310,13 +316,13 @@ export function Header({
     {showAuthButton && isAuthenticated && (
       <div className="border-t p-6">
         <Button variant="outline" size="sm" asChild className="w-full">
-          <Link 
-            href="/dashboard" 
+          <NextLink
+            href="/dashboard"
             onClick={closeMenu}
             className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
-            Dashboard
-          </Link>
+            {t('dashboard')}
+          </NextLink>
         </Button>
       </div>
     )}

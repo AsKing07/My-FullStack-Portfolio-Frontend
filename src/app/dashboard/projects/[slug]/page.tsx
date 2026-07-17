@@ -30,8 +30,11 @@ import { Project } from '@/types/Project/Project';
 
 const formSchema = z.object({
   title: z.string().min(3, 'Le titre doit contenir au moins 3 caractères'),
+  titleFr: z.string().optional(),
   description: z.string().min(10, 'La description doit contenir au moins 10 caractères'),
+  descriptionFr: z.string().optional(),
   content: z.string().optional(),
+  contentFr: z.string().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'IN_PROGRESS', 'PLANNED', 'COMPLETED']),
   featured: z.boolean().optional(),
   liveUrl: z.string().url('URL du site invalide').optional().or(z.literal('')),
@@ -63,8 +66,11 @@ export default function ProjectEditPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
+      titleFr: '',
       description: '',
+      descriptionFr: '',
       content: '',
+      contentFr: '',
       status: 'COMPLETED',
       featured: false,
       liveUrl: '',
@@ -93,8 +99,11 @@ export default function ProjectEditPage() {
         }
         form.reset({
           title: project.title,
+          titleFr: project.titleFr || '',
           description: project.description,
+          descriptionFr: project.descriptionFr || '',
           content: project.content || '',
+          contentFr: project.contentFr || '',
           status: project.status || 'COMPLETED',
           featured: !!project.featured,
           liveUrl: project.liveUrl || '',
@@ -239,15 +248,26 @@ export default function ProjectEditPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <label className="font-semibold">Titre</label>
+                  <label className="font-semibold">Titre (EN)</label>
                   <Input
                     {...form.register('title')}
                     placeholder="Titre du projet"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold">Description courte</label>
+                  <label className="font-semibold">Titre (FR)</label>
+                  <Input
+                    {...form.register('titleFr')}
+                    placeholder="Titre du projet en français"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold">Description courte (EN)</label>
                   <TextArea {...form.register('description')} rows={3} placeholder="Brève description" />
+                </div>
+                <div>
+                  <label className="font-semibold">Description courte (FR)</label>
+                  <TextArea {...form.register('descriptionFr')} rows={3} placeholder="Brève description en français" />
                 </div>
                 <div className='flex flex-col gap-2'>
                   <label className="font-semibold">Catégorie</label>
@@ -284,8 +304,12 @@ export default function ProjectEditPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <label className="font-semibold">Description détaillée</label>
+                  <label className="font-semibold">Description détaillée (EN)</label>
                   <TextArea {...form.register('content')} rows={6} placeholder="Description détaillée" />
+                </div>
+                <div>
+                  <label className="font-semibold">Description détaillée (FR)</label>
+                  <TextArea {...form.register('contentFr')} rows={6} placeholder="Description détaillée en français" />
                 </div>
                 <div>
                   <label className="font-semibold">Technologies (séparées par des virgules)</label>

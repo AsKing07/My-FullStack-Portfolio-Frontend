@@ -18,10 +18,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const formSchema = z.object({
   degree: z.string().min(2, 'Diplôme requis'),
+  degreeFr: z.string().optional(),
   school: z.string().min(2, 'École requise'),
   field: z.string().optional(),
   location: z.string().optional(),
   description: z.string().optional(),
+  descriptionFr: z.string().optional(),
   grade: z.string().optional(),
   startDate: z.date(),
   endDate: z.date().optional(),
@@ -38,10 +40,12 @@ export default function NewEducationPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       degree: '',
+      degreeFr: '',
       school: '',
       field: '',
       location: '',
       description: '',
+      descriptionFr: '',
       grade: '',
       startDate: undefined,
       endDate: undefined,
@@ -76,7 +80,7 @@ export default function NewEducationPage() {
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div>
-              <label className="font-semibold">Diplôme *</label>
+              <label className="font-semibold">Diplôme (EN) *</label>
               <Input
                 {...form.register('degree')}
                 placeholder="Master en Informatique, Licence..."
@@ -84,6 +88,14 @@ export default function NewEducationPage() {
               {form.formState.errors.degree && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.degree.message}</p>
               )}
+            </div>
+
+            <div>
+              <label className="font-semibold">Diplôme (FR)</label>
+              <Input
+                {...form.register('degreeFr')}
+                placeholder="Master en Informatique, Licence... (français)"
+              />
             </div>
 
             <div>
@@ -114,11 +126,20 @@ export default function NewEducationPage() {
             </div>
 
             <div>
-              <label className="font-semibold">Description</label>
+              <label className="font-semibold">Description (EN)</label>
               <TextArea
                 {...form.register('description')}
                 rows={4}
                 placeholder="Description de la formation, spécialisations..."
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold">Description (FR)</label>
+              <TextArea
+                {...form.register('descriptionFr')}
+                rows={4}
+                placeholder="Description de la formation en français..."
               />
             </div>
 

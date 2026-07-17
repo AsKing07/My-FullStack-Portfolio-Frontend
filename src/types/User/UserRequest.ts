@@ -6,6 +6,7 @@ export interface UserRequest {
     title?: string;
     subtitle?: string;
     bio?: string;
+    bioFr?: string;
     avatar?: File;
     location?: string;
     website?: string;

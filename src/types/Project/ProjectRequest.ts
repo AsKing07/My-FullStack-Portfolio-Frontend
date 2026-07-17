@@ -2,10 +2,14 @@ import { ProjectStatus } from "./Project";
 
 export interface ProjectRequest {
     title: string;
+    titleFr?: string;
     slug?: string;
     description: string;
+    descriptionFr?: string;
     shortDesc?: string;
+    shortDescFr?: string;
     content?: string;
+    contentFr?: string;
     status: ProjectStatus;
     featured?: boolean;
     priority?: number;

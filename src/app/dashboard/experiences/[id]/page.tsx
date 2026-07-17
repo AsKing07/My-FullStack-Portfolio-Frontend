@@ -17,9 +17,11 @@ import { useToast } from '@/hooks/useToast';
 
 const formSchema = z.object({
   title: z.string().min(2, 'Titre requis'),
+  titleFr: z.string().optional(),
   company: z.string().min(2, 'Entreprise requise'),
   location: z.string().optional(),
   description: z.string().optional(),
+  descriptionFr: z.string().optional(),
   technologies: z.string().optional(),
   type: z.nativeEnum(ExperienceType),
   startDate: z.date(),
@@ -49,9 +51,11 @@ export default function EditExperiencePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
+      titleFr: '',
       company: '',
       location: '',
       description: '',
+      descriptionFr: '',
       technologies: '',
       type: ExperienceType.FULLTIME,
       startDate: undefined,
@@ -66,9 +70,11 @@ export default function EditExperiencePage() {
       if (exp) {
         form.reset({
           title: exp.title,
+          titleFr: exp.titleFr || '',
           company: exp.company,
           location: exp.location || '',
           description: exp.description || '',
+          descriptionFr: exp.descriptionFr || '',
           technologies: exp.technologies || '',
           type: exp.type,
           startDate: exp.startDate ? new Date(exp.startDate) : undefined,
@@ -110,21 +116,24 @@ export default function EditExperiencePage() {
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Input {...form.register('title')} placeholder="Titre du poste" />
+              <Input {...form.register('title')} placeholder="Titre du poste (EN)" />
               {form.formState.errors.title && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.title.message}</p>
               )}
             </div>
-            
+
+            <Input {...form.register('titleFr')} placeholder="Titre du poste (FR)" />
+
             <div>
               <Input {...form.register('company')} placeholder="Entreprise" />
               {form.formState.errors.company && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.company.message}</p>
               )}
             </div>
-            
+
             <Input {...form.register('location')} placeholder="Lieu" />
-            <TextArea {...form.register('description')} placeholder="Description" rows={3} />
+            <TextArea {...form.register('description')} placeholder="Description (EN)" rows={3} />
+            <TextArea {...form.register('descriptionFr')} placeholder="Description (FR)" rows={3} />
             <Input {...form.register('technologies')} placeholder="Technologies (séparées par des virgules)" />
             
             <Select.Root value={form.watch('type')} onValueChange={val => form.setValue('type', val as ExperienceType)}>

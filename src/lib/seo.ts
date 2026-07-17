@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 
 interface SEOMetadata {
   title?: string;
@@ -6,7 +8,8 @@ interface SEOMetadata {
   keywords?: string[];
   ogImage?: string;
   ogType?: 'website' | 'article';
-  canonical?: string;
+  locale?: string;
+  path?: string;
   noindex?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
@@ -15,13 +18,20 @@ interface SEOMetadata {
   tags?: string[];
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com';
+
+function localizedUrl(locale: string, path: string): string {
+  return locale === routing.defaultLocale ? `${baseUrl}${path}` : `${baseUrl}/${locale}${path}`;
+}
+
 export function generateSEOMetadata({
-  title = 'Charbel SONON | Portfolio - Développeur Full Stack',
-  description = 'Portfolio de Charbel SONON, développeur full stack spécialisé en Angular, React, Next.js, Node.js, Java, et TypeScript.',
+  title = 'Charbel SONON | Portfolio - Full Stack Developer',
+  description = 'Portfolio of Charbel SONON, full stack developer specialized in Angular, React, Next.js, Node.js, Java and TypeScript.',
   keywords = [],
   ogImage,
   ogType = 'website',
-  canonical,
+  locale = 'en',
+  path = '',
   noindex = false,
   publishedTime,
   modifiedTime,
@@ -29,30 +39,36 @@ export function generateSEOMetadata({
   section,
   tags = [],
 }: SEOMetadata): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://charbelsnn.com';
-  
   const defaultKeywords = [
-    'portfolio', 'développeur', 'full stack', 'react', 'nextjs', 'nodejs', 
-    'typescript', 'charbel sonon', 'web development', 'javascript', 'angular', 'java', 'spring','html', 'css', 'tailwind',
-    'mongodb', 'mysql', 'api rest', 'sites web responsives', 'applications web', 'freelance', 'développeur france', 'développeur bénin'
+    'portfolio', 'developer', 'full stack', 'react', 'nextjs', 'nodejs',
+    'typescript', 'charbel sonon', 'web development', 'javascript', 'angular', 'java', 'spring', 'html', 'css', 'tailwind',
+    'mongodb', 'mysql', 'rest api', 'responsive websites', 'web applications', 'freelance', 'developer france', 'developer benin'
   ];
-  
+
   const allKeywords = [...defaultKeywords, ...keywords];
   const imageUrl = ogImage || `${baseUrl}/logo.png`;
+  const canonical = localizedUrl(locale, path);
 
   const metadata: Metadata = {
-    title,
+    title: { absolute: title },
     description,
     keywords: allKeywords,
     authors: authors.map(name => ({ name })),
     creator: 'Charbel SONON',
-    ...(canonical && { alternates: { canonical } }),
+    alternates: {
+      canonical,
+      languages: {
+        en: localizedUrl('en', path),
+        fr: localizedUrl('fr', path),
+        'x-default': localizedUrl(routing.defaultLocale, path),
+      },
+    },
     ...(noindex && { robots: { index: false, follow: false } }),
-    
+
     openGraph: {
       type: ogType,
-      locale: 'fr_FR',
-      url: canonical || baseUrl,
+      locale: locale === 'fr' ? 'fr_FR' : 'en_US',
+      url: canonical,
       title,
       description,
       siteName: 'Portfolio - Charbel SONON',
@@ -70,7 +86,7 @@ export function generateSEOMetadata({
       ...(section && { section }),
       ...(tags.length > 0 && { tags }),
     },
-    
+
     twitter: {
       card: 'summary_large_image',
       title,
@@ -78,7 +94,7 @@ export function generateSEOMetadata({
       creator: '@charbel_sonon',
       images: [imageUrl],
     },
-    
+
     robots: {
       index: !noindex,
       follow: !noindex,
@@ -95,88 +111,67 @@ export function generateSEOMetadata({
   return metadata;
 }
 
-// Métadonnées prédéfinies pour différentes pages
-export const pageMetadata = {
-  home: generateSEOMetadata({
-    title: 'Charbel SONON | Portfolio - Développeur Full Stack',
-    description: 'Découvrez le portfolio de Charbel SONON, développeur full stack passionné. Projets en Angular, React, Next.js, Node.js, Java, TypeScript et plein d\'autres technologies web modernes.',
-    keywords: ['accueil', 'portfolio principal', 'développeur web', 'projets'],
-  }),
-  
-  about: generateSEOMetadata({
-    title: 'À propos - Charbel SONON | Développeur Full Stack',
-    description: 'En savoir plus sur Charbel SONON, développeur full stack avec une expertise en technologies web modernes et une passion pour l\'innovation.',
-    keywords: ['à propos', 'profil', 'compétences', 'parcours'],
-  }),
-  
-  experience: generateSEOMetadata({
-    title: 'Expérience Professionnelle - Charbel SONON',
-    description: 'Découvrez l\'expérience professionnelle de Charbel SONON, son parcours, ses missions, projets et responsabilités en développement.',
-    keywords: ['expérience', 'carrière', 'missions', 'projets professionnels'],
-  }),
-  
-  education: generateSEOMetadata({
-    title: 'Formation & Éducation - Charbel SONON',
-    description: 'Parcours éducatif et formations de Charbel SONON en développement logiciel, web et technologies informatiques.',
-    keywords: ['formation', 'éducation', 'diplômes', 'certifications'],
-  }),
-  
-  projects: generateSEOMetadata({
-    title: 'Projets - Charbel SONON | Portfolio',
-    description: 'Explorez les projets réalisés par Charbel SONON : logiciels,applications web, APIs, sites responsives et solutions innovantes.',
-    keywords: ['projets', 'réalisations', 'applications web', 'portfolio', 'logiciels'],
-  }),
-  
-  blog: generateSEOMetadata({
-    title: 'Blog - Charbel SONON | Articles Tech',
-    description: 'Articles et tutoriels sur le développement web, les technologies modernes et les bonnes pratiques par Charbel SONON.',
-    keywords: ['blog', 'articles', 'tutoriels', 'développement web', 'tech'],
-  }),
-  
-  contact: generateSEOMetadata({
-    title: 'Contact - Charbel SONON | Développeur Full Stack',
-    description: 'Contactez Charbel SONON pour vos projets de développement web et logiciel, collaborations ou opportunités professionnelles.',
-    keywords: ['contact', 'collaboration', 'freelance', 'mission'],
-  }),
-  
-  githubStats: generateSEOMetadata({
-    title: 'Statistiques - Charbel SONON',
-    description: 'Consultez les statistiques de développement de Charbel SONON : contributions, projets open source et activité de développement.',
-    keywords: ['github', 'statistiques', 'open source', 'contributions'],
-  }),
+type SEOPageKey = 'about' | 'experience' | 'education' | 'projects' | 'blog' | 'contact' | 'githubStats';
+
+const pagePaths: Record<SEOPageKey, string> = {
+  about: '/about',
+  experience: '/experience',
+  education: '/education',
+  projects: '/projects',
+  blog: '/blog',
+  contact: '/contact',
+  githubStats: '/github-stats',
 };
 
-export function generateProjectMetadata(project: {
+export async function getLocalizedPageMetadata(locale: string, page: SEOPageKey): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'SEO' });
+
+  return generateSEOMetadata({
+    title: t(`${page}.title`),
+    description: t(`${page}.description`),
+    keywords: t.raw(`${page}.keywords`) as string[],
+    locale,
+    path: pagePaths[page],
+  });
+}
+
+export async function generateProjectMetadata(locale: string, project: {
   title: string;
   description: string;
   technologies?: string[];
   slug: string;
-}) {
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'SEO' });
+
   return generateSEOMetadata({
-    title: `${project.title} - Projet | Charbel SONON`,
+    title: `${project.title} - ${t('projectSuffix')}`,
     description: project.description,
-    keywords: [...(project.technologies || []), 'projet', 'développement'],
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL}/projects/${project.slug}`,
+    keywords: [...(project.technologies || []), 'project', 'development'],
+    locale,
+    path: `/projects/${project.slug}`,
   });
 }
 
-export function generateBlogPostMetadata(post: {
+export async function generateBlogPostMetadata(locale: string, post: {
   title: string;
   excerpt: string;
   slug: string;
   publishedAt: string;
   updatedAt?: string;
   tags?: string[];
-}) {
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'SEO' });
+
   return generateSEOMetadata({
-    title: `${post.title} - Blog | Charbel SONON`,
+    title: `${post.title} - ${t('blogSuffix')}`,
     description: post.excerpt,
-    keywords: [...(post.tags || []), 'article', 'blog', 'tutoriel'],
+    keywords: [...(post.tags || []), 'article', 'blog', 'tutorial'],
     ogType: 'article',
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`,
+    locale,
+    path: `/blog/${post.slug}`,
     publishedTime: post.publishedAt,
     modifiedTime: post.updatedAt,
-    section: 'Technologie',
+    section: 'Technology',
     tags: post.tags,
   });
 }

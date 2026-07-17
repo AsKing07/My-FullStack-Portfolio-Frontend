@@ -38,10 +38,13 @@ import DatePicker from "react-datepicker";
 
 const formSchema = z.object({
   title: z.string().min(3, "Le titre doit contenir au moins 3 caractères"),
+  titleFr: z.string().optional(),
   description: z
     .string()
     .min(10, "La description doit contenir au moins 10 caractères"),
+  descriptionFr: z.string().optional(),
   content: z.string().optional(),
+  contentFr: z.string().optional(),
   status: z.enum([
     "DRAFT",
     "PUBLISHED",
@@ -79,8 +82,11 @@ export default function ProjectCreatePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      titleFr: "",
       description: "",
+      descriptionFr: "",
       content: "",
+      contentFr: "",
       status: "COMPLETED",
       featured: false,
       liveUrl: "",
@@ -230,7 +236,7 @@ export default function ProjectCreatePage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <label className="font-semibold">Titre</label>
+                  <label className="font-semibold">Titre (EN)</label>
                   <Input
                     {...form.register("title")}
                     placeholder="Titre du projet"
@@ -240,11 +246,26 @@ export default function ProjectCreatePage() {
                   </small>
                 </div>
                 <div>
-                  <label className="font-semibold">Description courte</label>
+                  <label className="font-semibold">Titre (FR)</label>
+                  <Input
+                    {...form.register("titleFr")}
+                    placeholder="Titre du projet en français"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold">Description courte (EN)</label>
                   <TextArea
                     {...form.register("description")}
                     rows={3}
                     placeholder="Brève description"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold">Description courte (FR)</label>
+                  <TextArea
+                    {...form.register("descriptionFr")}
+                    rows={3}
+                    placeholder="Brève description en français"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -293,11 +314,19 @@ export default function ProjectCreatePage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <label className="font-semibold">Description détaillée</label>
+                  <label className="font-semibold">Description détaillée (EN)</label>
                   <TextArea
                     {...form.register("content")}
                     rows={6}
                     placeholder="Description détaillée"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold">Description détaillée (FR)</label>
+                  <TextArea
+                    {...form.register("contentFr")}
+                    rows={6}
+                    placeholder="Description détaillée en français"
                   />
                 </div>
                 <div>
