@@ -14,9 +14,11 @@ export enum ExperienceType {
 export interface Experience {
     id: string;
     title: string;
+    titleFr?: string;
     company: string;
     location?: string;
     description?: string; // Markdown or plain text
+    descriptionFr?: string;
     technologies?: string; // Comma-separated list of technologies used
     type: ExperienceType;
     startDate: Date;

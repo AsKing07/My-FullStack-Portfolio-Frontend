@@ -15,10 +15,14 @@ export enum ProjectStatus {
 export interface Project {
     id: string; // UUID
     title: string;
+    titleFr?: string;
     slug: string; // Unique slug for SEO-friendly URLs
     description: string; // Full description, can be markdown or plain text
+    descriptionFr?: string;
     shortDesc?: string; // Optional short description, max 255 characters
+    shortDescFr?: string;
     content?: string; // Optional detailed content, can be markdown or HTML
+    contentFr?: string;
     status: ProjectStatus; // Status of the project (DRAFT, PUBLISHED, ARCHIVED)
     featured?: boolean; // Indicates if the project is featured
     priority?: number; // Priority level for sorting, default is 0

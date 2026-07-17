@@ -32,15 +32,20 @@ import { generateSlug } from '@/lib/utils';
 
 const blogPostSchema = z.object({
   title: z.string().min(2, 'Le titre doit contenir au moins 2 caractères'),
+  titleFr: z.string().optional(),
   slug: z.string()
     .min(2, 'Le slug doit contenir au moins 2 caractères')
     .regex(/^[a-z0-9-]+$/, 'Le slug ne peut contenir que des lettres minuscules, chiffres et tirets'),
   excerpt: z.string().optional(),
+  excerptFr: z.string().optional(),
   content: z.string().min(10, 'Le contenu doit contenir au moins 10 caractères'),
+  contentFr: z.string().optional(),
   status: z.nativeEnum(PostStatus).optional(),
   featured: z.boolean().optional(),
   metaTitle: z.string().optional(),
+  metaTitleFr: z.string().optional(),
   metaDesc: z.string().optional(),
+  metaDescFr: z.string().optional(),
   image: z.instanceof(File).optional(),
   readingTime: z.number().min(1).optional(),
   publishedAt: z.date().optional(),
@@ -87,13 +92,18 @@ export default function EditBlogPostPage() {
         
         reset({
           title: post.title,
+          titleFr: post.titleFr || '',
           slug: post.slug,
           excerpt: post.excerpt || '',
+          excerptFr: post.excerptFr || '',
           content: post.content,
+          contentFr: post.contentFr || '',
           status: post.status,
           featured: post.featured,
           metaTitle: post.metaTitle || '',
+          metaTitleFr: post.metaTitleFr || '',
           metaDesc: post.metaDesc || '',
+          metaDescFr: post.metaDescFr || '',
           image: undefined, // Pour les fichiers, on commence toujours par undefined
           readingTime: post.readingTime,
           publishedAt: post.publishedAt ? new Date(post.publishedAt) : undefined,
@@ -277,7 +287,7 @@ export default function EditBlogPostPage() {
                 <div className="space-y-2">
                   <label htmlFor="title" className="text-sm font-medium flex items-center gap-2">
                     <FileText className="w-4 h-4" />
-                    Titre de l'article *
+                    Titre de l'article (EN) *
                   </label>
                   <input
                     id="title"
@@ -293,6 +303,20 @@ export default function EditBlogPostPage() {
                   {errors.title && (
                     <p className="text-sm text-red-600">{errors.title.message}</p>
                   )}
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="titleFr" className="text-sm font-medium flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    Titre de l'article (FR)
+                  </label>
+                  <input
+                    id="titleFr"
+                    type="text"
+                    {...register('titleFr')}
+                    className="w-full px-3 py-2 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    placeholder="Titre de votre article en français"
+                  />
                 </div>
 
                 {/* Slug */}
@@ -319,7 +343,7 @@ export default function EditBlogPostPage() {
                 {/* Excerpt */}
                 <div className="space-y-2">
                   <label htmlFor="excerpt" className="text-sm font-medium">
-                    Résumé
+                    Résumé (EN)
                   </label>
                   <textarea
                     id="excerpt"
@@ -330,10 +354,23 @@ export default function EditBlogPostPage() {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <label htmlFor="excerptFr" className="text-sm font-medium">
+                    Résumé (FR)
+                  </label>
+                  <textarea
+                    id="excerptFr"
+                    {...register('excerptFr')}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    placeholder="Résumé de l'article en français (optionnel)"
+                  />
+                </div>
+
                 {/* Contenu */}
                 <div className="space-y-2">
                   <label htmlFor="content" className="text-sm font-medium">
-                    Contenu *
+                    Contenu (EN) *
                   </label>
                   {previewMode ? (
                     <div className="min-h-[400px] p-4 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
@@ -361,6 +398,19 @@ export default function EditBlogPostPage() {
                   {errors.content && (
                     <p className="text-sm text-red-600">{errors.content.message}</p>
                   )}
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="contentFr" className="text-sm font-medium">
+                    Contenu (FR)
+                  </label>
+                  <textarea
+                    id="contentFr"
+                    {...register('contentFr')}
+                    rows={20}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 font-mono text-sm"
+                    placeholder="Contenu de votre article en français (Markdown ou HTML)..."
+                  />
                 </div>
               </div>
             </Card>
@@ -539,7 +589,7 @@ export default function EditBlogPostPage() {
               <h3 className="font-medium mb-4">SEO</h3>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Meta Title</label>
+                  <label className="text-sm font-medium">Meta Title (EN)</label>
                   <input
                     type="text"
                     {...register('metaTitle')}
@@ -552,7 +602,20 @@ export default function EditBlogPostPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Meta Description</label>
+                  <label className="text-sm font-medium">Meta Title (FR)</label>
+                  <input
+                    type="text"
+                    {...register('metaTitleFr')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    placeholder="Titre pour les moteurs de recherche (français)"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {watch('metaTitleFr')?.length || 0}/60 caractères
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Meta Description (EN)</label>
                   <textarea
                     {...register('metaDesc')}
                     rows={3}
@@ -561,6 +624,19 @@ export default function EditBlogPostPage() {
                   />
                   <p className="text-xs text-muted-foreground">
                     {watch('metaDesc')?.length || 0}/160 caractères
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Meta Description (FR)</label>
+                  <textarea
+                    {...register('metaDescFr')}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    placeholder="Description pour les moteurs de recherche (français)"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {watch('metaDescFr')?.length || 0}/160 caractères
                   </p>
                 </div>
               </div>

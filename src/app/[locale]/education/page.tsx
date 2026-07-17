@@ -1,15 +1,16 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useEducations } from "@/hooks/useEducations";
 import { Badge } from "@/components/ui/badge_component";
 import { GraduationCap, MapPin, Calendar, BookOpen, AlertTriangle } from "lucide-react";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateShort, pickLocalized } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
 export default function EducationPage() {
   const t = useTranslations("Education");
   const tCommon = useTranslations("Common");
+  const locale = useLocale();
   const { educations, loading, error } = useEducations();
 
     if (loading) {
@@ -114,7 +115,7 @@ if (error) {
                           <div className={`relative flex flex-col ${i % 2 === 0 ? 'md:items-end' : 'md:items-start'} gap-3 mb-4 md:mb-6`}>
                             <div className={`flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 ${i % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
                               <h3 className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                                {edu.degree}
+                                {pickLocalized(edu.degree, edu.degreeFr, locale)}
                               </h3>
                               {edu.grade && (
                                 <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs md:text-sm px-2 md:px-3 py-1 shadow-lg self-start">
@@ -152,7 +153,7 @@ if (error) {
                           {/* Description - responsive text */}
                           {edu.description && (
                             <div className="relative text-gray-700 dark:text-gray-300 leading-relaxed text-sm md:text-base">
-                              {edu.description}
+                              {pickLocalized(edu.description, edu.descriptionFr, locale)}
                             </div>
                           )}
                         </div>

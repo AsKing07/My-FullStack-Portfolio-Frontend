@@ -19,6 +19,7 @@ role: Role;
 title?: string;
 subtitle?: string;
 bio?: string;
+bioFr?: string;
 avatarUrl?: string
 location?: string;
 website?: string;

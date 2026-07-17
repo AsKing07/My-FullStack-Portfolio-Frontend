@@ -5,6 +5,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Picks the French variant of a DB-backed field when the active locale is
+ * French and a translation was actually provided, falling back to the
+ * default (English) value otherwise.
+ */
+export function pickLocalized(
+  defaultValue: string | null | undefined,
+  frValue: string | null | undefined,
+  locale: string
+): string {
+  return (locale === 'fr' && frValue) ? frValue : (defaultValue ?? '');
+}
+
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',

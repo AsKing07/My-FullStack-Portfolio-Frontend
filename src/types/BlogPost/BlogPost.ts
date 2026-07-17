@@ -14,13 +14,18 @@ export enum PostStatus {
 export interface BlogPost {
     id: string;
     title: string;
+    titleFr?: string;
     slug: string;
     excerpt?: string;
+    excerptFr?: string;
     content: string;
+    contentFr?: string;
     status: PostStatus;
     featured: boolean;
     metaTitle: string;
+    metaTitleFr?: string;
     metaDesc: string;
+    metaDescFr?: string;
     image: string;
     readingTime: number;
     publishedAt: Date;

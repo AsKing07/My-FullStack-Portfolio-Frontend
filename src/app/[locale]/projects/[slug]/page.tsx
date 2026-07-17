@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useProjects } from '@/hooks/useProjects';
@@ -23,7 +23,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import Image from 'next/image';
-import { formatDate, cn } from '@/lib/utils';
+import { formatDate, cn, pickLocalized } from '@/lib/utils';
 import { ProjectSchema } from '@/components/seo/StructuredData';
 
 const statusColors: Record<string, string> = {
@@ -37,6 +37,7 @@ const statusColors: Record<string, string> = {
 
 export default function ProjectDetailPage() {
   const t = useTranslations('ProjectDetail');
+  const locale = useLocale();
   const params = useParams();
   const router = useRouter();
   const { getProjectBySlug, loading, error } = useProjects();
@@ -106,8 +107,8 @@ export default function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-8 mt-8 z-999">
       <ProjectSchema
-        name={project.title}
-        description={project.shortDesc || project.description || ''}
+        name={pickLocalized(project.title, project.titleFr, locale)}
+        description={pickLocalized(project.shortDesc, project.shortDescFr, locale) || pickLocalized(project.description, project.descriptionFr, locale)}
         url={`${baseUrl}/projects/${project.slug}`}
         author="Charbel SONON"
         programmingLanguage={project.technologies ? project.technologies.split(',').map(t => t.trim()) : []}
@@ -160,11 +161,11 @@ export default function ProjectDetailPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                      {project.title}
+                      {pickLocalized(project.title, project.titleFr, locale)}
                     </h1>
                     {project.shortDesc && (
                       <p className="text-lg text-gray-600 dark:text-gray-300">
-                        {project.shortDesc}
+                        {pickLocalized(project.shortDesc, project.shortDescFr, locale)}
                       </p>
                     )}
                   </div>
@@ -234,7 +235,7 @@ export default function ProjectDetailPage() {
                 <CardContent className="p-0">
                   <Image
                     src={project.image}
-                    alt={project.title}
+                    alt={pickLocalized(project.title, project.titleFr, locale)}
                     width={800}
                     height={400}
                     className="w-full h-64 md:h-96 object-cover rounded-lg"
@@ -249,7 +250,7 @@ export default function ProjectDetailPage() {
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-4">{t('projectDescription')}</h2>
                   <div className="prose dark:prose-invert max-w-none">
-                    <p className="whitespace-pre-wrap">{project.description}</p>
+                    <p className="whitespace-pre-wrap">{pickLocalized(project.description, project.descriptionFr, locale)}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -261,7 +262,7 @@ export default function ProjectDetailPage() {
                 <CardContent className="p-6">
                   <h2 className="text-xl font-semibold mb-4">{t('technicalDetails')}</h2>
                   <div className="prose dark:prose-invert max-w-none">
-                    <div dangerouslySetInnerHTML={{ __html: project.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: pickLocalized(project.content, project.contentFr, locale) }} />
                   </div>
                 </CardContent>
               </Card>
@@ -283,7 +284,7 @@ export default function ProjectDetailPage() {
                       <Image
                         key={index}
                         src={imageUrl}
-                        alt={`${project.title} - Image ${index + 1}`}
+                        alt={`${pickLocalized(project.title, project.titleFr, locale)} - Image ${index + 1}`}
                         width={300}
                         height={200}
                         className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"

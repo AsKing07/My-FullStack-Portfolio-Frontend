@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useExperiences } from "@/hooks/useExperience";
 import { useSkills } from "@/hooks/useSkills";
 import { useCategory } from "@/hooks/useCategory";
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge_component";
 import { Button } from "@/components/ui/button_component";
 import { Download, Briefcase, MapPin, Calendar, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { cn, formatDateShort } from "@/lib/utils";
+import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
 
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 
@@ -27,6 +27,7 @@ const typeColors: Record<string, string> = {
 export default function ExperiencePage() {
   const t = useTranslations("Experience");
   const tCommon = useTranslations("Common");
+  const locale = useLocale();
   const softSkills = t.raw("softSkillsList") as string[];
   const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
   const { skills, loading: loadingSkills, error: errorSkills } = useSkills({limit:100});
@@ -155,7 +156,7 @@ export default function ExperiencePage() {
                           <div className={`flex flex-col ${i % 2 === 0 ? 'md:items-end' : 'md:items-start'} gap-3 mb-4 md:mb-6`}>
                             <div className={`flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3 ${i % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
                               <h3 className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                {exp.title}
+                                {pickLocalized(exp.title, exp.titleFr, locale)}
                               </h3>
                               <Badge className={cn("text-white text-xs md:text-sm px-2 md:px-3 py-1 self-start", typeColors[exp.type])}>
                                 {t(`employmentTypes.${exp.type}` as Parameters<typeof t>[0])}
@@ -184,7 +185,7 @@ export default function ExperiencePage() {
                           
                           {/* Description - responsive text */}
                           <div className="text-gray-700 dark:text-gray-300 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                            {exp.description}
+                            {pickLocalized(exp.description, exp.descriptionFr, locale)}
                           </div>
                           
                           {/* Technologies - responsive layout */}

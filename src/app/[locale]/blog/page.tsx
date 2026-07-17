@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Link } from '@/i18n/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
@@ -10,12 +10,13 @@ import { Badge } from '@/components/ui/badge_component';
 import { Search, Calendar, Clock, AlertTriangle, BookOpen } from 'lucide-react';
 import { useBlog } from '@/hooks/useBlogPost';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
-import { formatDate } from '@/lib/utils';
+import { formatDate, pickLocalized } from '@/lib/utils';
 import Image from 'next/image';
 
 export default function BlogPage() {
   const t = useTranslations('BlogList');
   const tCommon = useTranslations('Common');
+  const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const { posts, loading, error } = useBlog();
@@ -24,9 +25,11 @@ export default function BlogPage() {
   const allTags = [...new Set(posts?.flatMap((post: BlogPost) => post.tags || []) || [])];
 
   const filteredPosts = posts?.filter((post: BlogPost) => {
+    const title = pickLocalized(post.title, post.titleFr, locale);
+    const excerpt = pickLocalized(post.excerpt, post.excerptFr, locale);
     const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (post.excerpt && post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()));
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTag = !selectedTag || (post.tags && post.tags.includes(selectedTag));
     return matchesSearch && matchesTag;
   });
@@ -145,7 +148,7 @@ export default function BlogPage() {
                         <Image
                           layout='fill'
                           src={post.image}
-                          alt={post.title}
+                          alt={pickLocalized(post.title, post.titleFr, locale)}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
@@ -159,12 +162,12 @@ export default function BlogPage() {
                         ))}
                       </div>
                       <CardTitle className="line-clamp-2 group-hover:text-blue-600 transition-colors">
-                        {post.title}
+                        {pickLocalized(post.title, post.titleFr, locale)}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground line-clamp-3 mb-4">
-                        {post.excerpt}
+                        {pickLocalized(post.excerpt, post.excerptFr, locale)}
                       </p>
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <div className="flex items-center gap-4">

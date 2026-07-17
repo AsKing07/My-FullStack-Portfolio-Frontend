@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { ProjectsService } from '@/services/projects.service';
 import { generateProjectMetadata } from '@/lib/seo';
+import { pickLocalized } from '@/lib/utils';
 
 interface ProjectLayoutProps {
   children: React.ReactNode;
@@ -21,8 +22,8 @@ export async function generateMetadata({ params }: ProjectLayoutProps): Promise<
     }
 
     return generateProjectMetadata(locale, {
-      title: project.title,
-      description: project.shortDesc || project.description || '',
+      title: pickLocalized(project.title, project.titleFr, locale),
+      description: pickLocalized(project.shortDesc, project.shortDescFr, locale) || pickLocalized(project.description, project.descriptionFr, locale),
       technologies: project.technologies?.split(',') || [],
       slug: project.slug,
     });

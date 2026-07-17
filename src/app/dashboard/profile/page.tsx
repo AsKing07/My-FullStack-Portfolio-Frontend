@@ -35,6 +35,7 @@ const profileSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   bio: z.string().optional(),
+  bioFr: z.string().optional(),
   location: z.string().optional(),
   website: z.string().url('URL invalide').optional().or(z.literal('')),
   linkedin: z.string().url('URL LinkedIn invalide').optional().or(z.literal('')),
@@ -76,6 +77,7 @@ export default function ProfilePage() {
         title: user.title || '',
         subtitle: user.subtitle || '',
         bio: user.bio || '',
+        bioFr: user.bioFr || '',
         location: user.location || '',
         website: user.website || '',
         linkedin: user.linkedin || '',
@@ -301,7 +303,7 @@ export default function ProfilePage() {
                 {/* Bio */}
                 <div className="space-y-2">
                   <label htmlFor="bio" className="text-sm font-medium">
-                    Biographie
+                    Biographie (EN)
                   </label>
                   <textarea
                     id="bio"
@@ -309,6 +311,20 @@ export default function ProfilePage() {
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
                     placeholder="Parlez-nous de vous..."
+                  />
+                </div>
+
+                {/* Bio FR */}
+                <div className="space-y-2">
+                  <label htmlFor="bioFr" className="text-sm font-medium">
+                    Biographie (FR)
+                  </label>
+                  <textarea
+                    id="bioFr"
+                    {...register('bioFr')}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                    placeholder="Parlez de vous en français..."
                   />
                 </div>
 

@@ -1,13 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useProjects } from "@/hooks/useProjects";
 import { useCategory } from "@/hooks/useCategory";
 import { Badge } from "@/components/ui/badge_component";
 import { Button } from "@/components/ui/button_component";
 import { Loader2, ExternalLink, Github, Figma, Calendar, Layers, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { cn, formatDateShort } from "@/lib/utils";
+import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -19,6 +19,7 @@ const statusColors: Record<string, string> = {
 
 export default function ProjectsPage() {
   const t = useTranslations("Projects");
+  const locale = useLocale();
   const { projects, loading } = useProjects();
   const { categories } = useCategory();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -111,7 +112,7 @@ export default function ProjectsPage() {
                         width={400}
                         height={200}
                         src={project.image}
-                        alt={project.title}
+                        alt={pickLocalized(project.title, project.titleFr, locale)}
                         className="rounded-t-2xl w-full h-48 object-cover border-b border-blue-100 dark:border-blue-900"
                         priority={!!project.featured}
                         placeholder="blur"
@@ -120,7 +121,7 @@ export default function ProjectsPage() {
                     )}
                     <div className="p-6 flex flex-col flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h2 className="text-xl font-semibold">{project.title}</h2>
+                        <h2 className="text-xl font-semibold">{pickLocalized(project.title, project.titleFr, locale)}</h2>
                         <Badge className={cn("ml-2", statusColors[project.status], "text-white")}>
                           {t(`status.${project.status}` as Parameters<typeof t>[0])}
                         </Badge>
@@ -148,7 +149,8 @@ export default function ProjectsPage() {
                         )}
                       </div>
                       <div className="text-blue-600 dark:text-blue-400 font-medium mb-2">
-                        {project.shortDesc || project.description?.slice(0, 120) + "..."}
+                        {pickLocalized(project.shortDesc, project.shortDescFr, locale) ||
+                          pickLocalized(project.description, project.descriptionFr, locale).slice(0, 120) + "..."}
                       </div>
                       {project.technologies && (
                         <div className="flex flex-wrap gap-2 mb-4">

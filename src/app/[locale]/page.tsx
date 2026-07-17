@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import {
@@ -26,11 +26,12 @@ import { LoadingSpinner } from "@/components/ui/loading_spinner";
 import { Badge } from "@/components/ui/badge_component";
 import { useToast } from "@/hooks/useToast";
 import { useBlog } from "@/hooks/useBlogPost";
-import { formatDate } from "@/lib/utils";
+import { formatDate, pickLocalized } from "@/lib/utils";
 import { PersonSchema, WebsiteSchema } from "@/components/seo/StructuredData";
 
 export default function HomePage() {
   const t = useTranslations('Home');
+  const locale = useLocale();
   const {
     experiences,
     loading: loadingExp,
@@ -141,7 +142,7 @@ export default function HomePage() {
               </div>
 
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed">
-                {user?.bio || t('hero.bioFallback')}
+                {pickLocalized(user?.bio, user?.bioFr, locale) || t('hero.bioFallback')}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -245,7 +246,7 @@ export default function HomePage() {
                   >
                     <CardHeader className="pb-3">
                       <CardTitle className="group-hover:text-blue-600 transition-colors duration-300">
-                        {exp.title}
+                        {pickLocalized(exp.title, exp.titleFr, locale)}
                       </CardTitle>
                       <div className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
                         {exp.company}
@@ -263,7 +264,7 @@ export default function HomePage() {
                         {   exp.current || !exp.endDate ? t('experience.present') : formatDate(exp.endDate)}
                       </div>
                       <div className="line-clamp-3 text-gray-700 dark:text-gray-300">
-                        {exp.description}
+                        {pickLocalized(exp.description, exp.descriptionFr, locale)}
                       </div>
                     </CardContent>
                   </Card>
@@ -327,7 +328,7 @@ export default function HomePage() {
                   >
                     <CardHeader className="pb-3">
                       <CardTitle className="group-hover:text-purple-600 transition-colors duration-300">
-                        {edu.degree}
+                        {pickLocalized(edu.degree, edu.degreeFr, locale)}
                       </CardTitle>
                       <div className="text-purple-600 dark:text-purple-400 font-semibold text-sm">
                         🎓 {edu.school}
@@ -344,7 +345,7 @@ export default function HomePage() {
                           : edu.endDate ?? t('education.present')}
                       </div>
                       <div className="line-clamp-3 text-gray-700 dark:text-gray-300">
-                        {edu.description}
+                        {pickLocalized(edu.description, edu.descriptionFr, locale)}
                       </div>
                     </CardContent>
                   </Card>
@@ -408,7 +409,7 @@ export default function HomePage() {
                   >
                     <CardHeader className="pb-3">
                       <CardTitle className="group-hover:text-orange-600 transition-colors duration-300 flex items-start justify-between">
-                        <span className="line-clamp-2">{proj.title}</span>
+                        <span className="line-clamp-2">{pickLocalized(proj.title, proj.titleFr, locale)}</span>
                         <div className="ml-2 p-1 rounded-full bg-orange-100 dark:bg-orange-900/50 group-hover:scale-110 transition-transform">
                           <WorkflowIcon className="w-4 h-4 text-orange-600" />
                         </div>
@@ -434,7 +435,7 @@ export default function HomePage() {
                         )}
                       </div>
                       <div className="line-clamp-3 text-gray-700 dark:text-gray-300">
-                        {proj.description}
+                        {pickLocalized(proj.description, proj.descriptionFr, locale)}
                       </div>
                       <Button
                         variant="ghost"
@@ -526,12 +527,12 @@ export default function HomePage() {
                         </span>
                       </div>
                       <CardTitle className="group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
-                        {post.title}
+                        {pickLocalized(post.title, post.titleFr, locale)}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-0 space-y-4">
                       <div className="line-clamp-3 text-gray-700 dark:text-gray-300">
-                        {post.excerpt}
+                        {pickLocalized(post.excerpt, post.excerptFr, locale)}
                       </div>
                       <Button
                         variant="ghost"
@@ -648,7 +649,7 @@ export default function HomePage() {
           <PersonSchema
             name={user.name || "Charbel SONON"}
             jobTitle={t('hero.jobTitle')}
-            bio={user.bio || t('hero.personSchemaBioFallback')}
+            bio={pickLocalized(user.bio, user.bioFr, locale) || t('hero.personSchemaBioFallback')}
             url={process.env.NEXT_PUBLIC_APP_URL || ""}
             image={user.avatarUrl}
             email={user.email}

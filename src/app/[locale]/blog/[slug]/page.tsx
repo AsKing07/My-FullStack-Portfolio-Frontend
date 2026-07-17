@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useBlog } from '@/hooks/useBlogPost';
 import { BlogPost } from '@/types/BlogPost/BlogPost';
@@ -9,12 +9,13 @@ import { Loader2, Calendar, Clock, User, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge_component';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import { Link } from '@/i18n/navigation';
-import { formatDate } from '@/lib/utils';
+import { formatDate, pickLocalized } from '@/lib/utils';
 import Image from 'next/image';
 import { BlogPostSchema } from '@/components/seo/StructuredData';
 
 export default function BlogPostPage() {
   const t = useTranslations('BlogDetail');
+  const locale = useLocale();
   const { slug } = useParams<{ slug: string }>();
   const { getBlogPostBySlug, loading, error } = useBlog();
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -63,8 +64,8 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-12">
       <BlogPostSchema
-        title={post.title}
-        description={post.excerpt || post.metaDesc || ''}
+        title={pickLocalized(post.title, post.titleFr, locale)}
+        description={pickLocalized(post.excerpt, post.excerptFr, locale) || pickLocalized(post.metaDesc, post.metaDescFr, locale)}
         url={`${baseUrl}/blog/${post.slug}`}
         datePublished={post.publishedAt.toString()}
         dateModified={post.updatedAt?.toString()}
@@ -78,7 +79,7 @@ export default function BlogPostPage() {
               <Image
                 layout='fill'
                 src={post.image}
-                alt={post.title}
+                alt={pickLocalized(post.title, post.titleFr, locale)}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -91,7 +92,7 @@ export default function BlogPostPage() {
                 </Badge>
               ))}
             </div>
-            <CardTitle className="text-3xl font-bold mb-2">{post.title}</CardTitle>
+            <CardTitle className="text-3xl font-bold mb-2">{pickLocalized(post.title, post.titleFr, locale)}</CardTitle>
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-2">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
@@ -112,7 +113,7 @@ export default function BlogPostPage() {
           <CardContent>
             <div
               className="prose dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: pickLocalized(post.content, post.contentFr, locale) }}
             />
           </CardContent>
         </Card>

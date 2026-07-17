@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import { Badge } from '@/components/ui/badge_component';
@@ -12,6 +12,7 @@ import { createLucideIcon, icons } from 'lucide-react';
 import { useUser } from '@/hooks/useUser';
 import Image from 'next/image';
 import { LoadingSpinner } from '@/components/ui/loading_spinner';
+import { pickLocalized } from '@/lib/utils';
 
 
 const Football = createLucideIcon('Football', soccerBall);
@@ -19,6 +20,7 @@ const Football = createLucideIcon('Football', soccerBall);
 export default function AboutPage() {
   const t = useTranslations('About');
   const tCommon = useTranslations('Common');
+  const locale = useLocale();
   const { user, loading, error } = useUser();
 
   const interests = [
@@ -116,7 +118,7 @@ if (error) {
               )}
               <p className="text-muted-foreground text-center">{user?.subtitle}</p>
               <p className="text-muted-foreground text-center">
-                {user?.bio || t('bioFallback')}
+                {pickLocalized(user?.bio, user?.bioFr, locale) || t('bioFallback')}
               </p>
               <div className="flex flex-wrap gap-4 justify-center pt-4">
                 {user?.location && (

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { BlogService } from '@/services/blog.service';
 import { generateBlogPostMetadata } from '@/lib/seo';
+import { pickLocalized } from '@/lib/utils';
 
 interface BlogPostLayoutProps {
   children: React.ReactNode;
@@ -21,8 +22,8 @@ export async function generateMetadata({ params }: BlogPostLayoutProps): Promise
     }
 
     return generateBlogPostMetadata(locale, {
-      title: post.title,
-      excerpt: post.excerpt || post.metaDesc || '',
+      title: pickLocalized(post.title, post.titleFr, locale),
+      excerpt: pickLocalized(post.excerpt, post.excerptFr, locale) || pickLocalized(post.metaDesc, post.metaDescFr, locale),
       slug: post.slug,
       publishedAt: post.publishedAt.toString(),
       updatedAt: post.updatedAt?.toString(),
