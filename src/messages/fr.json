@@ -74,6 +74,7 @@
   },
   "Projects": {
     "pageTitle": "Projets réalisés",
+    "errorPrefix": "Erreur lors du chargement des projets :",
     "all": "Tous",
     "status": {
       "DRAFT": "Brouillon",
