@@ -74,6 +74,7 @@
   },
   "Projects": {
     "pageTitle": "Completed projects",
+    "errorPrefix": "Error loading projects:",
     "all": "All",
     "status": {
       "DRAFT": "Draft",

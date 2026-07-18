@@ -1,26 +1,21 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { Link, useRouter } from '@/i18n/navigation';
-import { useProjects } from '@/hooks/useProjects';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
+import { ProjectsService } from '@/services/projects.service';
 import { Project } from '@/types/Project/Project';
 import { Badge } from '@/components/ui/badge_component';
 import { Button } from '@/components/ui/button_component';
 import { Card, CardContent } from '@/components/ui/card_component';
-import { LoadingSpinner } from '@/components/ui/loading_spinner';
-import { 
-  ExternalLink, 
-  Github, 
-  Figma, 
-  Calendar, 
-  ArrowLeft, 
+import { BackButton } from '@/components/ui/back_button';
+import { ErrorRetryCard } from '@/components/ui/error_retry_card';
+import {
+  ExternalLink,
+  Github,
+  Figma,
+  Calendar,
+  ArrowLeft,
   Clock,
-  User,
   Tag,
   Image as ImageIcon,
-  AlertTriangle
 } from 'lucide-react';
 import Image from 'next/image';
 import { formatDate, cn, pickLocalized } from '@/lib/utils';
@@ -35,53 +30,33 @@ const statusColors: Record<string, string> = {
   COMPLETED: "bg-emerald-600",
 };
 
-export default function ProjectDetailPage() {
-  const t = useTranslations('ProjectDetail');
-  const locale = useLocale();
-  const params = useParams();
-  const router = useRouter();
-  const { getProjectBySlug, loading, error } = useProjects();
-  const [project, setProject] = useState<Project | null>(null);
+interface ProjectDetailPageProps {
+  params: Promise<{ locale: string; slug: string }>;
+}
 
-  useEffect(() => {
-    async function fetchProject() {
-      if (params.slug) {
-        const projectData = await getProjectBySlug(params.slug as string);
-        setProject(projectData);
-      }
-    }
-    fetchProject();
-  }, [params.slug, getProjectBySlug]);
+export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: 'ProjectDetail' });
+  const tCommon = await getTranslations({ locale, namespace: 'Common' });
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+  let project: Project | null = null;
+  let error: string | null = null;
+
+  try {
+    const response = await ProjectsService.getProjectBySlug(slug);
+    project = response.data.items;
+  } catch (err) {
+    error = err instanceof Error ? err.message : 'Unknown error';
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-        <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-          <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
-          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-            {t('errorLoading')}
-          </h2>
-          <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            {t('errorPrefix')}<br />
-            <span className="font-mono break-all">{error}</span>
-          </p>
-          <Button
-            onClick={() => router.back()}
-            className="mt-2"
-            variant="outline"
-          >
-           {t('back')}
-          </Button>
-        </div>
-      </div>
+      <ErrorRetryCard
+        title={t('errorLoading')}
+        message={t('errorPrefix')}
+        error={error}
+        retryLabel={t('back')}
+      />
     );
   }
 
@@ -92,10 +67,12 @@ export default function ProjectDetailPage() {
           <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">
             {t('notFound')}
           </h2>
-          <Button onClick={() => router.push('/projects')} variant="outline">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-           {t('allProjects')}
-          </Button>
+          <Link href="/projects">
+            <Button variant="outline">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              {t('allProjects')}
+            </Button>
+          </Link>
         </div>
       </div>
     );
@@ -118,11 +95,8 @@ export default function ProjectDetailPage() {
       <div className="container mx-auto px-4">
         {/* Header avec navigation */}
         <div className="flex items-center justify-between mb-8">
-            
-        <Button onClick={() => router.back()} variant="outline" size="sm" className="z-10">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-           {t('back')}
-        </Button>
+
+        <BackButton label={t('back')} className="z-10" />
 
         <div className="flex gap-3">
             {project.liveUrl && (
@@ -195,14 +169,14 @@ export default function ProjectDetailPage() {
                       )}
                     </div>
                   )}
-                  
+
                   {project.category && (
                     <div className="flex items-center gap-1">
                       <Tag className="w-4 h-4" />
                       {project.category.name}
                     </div>
                   )}
-                  
+
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
                    {t('updatedOn')} {formatDate(project.updatedAt)}
@@ -215,9 +189,9 @@ export default function ProjectDetailPage() {
                     <h3 className="font-semibold mb-2">{t('technologiesUsed')}</h3>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.split(",").map((tech) => (
-                        <Badge 
-                          key={tech.trim()} 
-                          variant="secondary" 
+                        <Badge
+                          key={tech.trim()}
+                          variant="secondary"
                           className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
                         >
                           {tech.trim()}

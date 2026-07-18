@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations, useLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import {
@@ -17,77 +15,73 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card_component";
-import { useExperiences } from "@/hooks/useExperience";
-import { useEducations } from "@/hooks/useEducations";
-import { useProjects } from "@/hooks/useProjects";
-import { useUser } from "@/hooks/useUser";
-import { LoadingSpinner } from "@/components/ui/loading_spinner";
 import { Badge } from "@/components/ui/badge_component";
 import { ResumeDownloadButton } from "@/components/ui/resume_download_button";
-import { useBlog } from "@/hooks/useBlogPost";
+import { ErrorRetryCard } from "@/components/ui/error_retry_card";
+import { ExperienceService } from "@/services/experience.service";
+import { EducationService } from "@/services/education.service";
+import { ProjectsService } from "@/services/projects.service";
+import { UserService } from "@/services/user.service";
+import { BlogService } from "@/services/blog.service";
 import { formatDate, pickLocalized } from "@/lib/utils";
 import { PersonSchema, WebsiteSchema } from "@/components/seo/StructuredData";
+import { Experience } from "@/types/Experience/Experience";
+import { Education } from "@/types/Education/Education";
+import { Project } from "@/types/Project/Project";
+import { User } from "@/types/User/User";
+import { BlogPost } from "@/types/BlogPost/BlogPost";
 
-export default function HomePage() {
-  const t = useTranslations('Home');
-  const locale = useLocale();
-  const {
-    experiences,
-    loading: loadingExp,
-    error: errorExp,
-  } = useExperiences();
-  const { educations, loading: loadingEdu, error: errorEdu } = useEducations();
-  const { projects, loading: loadingProj, error: errorProj } = useProjects();
-  const { user, loading: loadingUser, error: errorUser } = useUser();
-  const { posts, loading: loadingPost, error: errorPost } = useBlog();
+interface HomePageProps {
+  params: Promise<{ locale: string }>;
+}
 
-  const isLoading =
-    loadingExp || loadingEdu || loadingProj || loadingUser || loadingPost;
-  const error = errorExp || errorEdu || errorProj || errorUser || errorPost;
+// Fonction utilitaire pour normaliser les technologies en array
+function getTechArray(technologies: string | string[] | undefined): string[] {
+  if (Array.isArray(technologies)) {
+    return technologies;
+  }
+  if (typeof technologies === "string" && technologies) {
+    return technologies.split(",");
+  }
+  return [];
+}
 
-  // Fonction utilitaire pour normaliser les technologies en array
-  const getTechArray = (
-    technologies: string | string[] | undefined
-  ): string[] => {
-    if (Array.isArray(technologies)) {
-      return technologies;
-    }
-    if (typeof technologies === "string" && technologies) {
-      return technologies.split(",");
-    }
-    return [];
-  };
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Home" });
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+  let experiences: Experience[] = [];
+  let educations: Education[] = [];
+  let projects: Project[] = [];
+  let user: User | null = null;
+  let posts: BlogPost[] = [];
+  let error: string | null = null;
+
+  try {
+    const [expRes, eduRes, projRes, userRes, blogRes] = await Promise.all([
+      ExperienceService.getExperiences(),
+      EducationService.getEducations(),
+      ProjectsService.getProjects(),
+      UserService.getUserPublic(),
+      BlogService.getBlogPosts(),
+    ]);
+    experiences = expRes.data.items;
+    educations = eduRes.data.items;
+    projects = projRes.data.items;
+    user = userRes.data.items;
+    posts = blogRes.data.items;
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Unknown error";
   }
 
   if (error) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-        <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-          <span className="text-5xl mb-2" role="img" aria-label="Sad face">
-            😢
-          </span>
-          <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-            {t('error.title')}
-          </h2>
-          <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            {t('error.prefix')}<br />
-            <span className="font-mono break-all">{error}</span>
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
-          >
-            {t('error.tryAgain')}
-          </button>
-        </div>
-      </div>
+      <ErrorRetryCard
+        title={t("error.title")}
+        message={t("error.prefix")}
+        error={error}
+        retryLabel={t("error.tryAgain")}
+      />
     );
   }
 
