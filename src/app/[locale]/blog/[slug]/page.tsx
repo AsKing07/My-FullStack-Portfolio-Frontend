@@ -1,52 +1,34 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { useBlog } from '@/hooks/useBlogPost';
-import { BlogPost } from '@/types/BlogPost/BlogPost';
-import { Loader2, Calendar, Clock, User, AlertTriangle } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+import { Calendar, Clock, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge_component';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import { Link } from '@/i18n/navigation';
 import { formatDate, pickLocalized } from '@/lib/utils';
 import Image from 'next/image';
 import { BlogPostSchema } from '@/components/seo/StructuredData';
+import { BlogService } from '@/services/blog.service';
 
-export default function BlogPostPage() {
-  const t = useTranslations('BlogDetail');
-  const locale = useLocale();
-  const { slug } = useParams<{ slug: string }>();
-  const { getBlogPostBySlug, loading, error } = useBlog();
-  const [post, setPost] = useState<BlogPost | null>(null);
+interface BlogPostPageProps {
+  params: Promise<{ locale: string; slug: string }>;
+}
 
-  useEffect(() => {
-    if (slug) {
-      getBlogPostBySlug(slug as string).then((data) => {
-        setPost(data);
-      });
-    }
-  }, [slug, getBlogPostBySlug]);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: 'BlogDetail' });
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <Loader2 className="animate-spin w-10 h-10 text-blue-600" />
-      </div>
-    );
-  }
+  const post = await BlogService.getBlogPostBySlug(slug)
+    .then((res) => res.data.items)
+    .catch(() => null);
 
-  if ( error || !post) {
+  if (!post) {
     return (
       <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
         <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-          <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
           <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
             {t('notFound')}
           </h2>
           <p className="text-sm text-red-600 dark:text-red-200 text-center">
-            {t('errorPrefix')}<br />
-            <span className="font-mono break-all">{error}</span>
+            {t('errorPrefix')}
           </p>
           <Link
             href="/blog"

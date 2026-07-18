@@ -1,16 +1,17 @@
-"use client";
-
-import { useTranslations, useLocale } from "next-intl";
-import { useExperiences } from "@/hooks/useExperience";
-import { useSkills } from "@/hooks/useSkills";
-import { useCategory } from "@/hooks/useCategory";
-import { useUser } from "@/hooks/useUser";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge_component";
-import { Briefcase, MapPin, Calendar, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
+import { Briefcase, MapPin, Calendar, Terminal, LightbulbIcon } from "lucide-react";
 import { ResumeDownloadButton } from "@/components/ui/resume_download_button";
+import { ErrorRetryCard } from "@/components/ui/error_retry_card";
 import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
-
-import { LoadingSpinner } from "@/components/ui/loading_spinner";
+import { ExperienceService } from "@/services/experience.service";
+import { SkillsService } from "@/services/skills.service";
+import { CategoryService } from "@/services/category.service";
+import { UserService } from "@/services/user.service";
+import { Experience } from "@/types/Experience/Experience";
+import { Skill } from "@/types/Skill/Skill";
+import { Category } from "@/types/Category/Category";
+import { User } from "@/types/User/User";
 
 const typeColors: Record<string, string> = {
   FULLTIME: "bg-blue-600",
@@ -19,63 +20,55 @@ const typeColors: Record<string, string> = {
   INTERNSHIP: "bg-yellow-500",
   CONTRACT: "bg-pink-600",
   APPRENTICESHIP: "bg-orange-600",
-   VOLUNTEER: "bg-teal-600",
-
+  VOLUNTEER: "bg-teal-600",
 };
 
-export default function ExperiencePage() {
-  const t = useTranslations("Experience");
-  const tCommon = useTranslations("Common");
-  const locale = useLocale();
-  const softSkills = t.raw("softSkillsList") as string[];
-  const { experiences, loading: loadingExp, error: errorExp } = useExperiences();
-  const { skills, loading: loadingSkills, error: errorSkills } = useSkills({limit:100});
-  const { categories } = useCategory();
-  const { user, loading: loadingUser, error: errorUser } = useUser();
+interface ExperiencePageProps {
+  params: Promise<{ locale: string }>;
+}
 
-  // Regroupe les skills par catégorie
-  const skillsByCategory = (Array.isArray(categories) ? categories : []).reduce<Record<string, typeof skills>>((acc, cat) => {
+export default async function ExperiencePage({ params }: ExperiencePageProps) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Experience" });
+  const tCommon = await getTranslations({ locale, namespace: "Common" });
+  const softSkills = t.raw("softSkillsList") as string[];
+
+  let experiences: Experience[] = [];
+  let skills: Skill[] = [];
+  let categories: Category[] = [];
+  let user: User | null = null;
+  let error: string | null = null;
+
+  try {
+    const [expRes, skillsRes, catRes, userRes] = await Promise.all([
+      ExperienceService.getExperiences({ limit: 1000 }),
+      SkillsService.getSkills({ limit: 100 }),
+      CategoryService.getCategories(),
+      UserService.getUserPublic(),
+    ]);
+    experiences = expRes.data.items;
+    skills = skillsRes.data.items;
+    categories = catRes.data.items;
+    user = userRes.data.items;
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Unknown error";
+  }
+
+  if (error) {
+    return (
+      <ErrorRetryCard
+        title={tCommon("errorTitle")}
+        message={t("errorPrefix")}
+        error={error}
+        retryLabel={tCommon("tryAgain")}
+      />
+    );
+  }
+
+  const skillsByCategory = categories.reduce<Record<string, Skill[]>>((acc, cat) => {
     acc[cat.name] = skills.filter((s) => s.category?.id === cat.id);
     return acc;
   }, {});
-
-    if (loadingExp || loadingSkills) {
-      return (
-  <div className="flex-1 flex flex-col justify-center items-center min-h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">        
-    <div className="container mx-auto">
-      
-       <div className="min-h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-    <LoadingSpinner />
-  </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (errorSkills || errorExp ) {
-  return (
-    <div className="flex-1 w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-8 py-8 rounded-xl shadow-lg max-w-md">
-        <AlertTriangle className="w-10 h-10 text-red-500 mb-2" />
-        <h2 className="text-lg font-semibold text-red-700 dark:text-red-300">
-          {tCommon("errorTitle")}
-        </h2>
-        <p className="text-sm text-red-600 dark:text-red-200 text-center">
-         {t("errorPrefix")}<br />
-          <span className="font-mono break-all">{
-            errorSkills || errorExp
-          }</span>
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition cursor-pointer"
-        >
-          {tCommon("tryAgain")}
-        </button>
-      </div>
-    </div>
-  );
-}
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-950">
@@ -86,7 +79,7 @@ export default function ExperiencePage() {
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-purple-400/10 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-in slide-in-from-top duration-1000">
             <div className="inline-flex items-center justify-center p-3 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
@@ -125,12 +118,12 @@ export default function ExperiencePage() {
               {t("timelineSubtitle")}
             </p>
           </div>
-        
+
           {/* Enhanced Timeline */}
           <div className="relative max-w-6xl mx-auto">
             {/* Timeline line - responsive positioning */}
             <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 transform md:-translate-x-1/2"></div>
-            
+
             <div className="space-y-12 md:space-y-16">
               {(Array.isArray(experiences) ? experiences : [])
                 .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
@@ -145,7 +138,7 @@ export default function ExperiencePage() {
                         <Briefcase className="w-3 h-3 md:w-6 md:h-6 text-white" />
                       </div>
                     </div>
-                    
+
                     {/* Content Card - responsive layout */}
                     <div className={`w-full md:w-5/12 pl-12 md:pl-0 pr-4 md:pr-0 ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                       <div className="group">
@@ -160,11 +153,11 @@ export default function ExperiencePage() {
                                 {t(`employmentTypes.${exp.type}` as Parameters<typeof t>[0])}
                               </Badge>
                             </div>
-                            
+
                             <div className="text-blue-600 dark:text-blue-400 font-semibold text-base md:text-lg">
                               {exp.company}
                             </div>
-                            
+
                             <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 text-gray-500 dark:text-gray-400 text-sm">
                               <div className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
@@ -180,19 +173,19 @@ export default function ExperiencePage() {
                               )}
                             </div>
                           </div>
-                          
+
                           {/* Description - responsive text */}
                           <div className="text-gray-700 dark:text-gray-300 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                             {pickLocalized(exp.description, exp.descriptionFr, locale)}
                           </div>
-                          
+
                           {/* Technologies - responsive layout */}
                           {exp.technologies && (
                             <div className={`flex flex-wrap gap-1 md:gap-2 ${i % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}>
                               {exp.technologies.split(",").map((tech) => (
-                                <Badge 
-                                  key={tech.trim()} 
-                                  variant="outline" 
+                                <Badge
+                                  key={tech.trim()}
+                                  variant="outline"
                                   className="text-xs bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors px-2 py-1"
                                 >
                                   {tech.trim()}
@@ -203,7 +196,7 @@ export default function ExperiencePage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Spacer for the other side - only visible on desktop */}
                     <div className="hidden md:block w-5/12"></div>
                   </div>
@@ -225,7 +218,7 @@ export default function ExperiencePage() {
               {t("skillsSubtitle")}
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {categories.map((cat) =>
               skillsByCategory[cat.name] && skillsByCategory[cat.name].length > 0 ? (
@@ -254,7 +247,7 @@ export default function ExperiencePage() {
                         </p>
                       </div>
                     </div>
-                    
+
                     {/* Skills Grid */}
                     <div className="flex flex-wrap gap-3">
                       {skillsByCategory[cat.name].map((skill) => (
@@ -282,7 +275,7 @@ export default function ExperiencePage() {
                               )} />
                             </div>
                           </Badge>
-                          
+
                           {/* Tooltip */}
                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded-lg opacity-0 group-hover/skill:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
                             {skill.level && t(`levels.${skill.level}` as Parameters<typeof t>[0])}
