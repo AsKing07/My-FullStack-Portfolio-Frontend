@@ -30,6 +30,7 @@ phone?: string;
 createdAt: Date;
 updatedAt: Date;
 resumeUrl?: string;
+resumeUrlFr?: string;
 
 }
     

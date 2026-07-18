@@ -5,7 +5,6 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import {
   ArrowRight,
-  Download,
   GraduationCap,
   Briefcase,
   BookOpen,
@@ -24,7 +23,7 @@ import { useProjects } from "@/hooks/useProjects";
 import { useUser } from "@/hooks/useUser";
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
 import { Badge } from "@/components/ui/badge_component";
-import { useToast } from "@/hooks/useToast";
+import { ResumeDownloadButton } from "@/components/ui/resume_download_button";
 import { useBlog } from "@/hooks/useBlogPost";
 import { formatDate, pickLocalized } from "@/lib/utils";
 import { PersonSchema, WebsiteSchema } from "@/components/seo/StructuredData";
@@ -41,8 +40,6 @@ export default function HomePage() {
   const { projects, loading: loadingProj, error: errorProj } = useProjects();
   const { user, loading: loadingUser, error: errorUser } = useUser();
   const { posts, loading: loadingPost, error: errorPost } = useBlog();
-
-  const { toast } = useToast();
 
   const isLoading =
     loadingExp || loadingEdu || loadingProj || loadingUser || loadingPost;
@@ -158,27 +155,16 @@ export default function HomePage() {
                     </span>
                   </Link>
                 </Button>
-                <Button
-                  variant="outline"
+                <ResumeDownloadButton
+                  resumeUrl={user?.resumeUrl}
+                  resumeUrlFr={user?.resumeUrlFr}
+                  name={user?.name}
+                  label={t('hero.downloadResume')}
+                  toastMessages={{ downloading: t('hero.downloadToast'), success: t('hero.downloadSuccess') }}
                   size="lg"
+                  variant="outline"
                   className="border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 dark:border-purple-800 dark:hover:bg-purple-900 transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
-                  onClick={() => {
-                    toast.info(t('hero.downloadToast'));
-                    const resumeUrl = user?.resumeUrl;
-                    if (resumeUrl) {
-                      const link = document.createElement("a");
-                      link.href = resumeUrl;
-                      link.download = `CV_${user?.name || "Charbel_SONON"}.pdf`;
-                      document.body.appendChild(link);
-                      link.click();
-                      link.remove();
-                      toast.success(t('hero.downloadSuccess'));
-                    }
-                  }}
-                >
-                  <Download className="mr-2 h-5 w-5" />
-                  {t('hero.downloadResume')}
-                </Button>
+                />
               </div>
 
               {/* Social indicators or stats */}

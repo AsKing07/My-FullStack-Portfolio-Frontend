@@ -52,11 +52,11 @@ export function useUser() {
     }
   }, []);
 
-  const updateResume = useCallback(async (resume: File) => {
+  const updateResume = useCallback(async (resume: File, lang: 'en' | 'fr' = 'en') => {
     setLoading(true);
     setError(null);
     try {
-      const res = await UserService.updateResume(resume);
+      const res = await UserService.updateResume(resume, lang);
      fetchUserByAdmin();
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la mise à jour du CV');

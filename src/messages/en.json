@@ -11,7 +11,9 @@
     "tryAgain": "Try again",
     "backToBlog": "Back to blog",
     "backToProjects": "All projects",
-    "back": "Back"
+    "back": "Back",
+    "downloadInEnglish": "Download in English",
+    "downloadInFrench": "Download in French"
   },
   "About": {
     "pageTitle": "About Me",

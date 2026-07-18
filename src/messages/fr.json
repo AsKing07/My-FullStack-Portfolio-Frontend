@@ -11,7 +11,9 @@
     "tryAgain": "Réessayer",
     "backToBlog": "Retour au blog",
     "backToProjects": "Tous les projets",
-    "back": "Retour"
+    "back": "Retour",
+    "downloadInEnglish": "Télécharger en anglais",
+    "downloadInFrench": "Télécharger en français"
   },
   "About": {
     "pageTitle": "À propos de moi",
