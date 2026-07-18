@@ -17,6 +17,7 @@ export default function ExperiencesPage() {
   const { experiences, loading, error, deleteExperience, updateResume } = useExperiences();
   const { user, refetchUser } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputFrRef = useRef<HTMLInputElement>(null);
 
 
 const handleDelete = async (id: string) => {
@@ -40,9 +41,27 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   }
 
   try {
-    await updateResume(file);
+    await updateResume(file, 'en');
     await refetchUser();
-    toast.success('CV mis à jour avec succès');
+    toast.success('CV (EN) mis à jour avec succès');
+  } catch (err) {
+    toast.error(`Erreur lors de la mise à jour du CV : ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
+  }
+};
+
+const handleFileUploadFr = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  if (file.type !== 'application/pdf') {
+    toast.error('Seuls les fichiers PDF sont acceptés');
+    return;
+  }
+
+  try {
+    await updateResume(file, 'fr');
+    await refetchUser();
+    toast.success('CV (FR) mis à jour avec succès');
   } catch (err) {
     toast.error(`Erreur lors de la mise à jour du CV : ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
   }
@@ -52,7 +71,15 @@ const handleDownloadCV = () => {
   if (user?.resumeUrl) {
     window.open(user.resumeUrl, '_blank');
   } else {
-    toast.error('Aucun CV disponible');
+    toast.error('Aucun CV (EN) disponible');
+  }
+};
+
+const handleDownloadCVFr = () => {
+  if (user?.resumeUrlFr) {
+    window.open(user.resumeUrlFr, '_blank');
+  } else {
+    toast.error('Aucun CV (FR) disponible');
   }
 };
 
@@ -73,24 +100,24 @@ const handleDownloadCV = () => {
         <CardHeader>
           <CardTitle>Mon CV</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div className="text-sm text-muted-foreground">
-              {user?.resumeUrl ? 'CV disponible' : 'Aucun CV téléchargé'}
+              CV (EN) — {user?.resumeUrl ? 'disponible' : 'aucun CV téléchargé'}
             </div>
             <div className="flex gap-2">
               {user?.resumeUrl && (
                 <Button variant="outline" onClick={handleDownloadCV}>
                   <Download className="mr-2 h-4 w-4" />
-                  Télécharger CV
+                  Télécharger
                 </Button>
               )}
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Upload className="mr-2 h-4 w-4" />
-                {user?.resumeUrl ? 'Remplacer CV' : 'Télécharger CV'}
+                {user?.resumeUrl ? 'Remplacer' : 'Téléverser'}
               </Button>
               <input
                 ref={fileInputRef}
@@ -98,7 +125,36 @@ const handleDownloadCV = () => {
                 accept=".pdf"
                 onChange={handleFileUpload}
                 className="hidden"
-                aria-label="Sélectionner un fichier CV"
+                aria-label="Sélectionner un fichier CV (EN)"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between pt-4 border-t">
+            <div className="text-sm text-muted-foreground">
+              CV (FR) — {user?.resumeUrlFr ? 'disponible' : 'aucun CV téléchargé'}
+            </div>
+            <div className="flex gap-2">
+              {user?.resumeUrlFr && (
+                <Button variant="outline" onClick={handleDownloadCVFr}>
+                  <Download className="mr-2 h-4 w-4" />
+                  Télécharger
+                </Button>
+              )}
+              <Button
+                variant="default"
+                onClick={() => fileInputFrRef.current?.click()}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {user?.resumeUrlFr ? 'Remplacer' : 'Téléverser'}
+              </Button>
+              <input
+                ref={fileInputFrRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleFileUploadFr}
+                className="hidden"
+                aria-label="Sélectionner un fichier CV (FR)"
               />
             </div>
           </div>
