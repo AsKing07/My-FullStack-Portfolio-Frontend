@@ -195,7 +195,7 @@ if (error) {
                     {(Array.isArray(educations) ? educations : []).length}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 font-medium">
-                    {t("degreesAndCertifications")}
+                    {t("degreesObtained")}
                   </p>
                 </div>
               </div>
