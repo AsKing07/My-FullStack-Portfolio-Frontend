@@ -6,9 +6,8 @@ import { useSkills } from "@/hooks/useSkills";
 import { useCategory } from "@/hooks/useCategory";
 import { useUser } from "@/hooks/useUser";
 import { Badge } from "@/components/ui/badge_component";
-import { Button } from "@/components/ui/button_component";
-import { Download, Briefcase, MapPin, Calendar, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
-import Link from "next/link";
+import { Briefcase, MapPin, Calendar, Terminal, LightbulbIcon, AlertTriangle } from "lucide-react";
+import { ResumeDownloadButton } from "@/components/ui/resume_download_button";
 import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
 
 import { LoadingSpinner } from "@/components/ui/loading_spinner";
@@ -100,18 +99,17 @@ export default function ExperiencePage() {
               {t("heroSubtitle")}
             </p>
 
-            {user?.resumeUrl && (
-              <Button
-                asChild
+            <div className="flex justify-center">
+              <ResumeDownloadButton
+                resumeUrl={user?.resumeUrl}
+                resumeUrlFr={user?.resumeUrlFr}
+                name={user?.name}
+                label={t("downloadResume")}
                 size="lg"
+                variant="default"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 px-8 py-4 text-lg"
-              >
-                <Link href={user.resumeUrl} target="_blank" rel="noopener noreferrer">
-                  <Download className="w-5 h-5 mr-2" />
-                  {t("downloadResume")}
-                </Link>
-              </Button>
-            )}
+              />
+            </div>
           </div>
         </div>
       </section>

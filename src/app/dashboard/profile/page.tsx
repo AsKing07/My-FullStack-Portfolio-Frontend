@@ -54,8 +54,10 @@ export default function ProfilePage() {
   const [avatarPreview, setAvatarPreview] = useState<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [selectedResume, setSelectedResume] = useState<File | null>(null);
+  const [selectedResumeFr, setSelectedResumeFr] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const resumeInputRef = useRef<HTMLInputElement>(null);
+  const resumeFrInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -134,6 +136,23 @@ export default function ProfilePage() {
     }
   };
 
+  const handleResumeFrChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        toast.error('Veuillez sélectionner un fichier PDF');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('Le CV ne doit pas dépasser 10MB');
+        return;
+      }
+
+      setSelectedResumeFr(file);
+    }
+  };
+
   const handleRemoveAvatar = () => {
     setSelectedAvatar(null);
     setAvatarPreview(user?.avatarUrl || '');
@@ -146,6 +165,13 @@ export default function ProfilePage() {
     setSelectedResume(null);
     if (resumeInputRef.current) {
       resumeInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveResumeFr = () => {
+    setSelectedResumeFr(null);
+    if (resumeFrInputRef.current) {
+      resumeFrInputRef.current.value = '';
     }
   };
 
@@ -190,12 +216,16 @@ export default function ProfilePage() {
 
       // Upload du CV si modifié
       if (selectedResume) {
-        await updateResume(selectedResume);
+        await updateResume(selectedResume, 'en');
+      }
+      if (selectedResumeFr) {
+        await updateResume(selectedResumeFr, 'fr');
       }
 
       toast.success('Profil mis à jour avec succès');
       setSelectedAvatar(null);
       setSelectedResume(null);
+      setSelectedResumeFr(null);
     } catch (error) {
       toast.error('Erreur lors de la mise à jour du profil');
     } finally {
@@ -532,23 +562,23 @@ export default function ProfilePage() {
                   CV (PDF)
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {user?.resumeUrl && (
-                  <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
-                    <p className="text-sm font-medium">CV actuel</p>
-                    <Button
-                      type="button"
-                      variant="link"
-                      className="p-0 h-auto text-blue-600"
-                      onClick={() => window.open(user.resumeUrl, '_blank')}
-                    >
-                      Voir le CV
-                    </Button>
-                  </div>
-                )}
-
-                {/* Upload de CV */}
+              <CardContent className="space-y-6">
+                {/* CV EN */}
                 <div className="space-y-2">
+                  <p className="text-sm font-medium">CV (EN)</p>
+                  {user?.resumeUrl && (
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                      <p className="text-sm font-medium">CV actuel</p>
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="p-0 h-auto text-blue-600"
+                        onClick={() => window.open(user.resumeUrl, '_blank')}
+                      >
+                        Voir le CV
+                      </Button>
+                    </div>
+                  )}
                   <Input
                     ref={resumeInputRef}
                     type="file"
@@ -563,7 +593,7 @@ export default function ProfilePage() {
                     className="w-full"
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    {selectedResume ? 'CV sélectionné' : 'Uploader un CV'}
+                    {selectedResume ? 'CV sélectionné' : 'Uploader le CV (EN)'}
                   </Button>
                   {selectedResume && (
                     <div className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md">
@@ -581,10 +611,61 @@ export default function ProfilePage() {
                       </Button>
                     </div>
                   )}
-                  <p className="text-xs text-muted-foreground text-center">
-                    PDF uniquement (max 10MB)
-                  </p>
                 </div>
+
+                {/* CV FR */}
+                <div className="space-y-2 pt-4 border-t">
+                  <p className="text-sm font-medium">CV (FR)</p>
+                  {user?.resumeUrlFr && (
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
+                      <p className="text-sm font-medium">CV actuel</p>
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="p-0 h-auto text-blue-600"
+                        onClick={() => window.open(user.resumeUrlFr, '_blank')}
+                      >
+                        Voir le CV
+                      </Button>
+                    </div>
+                  )}
+                  <Input
+                    ref={resumeFrInputRef}
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleResumeFrChange}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => resumeFrInputRef.current?.click()}
+                    className="w-full"
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {selectedResumeFr ? 'CV sélectionné' : 'Uploader le CV (FR)'}
+                  </Button>
+                  {selectedResumeFr && (
+                    <div className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+                      <span className="text-sm text-blue-700 dark:text-blue-300 truncate">
+                        {selectedResumeFr.name}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleRemoveResumeFr}
+                        className="h-6 w-6 text-red-500"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  PDF uniquement (max 10MB par fichier)
+                </p>
               </CardContent>
             </Card>
 

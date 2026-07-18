@@ -14,9 +14,10 @@ export const UserService = {
     updateUser: async (user: UserRequest): Promise<ApiResponse<User>> =>
     (await apiClient.put('/auth/user', user)).data,
 
-    updateResume: async (resume: File): Promise<ApiResponse<User>> => {
+    updateResume: async (resume: File, lang: 'en' | 'fr' = 'en'): Promise<ApiResponse<User>> => {
       const formData = new FormData();
       formData.append('resume', resume);
+      formData.append('lang', lang);
       return (await apiClient.put('/auth/user/resume', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
