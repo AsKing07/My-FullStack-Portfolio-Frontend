@@ -80,6 +80,8 @@
     "expires": "Expires",
     "expired": "Expired",
     "verifyCredential": "Verify credential",
+    "enlargeImage": "Enlarge badge image",
+    "closeEnlargedImage": "Close enlarged image",
     "credentialId": "Credential ID",
     "noItemsFound": "No certifications added yet",
     "errorPrefix": "Error loading certifications:"
@@ -254,6 +256,8 @@
     "blog": "Blog",
     "contact": "Contact",
     "dashboard": "Dashboard",
+    "more": "More",
+    "moreNavAriaLabel": "More navigation options",
     "logoAriaLabel": "Back to home",
     "mainNavAriaLabel": "Main navigation",
     "mobileNavAriaLabel": "Mobile navigation",

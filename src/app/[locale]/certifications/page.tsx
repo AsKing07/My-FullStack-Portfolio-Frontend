@@ -1,10 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
-import { Award, Calendar, ExternalLink, BadgeCheck, Hash } from "lucide-react";
+import { Award } from "lucide-react";
 import { ErrorRetryCard } from "@/components/ui/error_retry_card";
-import { formatDateShort, pickLocalized } from "@/lib/utils";
 import { CertificationService } from "@/services/certification.service";
 import { Certification } from "@/types/Certification/Certification";
+import { CertificationsGridClient } from "./CertificationsGridClient";
 
 interface CertificationsPageProps {
   params: Promise<{ locale: string }>;
@@ -65,98 +64,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
       </section>
 
       <div className="container mx-auto px-4 pb-20">
-        {sorted.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-muted-foreground text-lg">{t("noItemsFound")}</p>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {sorted.map((cert) => {
-              const isExpired = cert.expiryDate ? new Date(cert.expiryDate) < new Date() : false;
-              return (
-                <div
-                  key={cert.id}
-                  className="group relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white to-amber-50 dark:from-slate-800 dark:to-amber-900/20 rounded-3xl transform group-hover:scale-105 transition-transform duration-300"></div>
-                  <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-3xl shadow-xl p-6 border border-white/50 dark:border-slate-700/50 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/50 dark:to-orange-900/50 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        {cert.image ? (
-                          <Image
-                            src={cert.image}
-                            alt={pickLocalized(cert.name, cert.nameFr, locale)}
-                            width={64}
-                            height={64}
-                            className="object-contain w-full h-full"
-                          />
-                        ) : (
-                          <Award className="w-8 h-8 text-amber-600 dark:text-amber-400" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                          {pickLocalized(cert.name, cert.nameFr, locale)}
-                        </h3>
-                        <p className="text-sm text-amber-600 dark:text-amber-400 font-medium">
-                          {cert.issuer}
-                        </p>
-                      </div>
-                    </div>
-
-                    {cert.description && (
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">
-                        {pickLocalized(cert.description, cert.descriptionFr, locale)}
-                      </p>
-                    )}
-
-                    <div className="mt-auto space-y-2">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{t("issued")} {formatDateShort(cert.issueDate)}</span>
-                      </div>
-
-                      {cert.expiryDate && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <BadgeCheck className={`w-3.5 h-3.5 ${isExpired ? 'text-red-500' : 'text-green-600 dark:text-green-400'}`} />
-                          <span className={isExpired ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}>
-                            {isExpired ? t("expired") : `${t("expires")} ${formatDateShort(cert.expiryDate)}`}
-                          </span>
-                        </div>
-                      )}
-
-                      {!cert.expiryDate && (
-                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                          <BadgeCheck className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
-                          <span>{t("noExpiry")}</span>
-                        </div>
-                      )}
-
-                      {cert.credentialId && (
-                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                          <Hash className="w-3.5 h-3.5" />
-                          <span className="truncate">{t("credentialId")}: {cert.credentialId}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {cert.credentialUrl && (
-                      <a
-                        href={cert.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-medium px-4 py-2 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
-                      >
-                        {t("verifyCredential")}
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <CertificationsGridClient certifications={sorted} locale={locale} />
       </div>
     </div>
   );

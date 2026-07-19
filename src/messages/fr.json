@@ -80,6 +80,8 @@
     "expires": "Expire le",
     "expired": "Expirée",
     "verifyCredential": "Vérifier l'attestation",
+    "enlargeImage": "Agrandir l'image du badge",
+    "closeEnlargedImage": "Fermer l'image agrandie",
     "credentialId": "Identifiant de l'attestation",
     "noItemsFound": "Aucune certification ajoutée pour le moment",
     "errorPrefix": "Erreur lors du chargement des certifications :"
@@ -254,6 +256,8 @@
     "blog": "Blog",
     "contact": "Contact",
     "dashboard": "Tableau de bord",
+    "more": "Plus",
+    "moreNavAriaLabel": "Plus d'options de navigation",
     "logoAriaLabel": "Retour à l'accueil",
     "mainNavAriaLabel": "Navigation principale",
     "mobileNavAriaLabel": "Navigation mobile",

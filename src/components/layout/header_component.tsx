@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname, useRouter } from "@/i18n/navigation"
 import NextLink from "next/link"
 import { Menu, X, ChevronDown } from "lucide-react"
+import { DropdownMenu } from "@radix-ui/themes"
 import { Button } from "@/components/ui/button_component"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth_store"
@@ -141,6 +142,21 @@ export function Header({
     { name: t('contact'), href: "/contact" },
   ], [navigation, t])
 
+  // Sous-ensemble affiché directement sur desktop ; le reste est regroupé sous "Plus"
+  const moreHrefs = useMemo(() => ["/about", "/education", "/certifications", "/github-stats", "/blog"], [])
+  const mainNavItems = useMemo(
+    () => navigationItems.filter((item) => !moreHrefs.includes(item.href)),
+    [navigationItems, moreHrefs]
+  )
+  const moreNavItems = useMemo(
+    () => navigationItems.filter((item) => moreHrefs.includes(item.href)),
+    [navigationItems, moreHrefs]
+  )
+  const isMoreActive = useMemo(
+    () => moreNavItems.some((item) => item.href === pathname),
+    [moreNavItems, pathname]
+  )
+
   // Mémorisation des styles de variantes
   const headerStyles = useMemo(() => {
     const baseStyles = "sticky top-0 z-50 w-full border-b transition-all duration-300"
@@ -167,9 +183,9 @@ export function Header({
     handleNavigation(item.href)
   }, [handleNavigation])
 
-  // Mémorisation des éléments de navigation
+  // Mémorisation des éléments de navigation (desktop, items principaux uniquement)
   const navigationElements = useMemo(() => {
-    return navigationItems.map((item, index) => (
+    return mainNavItems.map((item, index) => (
       <Link
         key={item.name}
         href={item.href}
@@ -187,7 +203,7 @@ export function Header({
         {item.name}
       </Link>
     ))
-  }, [navigationItems, pathname, handleNavigationClick, focusedIndex, setFocusedIndex])
+  }, [mainNavItems, pathname, handleNavigationClick, focusedIndex, setFocusedIndex])
 
   // Mémorisation des éléments de navigation mobile
   const mobileNavigationElements = useMemo(() => {
@@ -224,12 +240,41 @@ export function Header({
 
           {/* Desktop Navigation */}
           <nav
-            className="hidden lg:flex space-x-6"
+            className="hidden lg:flex items-center space-x-6"
             role="navigation"
             aria-label={t('mainNavAriaLabel')}
-            onKeyDown={(e) => handleKeyNavigation(e, navigationItems.length)}
+            onKeyDown={(e) => handleKeyNavigation(e, mainNavItems.length)}
           >
             {navigationElements}
+
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger>
+                <button
+                  type="button"
+                  className={cn(
+                    "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-2 py-1",
+                    isMoreActive ? "text-primary" : "text-muted-foreground"
+                  )}
+                  aria-label={t('moreNavAriaLabel')}
+                >
+                  {t('more')}
+                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content align="end">
+                {moreNavItems.map((item) => (
+                  <DropdownMenu.Item key={item.name} asChild>
+                    <Link
+                      href={item.href}
+                      onClick={handleNavigationClick(item)}
+                      aria-current={pathname === item.href ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                  </DropdownMenu.Item>
+                ))}
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
           </nav>
 
           {/* Right section */}
