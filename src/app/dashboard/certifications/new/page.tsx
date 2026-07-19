@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,11 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_c
 import { Input } from '@/components/ui/form/input_component';
 import { TextArea } from '@radix-ui/themes';
 import { Button } from '@/components/ui/button_component';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import DatePicker from 'react-datepicker';
 import { TextField } from "@radix-ui/themes";
 import "react-datepicker/dist/react-datepicker.css";
+import Image from 'next/image';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nom requis'),
@@ -23,7 +25,7 @@ const formSchema = z.object({
   descriptionFr: z.string().optional(),
   credentialId: z.string().optional(),
   credentialUrl: z.string().url('URL invalide').optional().or(z.literal('')),
-  image: z.string().url('URL invalide').optional().or(z.literal('')),
+  image: z.string().optional(),
   issueDate: z.date(),
   expiryDate: z.date().optional(),
 });
@@ -32,7 +34,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function NewCertificationPage() {
   const router = useRouter();
-  const { createCertification, loading } = useCertifications();
+  const { certifications, createCertification, saveCertificationImage, loading } = useCertifications();
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -50,7 +53,34 @@ export default function NewCertificationPage() {
     },
   });
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const url = await saveCertificationImage(file);
+      if (url) {
+        setImageUrl(url);
+        form.setValue('image', url);
+      }
+      toast.success('Image téléchargée avec succès');
+    } catch (error) {
+      toast.error(`Erreur lors du téléchargement de l'image ` + (error instanceof Error ? error.message : ''));
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
+    const duplicate = certifications.find(
+      (c) =>
+        c.name.trim().toLowerCase() === values.name.trim().toLowerCase() &&
+        c.issuer.trim().toLowerCase() === values.issuer.trim().toLowerCase()
+    );
+    if (duplicate) {
+      const proceed = confirm(
+        `Une certification "${duplicate.name}" de "${duplicate.issuer}" existe déjà. Voulez-vous quand même en créer une nouvelle ?`
+      );
+      if (!proceed) return;
+    }
+
     try {
       await createCertification(values);
       toast.success('Certification créée avec succès');
@@ -144,13 +174,24 @@ export default function NewCertificationPage() {
             </div>
 
             <div>
-              <label className="font-semibold">Image du badge (URL)</label>
+              <label className="font-semibold flex items-center gap-2">
+                <ImageIcon className="w-4 h-4" /> Image du badge
+              </label>
               <Input
-                {...form.register('image')}
-                placeholder="https://.../badge.png"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
               />
-              {form.formState.errors.image && (
-                <p className="text-red-500 text-sm mt-1">{form.formState.errors.image.message}</p>
+              {imageUrl && (
+                <div className="mt-2">
+                  <Image
+                    src={imageUrl}
+                    alt="Badge"
+                    width={96}
+                    height={96}
+                    className="rounded-lg object-contain border"
+                  />
+                </div>
               )}
             </div>
 

@@ -27,6 +27,20 @@ export function useCertifications(defaultParams?: PaginationParams) {
     }
   }, []);
 
+  const saveCertificationImage = useCallback(async (image: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await CertificationService.saveCertificationImage(image);
+      return res.data.items;
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de l'enregistrement de l'image");
+      throw new Error(err.message || "Erreur lors de l'enregistrement de l'image");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const getCertificationById = useCallback(async (id: string) => {
     setLoading(true);
     setError(null);
@@ -93,6 +107,7 @@ export function useCertifications(defaultParams?: PaginationParams) {
     loading,
     error,
     fetchCertifications,
+    saveCertificationImage,
     getCertificationById,
     createCertification,
     updateCertification,
