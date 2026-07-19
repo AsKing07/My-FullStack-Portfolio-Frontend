@@ -11,6 +11,16 @@ export const CertificationService = {
   getCertificationById: async (id: string): Promise<ApiResponse<Certification>> =>
     (await apiClient.get(`/certifications/${id}`)).data,
 
+  saveCertificationImage: async (image: File): Promise<ApiResponse<string>> => {
+    const formData = new FormData();
+    formData.append('image', image);
+    return (await apiClient.post('/certifications/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })).data;
+  },
+
   createCertification: async (certification: CertificationRequest): Promise<ApiResponse<Certification>> =>
     (await apiClient.post('/certifications', certification)).data,
 
