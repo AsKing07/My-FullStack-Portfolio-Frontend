@@ -19,7 +19,8 @@ import {
   Briefcase,
   Shapes,
   GraduationCap,
-  Code
+  Code,
+  Award
 } from 'lucide-react';
 import { Button } from '@/components/ui/button_component';
 import { Tooltip } from '@radix-ui/themes';
@@ -196,6 +197,11 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       path: '/dashboard/education',
       name: 'Éducation',
       icon: <GraduationCap className="h-5 w-5" />
+    },
+    {
+      path: '/dashboard/certifications',
+      name: 'Certifications',
+      icon: <Award className="h-5 w-5" />
     },
     { 
       path: '/dashboard/contact', 

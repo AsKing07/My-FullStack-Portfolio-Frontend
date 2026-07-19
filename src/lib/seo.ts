@@ -111,12 +111,13 @@ export function generateSEOMetadata({
   return metadata;
 }
 
-type SEOPageKey = 'about' | 'experience' | 'education' | 'projects' | 'blog' | 'contact' | 'githubStats';
+type SEOPageKey = 'about' | 'experience' | 'education' | 'certifications' | 'projects' | 'blog' | 'contact' | 'githubStats';
 
 const pagePaths: Record<SEOPageKey, string> = {
   about: '/about',
   experience: '/experience',
   education: '/education',
+  certifications: '/certifications',
   projects: '/projects',
   blog: '/blog',
   contact: '/contact',
