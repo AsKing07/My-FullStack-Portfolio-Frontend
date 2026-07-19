@@ -72,6 +72,18 @@
     "yearsOfLearning": "Années d'apprentissage",
     "errorPrefix": "Erreur lors du chargement de la formation :"
   },
+  "Certifications": {
+    "heroTitle": "Certifications",
+    "heroSubtitle": "Certifications professionnelles et attestations validant mes compétences et mon apprentissage continu",
+    "noExpiry": "Sans expiration",
+    "issued": "Obtenue le",
+    "expires": "Expire le",
+    "expired": "Expirée",
+    "verifyCredential": "Vérifier l'attestation",
+    "credentialId": "Identifiant de l'attestation",
+    "noItemsFound": "Aucune certification ajoutée pour le moment",
+    "errorPrefix": "Erreur lors du chargement des certifications :"
+  },
   "Projects": {
     "pageTitle": "Projets réalisés",
     "errorPrefix": "Erreur lors du chargement des projets :",
@@ -224,6 +236,11 @@
       "title": "Statistiques - Charbel SONON",
       "description": "Consultez les statistiques de développement de Charbel SONON : contributions, projets open source et activité de développement.",
       "keywords": ["github", "statistiques", "open source", "contributions"]
+    },
+    "certifications": {
+      "title": "Certifications - Charbel SONON",
+      "description": "Certifications professionnelles et attestations obtenues par Charbel SONON en développement logiciel et technologies web.",
+      "keywords": ["certifications", "attestations", "badges", "formation professionnelle"]
     }
   },
   "Nav": {
@@ -231,6 +248,7 @@
     "about": "À propos",
     "experience": "Expérience",
     "education": "Formation",
+    "certifications": "Certifications",
     "projects": "Projets",
     "devStats": "Statistiques",
     "blog": "Blog",

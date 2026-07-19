@@ -134,6 +134,7 @@ export function Header({
     { name: t('about'), href: "/about" },
     { name: t('experience'), href: "/experience" },
     { name: t('education'), href: "/education" },
+    { name: t('certifications'), href: "/certifications" },
     { name: t('projects'), href: "/projects" },
     { name: t('devStats'), href: "/github-stats" },
     { name: t('blog'), href: "/blog" },

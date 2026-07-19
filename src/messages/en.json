@@ -72,6 +72,18 @@
     "yearsOfLearning": "Years of Learning",
     "errorPrefix": "Error loading education:"
   },
+  "Certifications": {
+    "heroTitle": "Certifications",
+    "heroSubtitle": "Professional certifications and credentials that validate my skills and continuous learning",
+    "noExpiry": "No expiration",
+    "issued": "Issued",
+    "expires": "Expires",
+    "expired": "Expired",
+    "verifyCredential": "Verify credential",
+    "credentialId": "Credential ID",
+    "noItemsFound": "No certifications added yet",
+    "errorPrefix": "Error loading certifications:"
+  },
   "Projects": {
     "pageTitle": "Completed projects",
     "errorPrefix": "Error loading projects:",
@@ -224,6 +236,11 @@
       "title": "Statistics - Charbel SONON",
       "description": "Check out Charbel SONON's development statistics: contributions, open source projects and development activity.",
       "keywords": ["github", "statistics", "open source", "contributions"]
+    },
+    "certifications": {
+      "title": "Certifications - Charbel SONON",
+      "description": "Professional certifications and credentials earned by Charbel SONON in software development and web technologies.",
+      "keywords": ["certifications", "credentials", "badges", "professional development"]
     }
   },
   "Nav": {
@@ -231,6 +248,7 @@
     "about": "About",
     "experience": "Experience",
     "education": "Education",
+    "certifications": "Certifications",
     "projects": "Projects",
     "devStats": "Dev Stats",
     "blog": "Blog",
