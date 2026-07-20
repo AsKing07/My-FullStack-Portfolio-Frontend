@@ -20,6 +20,7 @@ import {
   Gitlab,
   ExternalLink,
   BarChartIcon,
+  ListTree,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -60,6 +61,10 @@ export function DevStatsContentClient({ stats, gitlabStats, wakapiStats, wakapiS
   const editorData = (wakapiStats?.editors || [])
     .filter((e) => e.total_seconds > 0)
     .map((e) => ({ name: e.name, hours: Math.round((e.total_seconds / 3600) * 10) / 10, percent: e.percent }));
+
+  const categoryData = (wakapiStats?.categories || [])
+    .filter((c) => c.total_seconds > 0)
+    .map((c) => ({ name: c.name, hours: Math.round((c.total_seconds / 3600) * 10) / 10, percent: c.percent }));
 
   const activityData = wakapiSummaries.map((d) => ({
     date: new Date(d.date).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
@@ -334,6 +339,38 @@ export function DevStatsContentClient({ stats, gitlabStats, wakapiStats, wakapiS
                     />
                     <Bar dataKey="hours" radius={[0, 6, 6, 0]}>
                       {editorData.map((_, index) => (
+                        <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Categories */}
+        {categoryData.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ListTree className="w-5 h-5" />
+                {t("categories")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={categoryData} layout="vertical" margin={{ left: 16, right: 24 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} horizontal={false} />
+                    <XAxis type="number" unit="h" tick={AXIS_STYLE} />
+                    <YAxis type="category" dataKey="name" width={110} tick={AXIS_STYLE} />
+                    <Tooltip
+                      formatter={(value: number, _name, item) => [`${value}h (${item.payload.percent}%)`, t("categories")]}
+                      contentStyle={{ borderRadius: 8 }}
+                    />
+                    <Bar dataKey="hours" radius={[0, 6, 6, 0]}>
+                      {categoryData.map((_, index) => (
                         <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                       ))}
                     </Bar>

@@ -13,6 +13,13 @@ export interface WakapiEditor {
   text: string;
 }
 
+export interface WakapiCategory {
+  name: string;
+  total_seconds: number;
+  percent: number;
+  text: string;
+}
+
 export interface WakapiStats {
   username: string;
   range: string;
@@ -23,6 +30,7 @@ export interface WakapiStats {
   human_readable_daily_average: string;
   languages: WakapiLanguage[];
   editors: WakapiEditor[];
+  categories: WakapiCategory[];
 }
 
 export interface WakapiDailySummary {
