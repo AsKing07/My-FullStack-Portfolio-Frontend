@@ -197,6 +197,10 @@
     "codingActivity": "Personal development activity last 30 days",
     "editors": "Editors used in the last year",
     "visitGithub": "Visit my GitHub",
+    "githubSectionTitle": "GitHub Activity",
+    "gitlabSectionTitle": "GitLab Activity",
+    "wakapiUnavailable": "Coding activity stats are temporarily unavailable.",
+    "visitGitlab": "Visit my GitLab",
     "errorTitle": "An error has occurred",
     "errorPrefix": "Error loading statistics:",
     "tryAgain": "Try again"
