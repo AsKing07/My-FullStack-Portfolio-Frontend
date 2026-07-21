@@ -1,6 +1,7 @@
 "use client";
 import { Header } from "@/components/layout/header_component";
 import { Footer } from "@/components/layout/footer_component";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <Footer />
         </footer>
       </div>
+      <ChatWidget />
     </>
   );
 }
