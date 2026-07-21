@@ -12,6 +12,13 @@ export enum ContactStatus {
 
 
 
+export interface ContactReply {
+    id: string;
+    message: string;
+    createdAt: Date;
+    contactId: string;
+}
+
 export interface Contact {
     id: string;
     name: string;
@@ -26,6 +33,7 @@ export interface Contact {
     createdAt: Date;
     updatedAt: Date;
     user?: User;
+    replies?: ContactReply[];
 
 
 }
