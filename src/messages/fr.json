@@ -186,6 +186,16 @@
     "responseTime": "Je réponds généralement sous 24 heures",
     "errorPrefix": "Erreur lors du chargement des informations de contact :"
   },
+  "Chatbot": {
+    "title": "Une question sur Charbel ?",
+    "subtitle": "Demande-moi son parcours, ses compétences ou ses projets",
+    "welcome": "Salut ! Pose-moi une question sur le parcours, les compétences, l'expérience ou les projets de Charbel.",
+    "inputPlaceholder": "Écris ta question...",
+    "send": "Envoyer",
+    "open": "Ouvrir le chat",
+    "close": "Fermer le chat",
+    "error": "Une erreur est survenue. Réessaie."
+  },
   "DevStats": {
     "pageTitle": "Statistiques de développement",
     "pageSubtitle": "Aperçu de mon activité de développement et de mes contributions open source",

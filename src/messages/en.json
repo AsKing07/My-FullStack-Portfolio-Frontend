@@ -186,6 +186,16 @@
     "responseTime": "I usually respond within 24 hours",
     "errorPrefix": "Error loading contact information:"
   },
+  "Chatbot": {
+    "title": "Ask about Charbel",
+    "subtitle": "Ask me about my background, skills or projects",
+    "welcome": "Hi! Ask me anything about Charbel's background, skills, experience or projects.",
+    "inputPlaceholder": "Type your question...",
+    "send": "Send",
+    "open": "Open chat",
+    "close": "Close chat",
+    "error": "Something went wrong. Please try again."
+  },
   "DevStats": {
     "pageTitle": "Development statistics",
     "pageSubtitle": "Overview of my development activity and open source contributions",
