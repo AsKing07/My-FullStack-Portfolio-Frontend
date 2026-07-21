@@ -84,7 +84,11 @@ export default function ContactDetailPage() {
       await replyToContact(contact.id, values.reply);
       toast.success('Réponse envoyée avec succès');
       form.reset();
-      setContact((prev: typeof contact) => ({ ...prev, status: ContactStatus.REPLIED }));
+      // Recharger le message pour récupérer l'historique des réponses à jour
+      const refreshed = await getContactById(contact.id);
+      if (refreshed) {
+        setContact(refreshed);
+      }
     } catch (err) {
       toast.error(`Erreur lors de l'envoi : ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
     }
@@ -218,6 +222,33 @@ export default function ContactDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Historique des réponses */}
+      {contact.replies && contact.replies.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              Historique des réponses ({contact.replies.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {contact.replies.map((reply: { id: string; message: string; createdAt: string | Date }) => (
+              <div
+                key={reply.id}
+                className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-900/40"
+              >
+                <p className="text-xs text-muted-foreground mb-2">
+                  Répondu le {formatDate(reply.createdAt)}
+                </p>
+                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
+                  {reply.message}
+                </pre>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Formulaire de réponse */}
       <Card>
