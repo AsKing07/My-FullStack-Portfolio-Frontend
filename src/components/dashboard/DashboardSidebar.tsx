@@ -21,7 +21,8 @@ import {
   GraduationCap,
   Code,
   Award,
-  Bot
+  Bot,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button_component';
 import { Tooltip } from '@radix-ui/themes';
@@ -208,6 +209,11 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       path: '/dashboard/chatbot',
       name: 'Chatbot',
       icon: <Bot className="h-5 w-5" />
+    },
+    {
+      path: '/dashboard/blog-agent',
+      name: 'Agent Blog',
+      icon: <Sparkles className="h-5 w-5" />
     },
     { 
       path: '/dashboard/contact', 
