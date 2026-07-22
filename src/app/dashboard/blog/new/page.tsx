@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -53,6 +53,7 @@ type BlogPostFormData = z.infer<typeof blogPostSchema>;
 
 export default function NewBlogPostPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { createBlogPost } = useBlog();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,6 +101,37 @@ export default function NewBlogPostPage() {
     const words = content.split(' ').length;
     return Math.max(1, Math.ceil(words / 200));
   };
+
+  // Pré-remplissage depuis un brouillon accepté proposé par l'agent IA du blog
+  useEffect(() => {
+    const title = searchParams.get('title');
+    if (!title) return;
+
+    setValue('title', title);
+    setValue('slug', generateSlug(title));
+    setValue('metaTitle', title);
+
+    const titleFr = searchParams.get('titleFr');
+    if (titleFr) setValue('titleFr', titleFr);
+
+    const excerpt = searchParams.get('excerpt');
+    if (excerpt) setValue('excerpt', excerpt);
+
+    const excerptFr = searchParams.get('excerptFr');
+    if (excerptFr) setValue('excerptFr', excerptFr);
+
+    const content = searchParams.get('content');
+    if (content) {
+      setValue('content', content);
+      setValue('readingTime', estimateReadingTime(content));
+    }
+
+    const contentFr = searchParams.get('contentFr');
+    if (contentFr) setValue('contentFr', contentFr);
+
+    toast.success('Brouillon de l\'agent IA importé, relisez avant de publier');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Mettre à jour le slug et le temps de lecture automatiquement
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
