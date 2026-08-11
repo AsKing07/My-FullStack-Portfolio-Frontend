@@ -10,12 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_c
 import { Input } from '@/components/ui/form/input_component';
 import { TextArea } from '@radix-ui/themes';
 import { Button } from '@/components/ui/button_component';
-import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save, Image as ImageIcon, Linkedin } from 'lucide-react';
 import { toast } from 'sonner';
 import DatePicker from 'react-datepicker';
 import { TextField } from "@radix-ui/themes";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
+import { formatDate } from '@/lib/utils';
+import { buildLinkedInAddCertificationUrl } from '@/lib/linkedin';
+import { Certification } from '@/types/Certification/Certification';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nom requis'),
@@ -28,6 +31,7 @@ const formSchema = z.object({
   image: z.string().optional(),
   issueDate: z.date(),
   expiryDate: z.date().optional(),
+  parentId: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,6 +41,7 @@ export default function EditCertificationPage() {
   const params = useParams();
   const { certifications, getCertificationById, updateCertification, saveCertificationImage, loading } = useCertifications();
   const [imageUrl, setImageUrl] = useState<string>('');
+  const [current, setCurrent] = useState<Certification | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -51,8 +56,26 @@ export default function EditCertificationPage() {
       image: '',
       issueDate: undefined,
       expiryDate: undefined,
+      parentId: '',
     },
   });
+
+  const parentCandidates = certifications.filter((c) => !c.parentId && c.id !== params.id);
+
+  const handleAddToLinkedIn = async () => {
+    if (!current) return;
+    window.open(buildLinkedInAddCertificationUrl(current), '_blank', 'noopener,noreferrer');
+    const confirmed = confirm('As-tu bien ajouté cette certification sur LinkedIn ?');
+    if (!confirmed) return;
+    try {
+      const now = new Date();
+      await updateCertification(current.id, { ...form.getValues(), linkedinAddedAt: now });
+      setCurrent({ ...current, linkedinAddedAt: now });
+      toast.success('Marqué comme ajouté à LinkedIn');
+    } catch (err) {
+      toast.error("Erreur lors de l'enregistrement");
+    }
+  };
 
   // Charger les données de la certification
   useEffect(() => {
@@ -72,8 +95,10 @@ export default function EditCertificationPage() {
             image: certData.image || '',
             issueDate: certData.issueDate ? new Date(certData.issueDate) : undefined,
             expiryDate: certData.expiryDate ? new Date(certData.expiryDate) : undefined,
+            parentId: certData.parentId || '',
           });
           setImageUrl(certData.image || '');
+          setCurrent(certData);
         } else {
           toast.error('Certification introuvable');
           router.push('/dashboard/certifications');
@@ -174,6 +199,24 @@ export default function EditCertificationPage() {
             </div>
 
             <div>
+              <label className="font-semibold">Certification parente</label>
+              <select
+                {...form.register('parentId')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+              >
+                <option value="">Aucune (certification indépendante)</option>
+                {parentCandidates.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+              {current?.children && current.children.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {current.children.length} sous-certification(s) rattachée(s) : {current.children.map((c) => c.name).join(', ')}
+                </p>
+              )}
+            </div>
+
+            <div>
               <label className="font-semibold">Description (EN)</label>
               <TextArea
                 {...form.register('description')}
@@ -260,6 +303,23 @@ export default function EditCertificationPage() {
                   placeholderText="Sans expiration"
                   dateFormat="dd/MM/yyyy"
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="font-semibold flex items-center gap-2">
+                <Linkedin className="w-4 h-4" /> LinkedIn
+              </label>
+              <div className="flex items-center gap-3 mt-1">
+                <Button type="button" variant="outline" onClick={handleAddToLinkedIn} className="flex items-center gap-2">
+                  <Linkedin className="w-4 h-4" />
+                  {current?.linkedinAddedAt ? 'Ajouter quand même' : 'Ajouter à LinkedIn'}
+                </Button>
+                {current?.linkedinAddedAt && (
+                  <span className="text-xs text-muted-foreground">
+                    ✓ Ajouté le {formatDate(current.linkedinAddedAt)}
+                  </span>
+                )}
               </div>
             </div>
 

@@ -10,12 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_c
 import { Input } from '@/components/ui/form/input_component';
 import { TextArea } from '@radix-ui/themes';
 import { Button } from '@/components/ui/button_component';
-import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save, Image as ImageIcon, FileJson } from 'lucide-react';
 import { toast } from 'sonner';
 import DatePicker from 'react-datepicker';
 import { TextField } from "@radix-ui/themes";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from 'next/image';
+import { parseCredentialJson } from '@/lib/credentialImport';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nom requis'),
@@ -28,6 +29,7 @@ const formSchema = z.object({
   image: z.string().optional(),
   issueDate: z.date(),
   expiryDate: z.date().optional(),
+  parentId: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -50,8 +52,39 @@ export default function NewCertificationPage() {
       image: '',
       issueDate: undefined,
       expiryDate: undefined,
+      parentId: '',
     },
   });
+
+  // Seules les certifications "de premier niveau" (sans parent elles-mêmes) peuvent
+  // être choisies comme parente — un seul niveau de hiérarchie est supporté.
+  const parentCandidates = certifications.filter((c) => !c.parentId);
+
+  const handleImportJson = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const parsed = parseCredentialJson(JSON.parse(text));
+
+      if (!parsed.name && !parsed.issuer && !parsed.description) {
+        toast.error("Ce fichier ne ressemble pas à un badge Open Badges / Verifiable Credential reconnu");
+        return;
+      }
+
+      if (parsed.name) form.setValue('name', parsed.name);
+      if (parsed.issuer) form.setValue('issuer', parsed.issuer);
+      if (parsed.description) form.setValue('description', parsed.description);
+      if (parsed.credentialUrl) form.setValue('credentialUrl', parsed.credentialUrl);
+      if (parsed.issueDate) form.setValue('issueDate', parsed.issueDate);
+
+      toast.success("Badge importé : relis les champs avant d'enregistrer (l'image reste à uploader manuellement)");
+    } catch (error) {
+      toast.error('Fichier JSON invalide ou illisible');
+    }
+  };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -100,6 +133,20 @@ export default function NewCertificationPage() {
         <h2 className="text-2xl font-bold tracking-tight">Nouvelle certification</h2>
       </div>
 
+      <Card className="border-dashed">
+        <CardContent className="pt-6">
+          <label className="font-semibold flex items-center gap-2">
+            <FileJson className="w-4 h-4" /> Importer un badge (JSON)
+          </label>
+          <p className="text-xs text-muted-foreground mt-1 mb-2">
+            Certaines plateformes (Coursera/Columbia+ via Accredible, Credly, Badgr...) fournissent le certificat en
+            JSON Open Badges / Verifiable Credential. Dépose-le ici pour préremplir nom, émetteur, description, lien
+            de vérification et date — l&apos;image reste à uploader à la main plus bas.
+          </p>
+          <Input type="file" accept="application/json,.json" onChange={handleImportJson} />
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Informations de la certification</CardTitle>
@@ -134,6 +181,22 @@ export default function NewCertificationPage() {
               {form.formState.errors.issuer && (
                 <p className="text-red-500 text-sm mt-1">{form.formState.errors.issuer.message}</p>
               )}
+            </div>
+
+            <div>
+              <label className="font-semibold">Certification parente</label>
+              <select
+                {...form.register('parentId')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+              >
+                <option value="">Aucune (certification indépendante)</option>
+                {parentCandidates.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-1">
+                À utiliser pour les sous-certifications d&apos;un certificat global (ex: les cours individuels d&apos;un Professional Certificate Coursera).
+              </p>
             </div>
 
             <div>

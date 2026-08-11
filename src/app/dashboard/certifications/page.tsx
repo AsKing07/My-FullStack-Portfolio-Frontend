@@ -5,14 +5,19 @@ import { useCertifications } from '@/hooks/useCertifications';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card_component';
 import { Button } from '@/components/ui/button_component';
 import { Badge } from '@/components/ui/badge_component';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Linkedin } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { formatDate } from '@/lib/utils';
+import { buildLinkedInAddCertificationUrl } from '@/lib/linkedin';
+import { Certification } from '@/types/Certification/Certification';
 
 export default function CertificationsPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { certifications, loading, error, deleteCertification } = useCertifications();
+  // limit relevé pour ne pas perdre de certifications hors de la première page
+  // (pas de pagination UI ici pour l'instant) — pertinent surtout depuis l'ajout
+  // des sous-certifications qui font grossir la liste.
+  const { certifications, loading, error, deleteCertification, updateCertification } = useCertifications({ limit: 100 });
 
   const handleDelete = async (id: string) => {
     if (confirm('Supprimer cette certification ?')) {
@@ -22,6 +27,18 @@ export default function CertificationsPage() {
       } catch (err) {
         toast.error(`Erreur lors de la suppression : ${err instanceof Error ? err.message : 'Erreur inconnue'}`);
       }
+    }
+  };
+
+  const handleAddToLinkedIn = async (cert: Certification) => {
+    window.open(buildLinkedInAddCertificationUrl(cert), '_blank', 'noopener,noreferrer');
+    const confirmed = confirm('As-tu bien ajouté cette certification sur LinkedIn ?');
+    if (!confirmed) return;
+    try {
+      await updateCertification(cert.id, { ...cert, linkedinAddedAt: new Date() });
+      toast.success('Marqué comme ajouté à LinkedIn');
+    } catch (err) {
+      toast.error("Erreur lors de l'enregistrement");
     }
   };
 
@@ -55,7 +72,7 @@ export default function CertificationsPage() {
                     <div>
                       <div className="font-semibold">{cert.name}</div>
                       <div className="text-sm text-muted-foreground">{cert.issuer}</div>
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex flex-wrap gap-2 mt-2">
                         {cert.expiryDate ? (
                           <Badge variant={isExpired ? 'destructive' : 'secondary'}>
                             {isExpired ? 'Expirée' : `Expire le ${formatDate(cert.expiryDate)}`}
@@ -63,12 +80,29 @@ export default function CertificationsPage() {
                         ) : (
                           <Badge variant="secondary">Sans expiration</Badge>
                         )}
+                        {cert.children && cert.children.length > 0 && (
+                          <Badge variant="secondary">{cert.children.length} sous-certification(s)</Badge>
+                        )}
+                        {cert.parent && (
+                          <Badge variant="secondary">Sous-certif de : {cert.parent.name}</Badge>
+                        )}
+                        {cert.linkedinAddedAt && (
+                          <Badge variant="secondary">✓ LinkedIn ({formatDate(cert.linkedinAddedAt)})</Badge>
+                        )}
                       </div>
                       <div className="text-xs mt-1">
                         Obtenue le {formatDate(cert.issueDate)}
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        title={cert.linkedinAddedAt ? 'Ajouter quand même à LinkedIn' : 'Ajouter à LinkedIn'}
+                        onClick={() => handleAddToLinkedIn(cert)}
+                      >
+                        <Linkedin className="h-4 w-4" />
+                      </Button>
                       <Button
                         variant="outline"
                         size="icon"

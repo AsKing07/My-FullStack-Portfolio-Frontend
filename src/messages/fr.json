@@ -84,7 +84,9 @@
     "closeEnlargedImage": "Fermer l'image agrandie",
     "credentialId": "Identifiant de l'attestation",
     "noItemsFound": "Aucune certification ajoutée pour le moment",
-    "errorPrefix": "Erreur lors du chargement des certifications :"
+    "errorPrefix": "Erreur lors du chargement des certifications :",
+    "showIncluded": "Voir les {count} certifications incluses",
+    "hideIncluded": "Masquer les certifications incluses"
   },
   "Projects": {
     "pageTitle": "Projets réalisés",
