@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Award, Calendar, ExternalLink, BadgeCheck, Hash, X } from "lucide-react";
+import { Award, Calendar, ExternalLink, BadgeCheck, Hash, X, ChevronDown, ChevronUp } from "lucide-react";
 import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
 import { Certification } from "@/types/Certification/Certification";
 
@@ -15,8 +15,22 @@ interface CertificationsGridClientProps {
 export function CertificationsGridClient({ certifications, locale }: CertificationsGridClientProps) {
   const t = useTranslations("Certifications");
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
-  if (certifications.length === 0) {
+  const toggleExpanded = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  // Les sous-certifications (rattachées à une certification globale) ne sont
+  // affichées que repliées sous leur parent, pas comme cartes indépendantes.
+  const topLevelCertifications = certifications.filter((cert) => !cert.parentId);
+
+  if (topLevelCertifications.length === 0) {
     return (
       <div className="text-center py-20">
         <p className="text-muted-foreground text-lg">{t("noItemsFound")}</p>
@@ -27,9 +41,10 @@ export function CertificationsGridClient({ certifications, locale }: Certificati
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {certifications.map((cert) => {
+        {topLevelCertifications.map((cert) => {
           const isExpired = cert.expiryDate ? new Date(cert.expiryDate) < new Date() : false;
           const certTitle = pickLocalized(cert.name, cert.nameFr, locale);
+          const isExpanded = expandedIds.has(cert.id);
           return (
             <div
               key={cert.id}
@@ -122,6 +137,55 @@ export function CertificationsGridClient({ certifications, locale }: Certificati
                     {t("verifyCredential")}
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
+                )}
+
+                {cert.children && cert.children.length > 0 && (
+                  <div className="w-full mt-4 pt-4 border-t border-gray-100 dark:border-slate-700 text-left">
+                    <button
+                      type="button"
+                      onClick={() => toggleExpanded(cert.id)}
+                      className="w-full inline-flex items-center justify-center gap-2 text-sm font-medium text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 transition-colors"
+                    >
+                      {isExpanded ? t("hideIncluded") : t("showIncluded", { count: cert.children.length })}
+                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    </button>
+
+                    {isExpanded && (
+                      <ul className="mt-3 space-y-2">
+                        {cert.children.map((child) => (
+                          <li
+                            key={child.id}
+                            className="flex items-center gap-3 p-2 rounded-lg bg-amber-50/60 dark:bg-amber-950/30"
+                          >
+                            <div className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                              {child.image ? (
+                                <Image src={child.image} alt={pickLocalized(child.name, child.nameFr, locale)} width={40} height={40} className="object-contain w-full h-full" />
+                              ) : (
+                                <Award className="w-5 h-5 text-amber-500" />
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                {pickLocalized(child.name, child.nameFr, locale)}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{formatDateShort(child.issueDate)}</p>
+                            </div>
+                            {child.credentialUrl && (
+                              <a
+                                href={child.credentialUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={t("verifyCredential")}
+                                className="flex-shrink-0 text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-200"
+                              >
+                                <ExternalLink className="w-4 h-4" />
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

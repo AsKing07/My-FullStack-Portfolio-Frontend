@@ -9,4 +9,6 @@ export interface CertificationRequest {
     image?: string;
     issueDate: Date;
     expiryDate?: Date;
+    parentId?: string | null;
+    linkedinAddedAt?: Date;
 }
