@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Award, Calendar, ExternalLink, BadgeCheck, Hash, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Award, Calendar, ExternalLink, BadgeCheck, Hash, X, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge_component";
 import { cn, formatDateShort, pickLocalized } from "@/lib/utils";
 import { Certification } from "@/types/Certification/Certification";
 
@@ -12,10 +13,15 @@ interface CertificationsGridClientProps {
   locale: string;
 }
 
+const CERTS_PER_PAGE = 6;
+
 export function CertificationsGridClient({ certifications, locale }: CertificationsGridClientProps) {
   const t = useTranslations("Certifications");
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [search, setSearch] = useState("");
+  const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const toggleExpanded = (id: string) => {
     setExpandedIds((prev) => {
@@ -38,10 +44,88 @@ export function CertificationsGridClient({ certifications, locale }: Certificati
     );
   }
 
+  const issuers = Array.from(new Set(topLevelCertifications.map((c) => c.issuer))).sort();
+
+  const filteredCertifications = topLevelCertifications.filter((cert) => {
+    const matchesIssuer = !selectedIssuer || cert.issuer === selectedIssuer;
+    if (!matchesIssuer) return false;
+    if (!search.trim()) return true;
+    const q = search.trim().toLowerCase();
+    return (
+      pickLocalized(cert.name, cert.nameFr, locale).toLowerCase().includes(q) ||
+      cert.issuer.toLowerCase().includes(q)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredCertifications.length / CERTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * CERTS_PER_PAGE;
+  const endIndex = startIndex + CERTS_PER_PAGE;
+  const currentCertifications = filteredCertifications.slice(startIndex, endIndex);
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
+
+  const handleIssuerChange = (issuer: string | null) => {
+    setSelectedIssuer(issuer);
+    setCurrentPage(1);
+  };
+
   return (
     <>
+      <div className="max-w-7xl mx-auto mb-10 space-y-4">
+        <div className="relative max-w-md mx-auto">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder={t("searchPlaceholder")}
+            className="w-full pl-9 pr-4 py-2 rounded-full border border-amber-200 dark:border-amber-900 bg-white/90 dark:bg-slate-900/90 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+          />
+        </div>
+
+        {issuers.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-3">
+            <Badge
+              variant={selectedIssuer === null ? "default" : "outline"}
+              className={cn(
+                "cursor-pointer px-4 py-2 text-sm",
+                selectedIssuer === null
+                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white"
+                  : "hover:bg-amber-100 dark:hover:bg-amber-900"
+              )}
+              onClick={() => handleIssuerChange(null)}
+            >
+              {t("all")}
+            </Badge>
+            {issuers.map((issuer) => (
+              <Badge
+                key={issuer}
+                variant={selectedIssuer === issuer ? "default" : "outline"}
+                className={cn(
+                  "cursor-pointer px-4 py-2 text-sm",
+                  selectedIssuer === issuer
+                    ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white"
+                    : "hover:bg-amber-100 dark:hover:bg-amber-900"
+                )}
+                onClick={() => handleIssuerChange(issuer)}
+              >
+                {issuer}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {filteredCertifications.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-muted-foreground text-lg">{t("noResultsFound")}</p>
+        </div>
+      ) : (
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {topLevelCertifications.map((cert) => {
+        {currentCertifications.map((cert) => {
           const isExpired = cert.expiryDate ? new Date(cert.expiryDate) < new Date() : false;
           const certTitle = pickLocalized(cert.name, cert.nameFr, locale);
           const isExpanded = expandedIds.has(cert.id);
@@ -192,6 +276,74 @@ export function CertificationsGridClient({ certifications, locale }: Certificati
           );
         })}
       </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-12">
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-200 dark:border-amber-900 text-sm font-medium text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            {t("previous")}
+          </button>
+
+          <div className="flex items-center gap-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+              if (
+                page === 1 ||
+                page === totalPages ||
+                (page >= currentPage - 2 && page <= currentPage + 2)
+              ) {
+                return (
+                  <button
+                    type="button"
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={cn(
+                      "w-10 h-10 rounded-lg text-sm font-medium border transition-colors",
+                      currentPage === page
+                        ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white border-transparent"
+                        : "border-amber-200 dark:border-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/50"
+                    )}
+                  >
+                    {page}
+                  </button>
+                );
+              } else if (page === currentPage - 3 || page === currentPage + 3) {
+                return (
+                  <span key={page} className="px-2 text-gray-500">
+                    ...
+                  </span>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage === totalPages}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-200 dark:border-amber-900 text-sm font-medium text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            {t("next")}
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {filteredCertifications.length > 0 && (
+        <div className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+          {t("showingRange", {
+            start: startIndex + 1,
+            end: Math.min(endIndex, filteredCertifications.length),
+            total: filteredCertifications.length,
+          })}
+        </div>
+      )}
 
       {enlargedImage && (
         <div

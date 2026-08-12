@@ -84,9 +84,15 @@
     "closeEnlargedImage": "Close enlarged image",
     "credentialId": "Credential ID",
     "noItemsFound": "No certifications added yet",
+    "noResultsFound": "No certifications match your filters",
     "errorPrefix": "Error loading certifications:",
     "showIncluded": "Show {count} included certifications",
-    "hideIncluded": "Hide included certifications"
+    "hideIncluded": "Hide included certifications",
+    "all": "All",
+    "searchPlaceholder": "Search by name or issuer...",
+    "previous": "Previous",
+    "next": "Next",
+    "showingRange": "Showing {start}-{end} of {total} certifications"
   },
   "Projects": {
     "pageTitle": "Completed projects",

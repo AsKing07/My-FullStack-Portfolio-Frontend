@@ -84,9 +84,15 @@
     "closeEnlargedImage": "Fermer l'image agrandie",
     "credentialId": "Identifiant de l'attestation",
     "noItemsFound": "Aucune certification ajoutée pour le moment",
+    "noResultsFound": "Aucune certification ne correspond à vos filtres",
     "errorPrefix": "Erreur lors du chargement des certifications :",
     "showIncluded": "Voir les {count} certifications incluses",
-    "hideIncluded": "Masquer les certifications incluses"
+    "hideIncluded": "Masquer les certifications incluses",
+    "all": "Toutes",
+    "searchPlaceholder": "Rechercher par nom ou organisme...",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "showingRange": "Affichage de {start}-{end} sur {total} certifications"
   },
   "Projects": {
     "pageTitle": "Projets réalisés",
