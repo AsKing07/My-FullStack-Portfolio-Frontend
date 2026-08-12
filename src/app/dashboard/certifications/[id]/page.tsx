@@ -39,9 +39,12 @@ type FormValues = z.infer<typeof formSchema>;
 export default function EditCertificationPage() {
   const router = useRouter();
   const params = useParams();
-  const { certifications, getCertificationById, updateCertification, saveCertificationImage, loading } = useCertifications();
+  // limit relevé : le select "certification parente" doit voir toutes les
+  // certifications, pas seulement les 10 les plus récentes (défaut backend).
+  const { certifications, getCertificationById, updateCertification, saveCertificationImage, loading } = useCertifications({ limit: 200 });
   const [imageUrl, setImageUrl] = useState<string>('');
   const [current, setCurrent] = useState<Certification | null>(null);
+  const [confirmingLinkedIn, setConfirmingLinkedIn] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -62,11 +65,18 @@ export default function EditCertificationPage() {
 
   const parentCandidates = certifications.filter((c) => !c.parentId && c.id !== params.id);
 
-  const handleAddToLinkedIn = async () => {
+  const handleAddToLinkedIn = () => {
     if (!current) return;
     window.open(buildLinkedInAddCertificationUrl(current), '_blank', 'noopener,noreferrer');
-    const confirmed = confirm('As-tu bien ajouté cette certification sur LinkedIn ?');
-    if (!confirmed) return;
+    // Pas de window.confirm() ici : ouvert juste après window.open(), il apparaît
+    // souvent dans l'onglet resté en arrière-plan et passe inaperçu. On affiche
+    // plutôt une confirmation dans la page elle-même, qui reste visible au retour.
+    setConfirmingLinkedIn(true);
+  };
+
+  const handleConfirmLinkedInAdded = async (added: boolean) => {
+    setConfirmingLinkedIn(false);
+    if (!added || !current) return;
     try {
       const now = new Date();
       await updateCertification(current.id, { ...form.getValues(), linkedinAddedAt: now });
@@ -310,17 +320,29 @@ export default function EditCertificationPage() {
               <label className="font-semibold flex items-center gap-2">
                 <Linkedin className="w-4 h-4" /> LinkedIn
               </label>
-              <div className="flex items-center gap-3 mt-1">
-                <Button type="button" variant="outline" onClick={handleAddToLinkedIn} className="flex items-center gap-2">
-                  <Linkedin className="w-4 h-4" />
-                  {current?.linkedinAddedAt ? 'Ajouter quand même' : 'Ajouter à LinkedIn'}
-                </Button>
-                {current?.linkedinAddedAt && (
-                  <span className="text-xs text-muted-foreground">
-                    ✓ Ajouté le {formatDate(current.linkedinAddedAt)}
-                  </span>
-                )}
-              </div>
+              {confirmingLinkedIn ? (
+                <div className="flex items-center gap-2 mt-1 text-sm">
+                  <span className="text-muted-foreground">As-tu bien ajouté cette certification sur LinkedIn ?</span>
+                  <Button type="button" variant="outline" size="sm" onClick={() => handleConfirmLinkedInAdded(true)}>
+                    Oui
+                  </Button>
+                  <Button type="button" variant="ghost" size="sm" onClick={() => handleConfirmLinkedInAdded(false)}>
+                    Annuler
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 mt-1">
+                  <Button type="button" variant="outline" onClick={handleAddToLinkedIn} className="flex items-center gap-2">
+                    <Linkedin className="w-4 h-4" />
+                    {current?.linkedinAddedAt ? 'Ajouter quand même' : 'Ajouter à LinkedIn'}
+                  </Button>
+                  {current?.linkedinAddedAt && (
+                    <span className="text-xs text-muted-foreground">
+                      ✓ Ajouté le {formatDate(current.linkedinAddedAt)}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-2">

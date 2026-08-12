@@ -36,7 +36,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function NewCertificationPage() {
   const router = useRouter();
-  const { certifications, createCertification, saveCertificationImage, loading } = useCertifications();
+  // limit relevé : le select "certification parente" doit voir toutes les
+  // certifications, pas seulement les 10 les plus récentes (défaut backend).
+  const { certifications, createCertification, saveCertificationImage, loading } = useCertifications({ limit: 200 });
   const [imageUrl, setImageUrl] = useState<string>('');
 
   const form = useForm<FormValues>({
